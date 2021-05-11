@@ -1,142 +1,104 @@
 package com.example.shop.generator;
 
+import com.example.shop.constans.*;
+import com.example.shop.entity.Product;
+import com.example.shop.generator.parent.Generator;
+import com.example.shop.repository.ProductRepository;
+import org.springframework.stereotype.Component;
+
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.*;
 
-public class ProductGenerator {
+@Component
+public class ProductGenerator extends Generator {
 
-    private final int M_SIZE = 4000;
-    private final int F_SIZE = 4000;
-    private final int N_SIZE = 2000;
-    private final int ALL_SIZE = M_SIZE + N_SIZE + F_SIZE;
+    private ProductRepository productRepository;
 
-    public Set<String> allProductGeneration() {
-
-        Set<String> allProduct = new HashSet<>(ALL_SIZE);
-        allProduct.addAll(generationNeuterProduct());
-        allProduct.addAll(generationFeminineProduct());
-        allProduct.addAll(generationMasculineProduct());
-        return allProduct;
+    public ProductGenerator(ProductRepository productRepository) {
+        this.productRepository = productRepository;
     }
 
-    public Set<String> generationMasculineProduct() {
+    public void allProductGeneration() {
+        try {
+            generationMasculineProduct();
+            generationFeminineProduct();
+            generationNeuterProduct();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 
-        Set<String> masculineProduct = new HashSet<>(M_SIZE);
-        List<String> adjectiveMasculine = addAdjectiveMasculine();
-        List<String> nounMasculine = addNounMasculine();
+    public void generationMasculineProduct() throws IOException {
+
+        List<String> adjectiveMasculine = readAllLines(Constans.MASCULINE_ADJECTIVE_PATH);
+        List<String> nounMasculine = readAllLines(Constans.MASCULINE_NOUN_PATH);
 
         Random random = new Random();
 
-        while (masculineProduct.size()< M_SIZE){
-            int index1 = random.nextInt(100);
-            int index2 = random.nextInt(100);
-            masculineProduct.add(adjectiveMasculine.get(index1) + " " + nounMasculine.get(index2));
+        for (int i = 0; i < Constans.M_SIZE; i++) {
+            Product product = new Product();
+
+            product.setName(adjectiveMasculine.get(random.nextInt(100))
+                    + " " + nounMasculine.get(random.nextInt(100)));
+
+            product.setCost(random.nextDouble() * 100);
+
+            product.setDescription(adjectiveMasculine.get(random.nextInt(100))
+                    + " " + adjectiveMasculine.get(random.nextInt(100))
+                    + " " + adjectiveMasculine.get(random.nextInt(100)));
+
+            product.setQuantity(random.nextInt(10));
+            productRepository.save(product);
         }
-        return masculineProduct;
     }
 
-    public Set<String> generationFeminineProduct() {
+    public void generationFeminineProduct() throws IOException {
 
-        Set<String> feminineProduct = new HashSet<>(F_SIZE);
-        List<String> adjectiveFeminine = addAdjectiveFeminine();
-        List<String> nounFeminine = addNounFeminine();
+        List<String> adjectiveFeminine = readAllLines(Constans.FEMININE_ADJECTIVE_PATH);
+        List<String> nounFeminine = readAllLines(Constans.FEMININE_NOUN_PATH);
 
         Random random = new Random();
 
-        while (feminineProduct.size()< F_SIZE){
-            int index1 = random.nextInt(100);
-            int index2 = random.nextInt(100);
-            feminineProduct.add(adjectiveFeminine.get(index1) + " " + nounFeminine.get(index2));
+        for (int i = 0; i < Constans.F_SIZE; i++) {
+            Product product = new Product();
+
+            product.setName(adjectiveFeminine.get(random.nextInt(100))
+                    + " " + nounFeminine.get(random.nextInt(100)));
+
+            product.setCost(random.nextDouble() * 100);
+
+            product.setDescription(adjectiveFeminine.get(random.nextInt(100))
+                    + " " + adjectiveFeminine.get(random.nextInt(100))
+                    + " " + adjectiveFeminine.get(random.nextInt(100)));
+
+            product.setQuantity(random.nextInt(10));
+            productRepository.save(product);
         }
-        return feminineProduct;
     }
 
-    public Set<String> generationNeuterProduct() {
+    public void generationNeuterProduct() throws IOException {
 
-        Set<String> feminineProduct = new HashSet<>(N_SIZE);
-        List<String> adjectiveNeuter = addAdjectiveNeuter();
-        List<String> nounNeuter = addNounNeuter();
+        List<String> adjectiveNeuter = readAllLines(Constans.NEUTER_ADJECTIVE_PATH);
+        List<String> nounNeuter = readAllLines(Constans.NEUTER_NOUN_PATH);
 
         Random random = new Random();
 
-        while (feminineProduct.size()< N_SIZE){
-            int index1 = random.nextInt(100);
-            int index2 = random.nextInt(24);
-            feminineProduct.add(adjectiveNeuter.get(index1) + " " + nounNeuter.get(index2));
+        for (int i = 0; i < Constans.N_SIZE; i++) {
+            Product product = new Product();
+
+            product.setName(adjectiveNeuter.get(random.nextInt(100))
+                    + " " + nounNeuter.get(random.nextInt(100)));
+
+            product.setCost(random.nextDouble() * 100);
+
+            product.setDescription(adjectiveNeuter.get(random.nextInt(100))
+                    + " " + adjectiveNeuter.get(random.nextInt(100))
+                    + " " + adjectiveNeuter.get(random.nextInt(100)));
+
+            product.setQuantity(random.nextInt(10));
+            productRepository.save(product);
         }
-        return feminineProduct;
     }
-
-
-
-    public List<String> addNounMasculine() {
-        List<String> nounMasculine = new ArrayList<>(100);
-        Collections.addAll(
-                nounMasculine,
-                "кишлак", "асбоцемент", "женьшень", "светофор", "автограф", "кот", "корабль", "стул", "стол", "диван", "гамак", "нож", "стакан", "чайник", "самовар", "лежак", "камень", "катер", "свитер", "пластилин", "корень", "шкаф", "кофе", "чай", "песок",
-                "сахар", "фартук", "колпак", "мольберт", "портрет", "ласт", "картон", "ледник", "эвкалипт", "тренажер", "сфинкс", "жандарм", "купол", "бинокль", "саквояж", "индикатор", "портфель", "архитектор", "император", "космодром", "вирус", "антивирус", "паяльник", "винт", "бинт",
-                "ватник", "брус", "феникс", "брюнет", "блондин", "багаж", "коридор", "сюрприз", "приз", "каприз", "коттедж", "лосось", "будильник", "сапфир", "кабачок", "малыш", "декан", "дефект", "футляр", "артист", "юрист", "щавель", "компот", "позвонок", "ожог",
-                "кинозал", "шмель", "жук", "штопор", "кол", "поезд", "телеграф", "заяц", "Брюссель", "халат", "вентиль", "карцер", "рис", "байкал", "выгон", "бюст", "бюргер", "трамвай", "аммиак", "автопогрузчик", "вдовец", "водород", "пеликан", "манеж", "огнетушитель"
-        );
-        return nounMasculine;
-    }
-
-    public List<String> addNounFeminine() {
-        List<String> nounFeminine = new ArrayList<>(100);
-        Collections.addAll(
-                nounFeminine,
-                "библиотека", "касторка", "страна", "терраса", "гирлянда", "ворона", "указка", "брусника", "бумага", "лодка", "плеть", "верёвка", "стойка", "полка", "каска", "ласка", "краска", "водолазка", "смазка", "колбаса", "пена", "паста", "вата", "сумка", "галька",
-                "аптека", "шляпа", "карта", "лестница", "отвёртка", "кошка", "собака", "пила", "болгарка", "стамеска", "леска", "удочка", "лейка", "наклейка", "майка", "юбка", "вилка", "ложка", "палка", "трость", "кость", "коса", "песня", "веранда", "скалка",
-                "пешка", "арматура", "доска", "ресница", "спица", "игла", "шприц", "гитара", "труба", "флейта", "магнезия", "листва", "лыжа", "пилотка", "кофтам", "кулиса", "пленка", "березка", "таблица", "свирель", "стрела", "капуста", "кепка", "мышеловка", "малина",
-                "алыча", "клубника", "смородина", "вишня", "липа", "пихта", "сосна", "ежевика", "салфетка", "перекладина", "сгущенка", "простынь", "подушка", "клюшка", "вакса", "печь", "льдина", "фольга", "шайба", "волна", "лоджия", "контора", "кафедра", "кочерга", "книга"
-        );
-        return nounFeminine;
-    }
-
-    public List<String> addNounNeuter() {
-        List<String> nounNeuter = new ArrayList<>(100);
-        Collections.addAll(
-                nounNeuter,
-                "сено", "ружьё", "пано", "желе", "реле", "пиво", "торжество", "колдовство", "ярмо", "тавро", "преображение", "уныние", "пленение", "мировозрение", "мнение", "копьё", "цевьё", "рождество", "детство", "песнопение", "пано", "кашпо", "полено", "колено", "пение"
-        );
-        return nounNeuter;
-    }
-
-
-    public List<String> addAdjectiveMasculine() {
-        List<String> adjectiveMasculine = new ArrayList<>(100);
-        Collections.addAll(
-                adjectiveMasculine,
-                "красный", "белый", "синий", "жёлтый", "зелёный", "фиолетовый", "оранжевый", "светлый", "тёмный", "бежевый", "коричневый", "розовый", "чёрный", "серый", "лёгкий", "тяжёлый", "сладкий", "кислый", "горький", "острый", "лишний", "средний", "праздничный", "хлебный", "тёплый",
-                "добрый", "военный", "цветной", "медовый", "крепкий", "надёжный", "пластиковый", "натуральный", "вишнёвый", "малиновый", "вкусный", "копчёный", "молотый", "глянцевый", "матовый", "кожаный", "блестящий", "кожаный", "устойчивый", "жидкий", "едкий", "гибкий", "плотный", "шоколадный", "замороженный",
-                "плавленый", "газовый", "простой", "калёный", "дорожный", "сплошной", "прерывистый", "толсный", "липкий", "меховой", "нежный", "воздушный", "восковой", "карликовый", "гигантский", "миниарюрный", "удобный", "перемолотый", "игольчатый", "подводный", "космический", "галактический", "военный", "тактический", "стратегический",
-                "тонкий", "токсичный", "ауетентичный", "безалкогольный", "алкогольный", "засушенный", "постный", "местный", "честный", "правильный", "пошлый", "хитрый", "умный", "тотальный", "редкий", "эпичный", "легендарный", "обычный", "активный", "пассивный", "полный", "жирный", "худой", "плаксивый", "выдающийся"
-        );
-        return adjectiveMasculine;
-    }
-
-    public List<String> addAdjectiveFeminine() {
-        List<String> adjectiveFeminine = new ArrayList<>(100);
-        Collections.addAll(
-                adjectiveFeminine,
-                "красная", "белая", "синяя", "жёлтая", "зелёная", "фиолетовая", "оранжевая", "светлая", "тёмная", "бежевая", "коричневая", "розовая", "чёрная", "серая", "лёгкая", "тяжёлая", "сладкая", "кислая", "горькая", "острая", "лишний", "средняя", "праздничная", "хлебная", "тёплая",
-                "добрая", "военная", "цветной", "медовая", "крепкая", "надёжная", "пластиковая", "натуральная", "вишнёвая", "малиновая", "вкусная", "копчёная", "молотая", "глянцевая", "матовая", "кожаная", "блестящяя", "кожаная", "устойчивая", "жидкая", "едкая", "гибкая", "плотная", "шоколадная", "замороженная",
-                "плавленая", "газовая", "простой", "калёная", "дорожная", "сплошной", "прерывистая", "толсная", "липкая", "меховая", "нежная", "воздушная", "восковая", "карликовая", "гигантский", "миниарюрная", "удобная", "перемолотая", "игольчатая", "подводная", "космическая", "галактическая", "военная", "тактическая", "стратегическая",
-                "тонкая", "токсичная", "ауетентичная", "безалкогольная", "алкогольная", "засушенная", "постная", "местная", "честная", "правильная", "пошлая", "хитрая", "умная", "тотальная", "редкая", "эпичная", "легендарная", "обычная", "активная", "пассивная", "полная", "жирная", "худая", "плаксивая", "выдающаяся"
-        );
-        return adjectiveFeminine;
-    }
-
-    public List<String> addAdjectiveNeuter() {
-        List<String> adjectiveNeuter = new ArrayList<>(100);
-        Collections.addAll(
-                adjectiveNeuter,
-                "красное", "белое", "синое", "жёлтое", "зелёное", "фиолетовое", "оранжевое", "светлое", "тёмное", "бежевое", "коричневое", "розовое", "чёрное", "серое", "лёгкое", "тяжёлое", "сладкое", "кислое", "горькое", "острое", "лишное", "средное", "праздничное", "хлебное", "тёплое",
-                "доброе", "военное", "цветной", "медовое", "крепкое", "надёжное", "пластиковое", "натуральное", "вишнёвое", "малиновое", "вкусное", "копчёное", "молотое", "глянцевое", "матовое", "кожаное", "блестящое", "кожаное", "устойчивое", "жидкое", "едкое", "гибкое", "плотное", "шоколадное", "замороженное",
-                "плавленое", "газовое", "простой", "калёное", "дорожное", "сплошной", "прерывистое", "толсное", "липкое", "меховой", "нежное", "воздушное", "восковой", "карликовое", "гигантское", "миниарюрное", "удобное", "перемолотое", "игольчатое", "подводное", "космическое", "галактическое", "военное", "тактическое", "стратегическое",
-                "тонкое", "токсичное", "ауетентичное", "безалкогольное", "алкогольное", "засушенное", "постное", "местное", "честное", "правильное", "пошлое", "хитрое", "умное", "тотальное", "редкое", "эпичное", "легендарное", "обычное", "активное", "пассивное", "полное", "жирное", "худой", "плаксивое", "выдающееся"
-        );
-        return adjectiveNeuter;
-    }
-
-
 }
