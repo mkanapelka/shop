@@ -9,7 +9,7 @@ import javax.persistence.Entity;
 import javax.persistence.MappedSuperclass;
 import javax.persistence.UniqueConstraint;
 
-@Entity
+
 @MappedSuperclass
 @Getter
 @Setter

@@ -12,17 +12,19 @@ import java.util.List;
 @Setter
 public class Product extends NameEntity {
 
+    @Column(unique = true)
     private String vendorCode;
+
     private Double cost;
     private Integer quantity;
     private String description;
 
-    @ManyToMany(cascade = CascadeType.PERSIST)
-    @JoinTable(
-            name = "join_category_product",
+
+    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JoinTable(name = "link_product_rank",
             joinColumns = @JoinColumn(name = "product_id"),
-            inverseJoinColumns = @JoinColumn(name = "category_id"),
-            foreignKey = @ForeignKey(name = "fk_product_to_category")
+            inverseJoinColumns = @JoinColumn(name = "rank_id"),
+            foreignKey = @ForeignKey(name = "fk_product_to_rank")
     )
-    private List<Category> categoryList;
+    private List<Rank> ranks;
 }

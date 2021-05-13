@@ -1,23 +1,28 @@
 package com.example.shop.generator;
 
-import com.example.shop.constans.*;
+import com.example.shop.constans.Constans;
 import com.example.shop.entity.Product;
-import com.example.shop.generator.parent.Generator;
+import com.example.shop.entity.Rank;
 import com.example.shop.repository.ProductRepository;
+import com.example.shop.repository.RankRepository;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Random;
 
 @Component
-public class ProductGenerator extends Generator {
+public class ProductGenerator {
 
     private ProductRepository productRepository;
+    private RankRepository rankRepository;
 
-    public ProductGenerator(ProductRepository productRepository) {
+    public ProductGenerator(ProductRepository productRepository, RankRepository rankRepository) {
         this.productRepository = productRepository;
+        this.rankRepository = rankRepository;
     }
 
     public void allProductGeneration() {
@@ -49,7 +54,9 @@ public class ProductGenerator extends Generator {
                     + " " + adjectiveMasculine.get(random.nextInt(100))
                     + " " + adjectiveMasculine.get(random.nextInt(100)));
 
+            product.setRanks(addRandomRank());
             product.setQuantity(random.nextInt(10));
+            product.setVendorCode(genVendorCode());
             productRepository.save(product);
         }
     }
@@ -73,7 +80,9 @@ public class ProductGenerator extends Generator {
                     + " " + adjectiveFeminine.get(random.nextInt(100))
                     + " " + adjectiveFeminine.get(random.nextInt(100)));
 
+            product.setRanks(addRandomRank());
             product.setQuantity(random.nextInt(10));
+            product.setVendorCode(genVendorCode());
             productRepository.save(product);
         }
     }
@@ -97,8 +106,43 @@ public class ProductGenerator extends Generator {
                     + " " + adjectiveNeuter.get(random.nextInt(100))
                     + " " + adjectiveNeuter.get(random.nextInt(100)));
 
+            product.setRanks(addRandomRank());
             product.setQuantity(random.nextInt(10));
+            product.setVendorCode(genVendorCode());
             productRepository.save(product);
         }
+    }
+
+
+    //-------------------------------------------------------
+    private List<String> readAllLines(String file) throws IOException {
+        return Files.readAllLines(Paths.get(file));
+    }
+
+
+    private List<Rank> addRandomRank() {
+
+        List<Rank> rankList = new ArrayList<>(2);
+        Random random = new Random();
+
+        for (int i = 0; i < 2; i++) {
+            Long randId = (long) random.nextInt(9);
+            rankList.add(rankRepository.findRanksById(randId));
+        }
+        return rankList;
+    }
+
+    private String genVendorCode() {
+        int min = 41;
+        int max = 90;
+        int diff = max - min;
+        Random random = new Random();
+        char prefix1 = (char) (random.nextInt(diff + 1) + min);
+        char prefix2 = (char) (random.nextInt(diff + 1) + min);
+        return String.valueOf(prefix1 + prefix2
+                + random.nextInt(9)
+                + random.nextInt(9)
+                + random.nextInt(9)
+                + random.nextInt(9));
     }
 }

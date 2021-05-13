@@ -5,18 +5,13 @@ import lombok.Getter;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.util.List;
 
 @Entity
 @Getter
 @Setter
 public class Characteristic extends NameEntity {
 
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
-    @JoinColumn(
-            name = "category_id",
-            referencedColumnName = "id",
-            nullable = false,
-            foreignKey = @ForeignKey(name = "fk_category_id_to_id")
-    )
-    private Category category;
+    @ManyToMany(mappedBy = "characteristics",fetch = FetchType.LAZY)
+    private List<Rank> ranks;
 }
