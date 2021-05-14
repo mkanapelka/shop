@@ -27,4 +27,12 @@ public class Product extends NameEntity {
             foreignKey = @ForeignKey(name = "fk_product_to_rank")
     )
     private List<Rank> ranks;
+
+    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JoinTable(name = "link_product_order",
+            joinColumns = @JoinColumn(name = "product_id"),
+            inverseJoinColumns = @JoinColumn(name = "order_id"),
+            foreignKey = @ForeignKey(name = "fk_product_to_order")
+    )
+    private  List<Order> orders;
 }
