@@ -10,7 +10,7 @@ import java.util.List;
 @Entity
 @Getter
 @Setter
-public class Basket extends BaseEntity {
+public class Cart extends BaseEntity {
 
     private String orderNumber;
     private double totalCost;

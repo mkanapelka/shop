@@ -36,5 +36,5 @@ public class User extends NameEntity {
     private List<Order> orders;
 
     @OneToOne(mappedBy = "user", fetch = FetchType.LAZY)
-    private Basket basket;
+    private Cart cart;
 }

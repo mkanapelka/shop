@@ -1,7 +1,7 @@
 create sequence hibernate_sequence start 1 increment 1;
 
     
-    create table basket (
+    create table cart (
        id bigserial not null,
         order_number varchar(255),
         quantity_product int4 not null,
@@ -95,7 +95,7 @@ create sequence hibernate_sequence start 1 increment 1;
     alter table if exists usr 
        add constraint UK_dfui7gxngrgwn9ewee3ogtgym unique (username);
     
-    alter table if exists basket 
+    alter table if exists cart
        add constraint FKhp62cg2m4fosjqwgq7hxtxead 
        foreign key (user_id) 
        references usr;
