@@ -10,16 +10,15 @@ import java.util.List;
 @Entity
 @Getter
 @Setter
-@Table(name = "user_order")
-public class Order extends BaseEntity {
+public class Basket extends BaseEntity {
 
     private String orderNumber;
     private double totalCost;
+    private int quantityProduct;
 
     @ManyToMany(mappedBy = "orders",fetch = FetchType.LAZY)
     private List<Product> products;
 
-    @ManyToOne(optional = true, cascade = CascadeType.ALL)
-    @JoinColumn(name = "user_id")
+    @OneToOne
     private User user;
 }
