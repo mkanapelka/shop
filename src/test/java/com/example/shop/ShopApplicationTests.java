@@ -2,7 +2,6 @@ package com.example.shop;
 
 import com.example.shop.dto.UserProfileDto;
 import com.example.shop.entity.User;
-import lombok.val;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
@@ -13,6 +12,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+
 @SpringBootTest
 @AutoConfigureTestDatabase
 class ShopApplicationTests {
@@ -22,6 +22,7 @@ class ShopApplicationTests {
 
     @Test
     void contextLoads() {
+
 
         User user = User.builder()
                 .name("user2")
@@ -48,6 +49,7 @@ class ShopApplicationTests {
         BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder();
         System.out.println(bCryptPasswordEncoder.encode(str1));
         assertEquals(str1, str2);
+
     }
 
 }
