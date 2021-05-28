@@ -15,24 +15,17 @@ public class Product extends NameEntity {
     @Column(unique = true)
     private String vendorCode;
 
-    private Double cost;
+    private int cost;
     private Integer quantity;
     private String description;
 
 
     @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    @JoinTable(name = "link_product_rank",
+    @JoinTable(name = "link_product_product_category",
             joinColumns = @JoinColumn(name = "product_id"),
-            inverseJoinColumns = @JoinColumn(name = "rank_id"),
-            foreignKey = @ForeignKey(name = "fk_product_to_rank")
+            inverseJoinColumns = @JoinColumn(name = "product_category_id"),
+            foreignKey = @ForeignKey(name = "fk_product_to_product_category")
     )
-    private List<Rank> ranks;
+    private List<ProductCategory> productCategories;
 
-    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    @JoinTable(name = "link_product_order",
-            joinColumns = @JoinColumn(name = "product_id"),
-            inverseJoinColumns = @JoinColumn(name = "order_id"),
-            foreignKey = @ForeignKey(name = "fk_product_to_order")
-    )
-    private  List<Order> orders;
 }

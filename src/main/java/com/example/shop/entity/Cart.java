@@ -13,12 +13,18 @@ import java.util.List;
 public class Cart extends BaseEntity {
 
     private String orderNumber;
-    private double totalCost;
+    private int totalCost;
     private int quantityProduct;
 
-    @ManyToMany(mappedBy = "orders",fetch = FetchType.LAZY)
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(name = "link_cart_product",
+            joinColumns = @JoinColumn(name = "cart_id"),
+            inverseJoinColumns = @JoinColumn(name = "product_id"),
+            foreignKey = @ForeignKey(name = "fk_cart_to_product")
+    )
     private List<Product> products;
 
     @OneToOne
     private User user;
 }
+

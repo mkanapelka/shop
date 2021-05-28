@@ -1,0 +1,47 @@
+INSERT INTO product_category (created, updated, name)
+VALUES (now(),now(),'компьютеры'),
+       (now(),now(),'бытовая техника'),
+       (now(),now(),'мужская одежда'),
+       (now(),now(),'женская одежда'),
+       (now(),now(),'детская одежда'),
+       (now(),now(),'декор'),
+       (now(),now(),'мебель'),
+       (now(),now(),'хозяйственные товары'),
+       (now(),now(),'продовольственные товары');
+
+INSERT INTO characteristic (created, updated, name)
+VALUES (now(),now(),'оперативная память'),
+       (now(),now(),'процессор'),
+       (now(),now(),'размер'),
+       (now(),now(),'энергопотребление'),
+       (now(),now(),'цвет'),
+       (now(),now(),'длина'),
+       (now(),now(),'ширина'),
+       (now(),now(),'высота'),
+       (now(),now(),'материал'),
+       (now(),now(),'вес'),
+       (now(),now(),'срок годности'),
+       (now(),now(),'энергетическая ценность');
+
+INSERT INTO link_product_category_characteristic (product_category_id, characteristic_id)
+VALUES (1,1),
+       (1,2),
+       (2,3),
+       (2,4),
+       (3,3),
+       (3,5),
+       (4,3),
+       (4,5),
+       (5,3),
+       (5,5),
+       (6,3),
+       (6,5),
+       (6,10),
+       (7,5),
+       (7,6),
+       (7,7),
+       (7,8),
+       (8,9),
+       (8,10),
+       (9,11),
+       (9,12);

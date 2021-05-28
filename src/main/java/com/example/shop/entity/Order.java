@@ -14,12 +14,17 @@ import java.util.List;
 public class Order extends BaseEntity {
 
     private String orderNumber;
-    private double totalCost;
+    private int totalCost;
 
-    @ManyToMany(mappedBy = "orders",fetch = FetchType.LAZY)
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(name = "link_product_order",
+            joinColumns = @JoinColumn(name = "product_id"),
+            inverseJoinColumns = @JoinColumn(name = "order_id"),
+            foreignKey = @ForeignKey(name = "fk_order_to_product")
+    )
     private List<Product> products;
 
-    @ManyToOne(optional = true, cascade = CascadeType.ALL)
+    @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "user_id")
     private User user;
 }

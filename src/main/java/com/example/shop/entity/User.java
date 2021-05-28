@@ -1,23 +1,26 @@
 package com.example.shop.entity;
 
-import com.example.shop.entity.model.Role;
-import com.example.shop.entity.parent.NameEntity;
-import lombok.Getter;
-import lombok.Setter;
+
+import com.example.shop.entity.parent.BaseEntity;
+import lombok.*;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 
 import javax.persistence.*;
 import javax.validation.constraints.Email;
-import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @Entity
 @Getter
 @Setter
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
 @Table(name = "usr")
-public class User extends NameEntity {
-
+public class User extends BaseEntity {
 
     @Column(unique = true)
-    private String username;
+    private String name;
     private String firstName;
     private String lastName;
 
@@ -25,16 +28,27 @@ public class User extends NameEntity {
     private String email;
     private String password;
 
-    @ManyToMany(fetch = FetchType.EAGER)
-    @JoinTable(name = "user_roles",
-            joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"),
-            inverseJoinColumns = @JoinColumn(name = "role_id", referencedColumnName = "id"),
-            foreignKey = @ForeignKey(name = "fk_user_to_role"))
-    private List<Role> roles;
+    @ElementCollection(targetClass = Status.class, fetch = FetchType.EAGER)
+    @CollectionTable(name = "user_status", joinColumns = @JoinColumn(name = "user_id"))
+    @Enumerated(EnumType.STRING)
+    private Set<Status> status;
+
+
+    @ElementCollection(targetClass = Role.class, fetch = FetchType.EAGER)
+    @CollectionTable(name = "user_role", joinColumns = @JoinColumn(name = "user_id"))
+    @Enumerated(EnumType.STRING)
+    private Set<Role> roles;
 
     @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
-    private List<Order> orders;
+    private Set<Order> orders;
 
     @OneToOne(mappedBy = "user", fetch = FetchType.LAZY)
     private Cart cart;
+
+    //    ----------------------------------------------------
+
+//    public Set<SimpleGrantedAuthority> getAuthorities() {
+//        return roles.stream()
+//                .map(item -> new SimpleGrantedAuthority(item.name())).collect(Collectors.toSet());
+//    }
 }

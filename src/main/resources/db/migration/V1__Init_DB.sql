@@ -3,17 +3,31 @@ create sequence hibernate_sequence start 1 increment 1;
     
     create table cart (
        id bigserial not null,
+        created timestamp,
+        updated timestamp,
         order_number varchar(255),
         quantity_product int4 not null,
-        total_cost float8 not null,
+        total_cost int4 not null,
         user_id int8,
         primary key (id)
     );
     
     create table characteristic (
        id bigserial not null,
+        created timestamp,
+        updated timestamp,
         name varchar(255),
         primary key (id)
+    );
+    
+    create table link_cart_product (
+       cart_id int8 not null,
+        product_id int8 not null
+    );
+    
+    create table link_product_category_characteristic (
+       product_category_id int8 not null,
+        characteristic_id int8 not null
     );
     
     create table link_product_order (
@@ -21,59 +35,61 @@ create sequence hibernate_sequence start 1 increment 1;
         order_id int8 not null
     );
     
-    create table link_product_rank (
+    create table link_product_product_category (
        product_id int8 not null,
-        rank_id int8 not null
-    );
-    
-    create table link_rank_characteristic (
-       rank_id int8 not null,
-        characteristic_id int8 not null
+        product_category_id int8 not null
     );
     
     create table product (
        id bigserial not null,
+        created timestamp,
+        updated timestamp,
         name varchar(255),
-        cost float8,
+        cost int4 not null,
         description varchar(255),
         quantity int4,
         vendor_code varchar(255),
         primary key (id)
     );
-
-    create table rank (
-       id bigserial not null,
-        name varchar(255),
-        primary key (id)
-    );
     
-    create table rol (
+    create table product_category (
        id bigserial not null,
+        created timestamp,
+        updated timestamp,
         name varchar(255),
         primary key (id)
     );
     
     create table user_order (
        id bigserial not null,
+        created timestamp,
+        updated timestamp,
         order_number varchar(255),
-        total_cost float8 not null,
+        total_cost int4 not null,
         user_id int8,
         primary key (id)
     );
     
-    create table user_roles (
+    create table user_status (
        user_id int8 not null,
-        role_id int8 not null
+        status varchar(255)
+    );
+
+--    exp
+        create table user_role (
+       user_id int8 not null,
+        roles varchar(255)
     );
     
     create table usr (
        id bigserial not null,
+        created timestamp,
+        updated timestamp,
         name varchar(255),
         email varchar(255),
         first_name varchar(255),
         last_name varchar(255),
         password varchar(255),
-        username varchar(255),
         primary key (id)
     );
     
@@ -86,61 +102,69 @@ create sequence hibernate_sequence start 1 increment 1;
     alter table if exists product 
        add constraint UK_1p3f104fxuka6mielkduscihy unique (vendor_code);
     
-    alter table if exists rank 
-       add constraint UK_hqp7w6d3btg5deebi9jg1jxkw unique (name);
+    alter table if exists product_category 
+       add constraint UK_9qvug0bmpkmxkkx33q51m7do7 unique (name);
     
     alter table if exists usr 
        add constraint UK_mkjheedol1oe4evwyjw7ixpot unique (name);
     
-    alter table if exists usr 
-       add constraint UK_dfui7gxngrgwn9ewee3ogtgym unique (username);
-    
-    alter table if exists cart
-       add constraint FKhp62cg2m4fosjqwgq7hxtxead 
+    alter table if exists cart 
+       add constraint FKc9objqhvjc84nmsxvwk64dajp 
        foreign key (user_id) 
        references usr;
     
-    alter table if exists link_product_order 
-       add constraint FK7grnfhst1b3lr48lxoccl221u 
-       foreign key (order_id) 
-       references user_order;
-    
-    alter table if exists link_product_order 
-       add constraint fk_product_to_order 
+    alter table if exists link_cart_product 
+       add constraint FKj2tk3rf5vldn4ov6pl83x1w2h 
        foreign key (product_id) 
        references product;
     
-    alter table if exists link_product_rank 
-       add constraint FKkeygy3rg9f5rbqmmauvq5o13o 
-       foreign key (rank_id) 
-       references rank;
+    alter table if exists link_cart_product 
+       add constraint fk_cart_to_product 
+       foreign key (cart_id) 
+       references cart;
     
-    alter table if exists link_product_rank 
-       add constraint fk_product_to_rank 
-       foreign key (product_id) 
-       references product;
-    
-    alter table if exists link_rank_characteristic 
-       add constraint FKkk7r889esd7vxk04mpw6hsupa 
+    alter table if exists link_product_category_characteristic 
+       add constraint FK77n980bobf344ffk1gqxyxsfx 
        foreign key (characteristic_id) 
        references characteristic;
     
-    alter table if exists link_rank_characteristic 
-       add constraint fk_rank_to_characteristic 
-       foreign key (rank_id) 
-       references rank;
+    alter table if exists link_product_category_characteristic 
+       add constraint fk_product_category_to_characteristic 
+       foreign key (product_category_id) 
+       references product_category;
+    
+    alter table if exists link_product_order 
+       add constraint FKnemlm5jxsdpu3e636lot0iabm 
+       foreign key (order_id) 
+       references product;
+    
+    alter table if exists link_product_order 
+       add constraint fk_order_to_product 
+       foreign key (product_id) 
+       references user_order;
+    
+    alter table if exists link_product_product_category 
+       add constraint FKrrpt0k4d2eyjfcga16bkq5299 
+       foreign key (product_category_id) 
+       references product_category;
+    
+    alter table if exists link_product_product_category 
+       add constraint fk_product_to_product_category 
+       foreign key (product_id) 
+       references product;
     
     alter table if exists user_order 
        add constraint FKaqljrb4vcwujwu1k9fkd2a5jx 
        foreign key (user_id) 
        references usr;
     
-    alter table if exists user_roles 
-       add constraint FKrhfovtciq1l558cw6udg0h0d3 
-       foreign key (role_id) 
-       references rol;
-    
-    alter table if exists user_roles 
-       add constraint fk_user_to_role 
+    alter table if exists user_status 
+       add constraint FKet59o5t9q6lghggkaxlu2c593 
        foreign key (user_id) 
+       references usr;
+
+--exp
+    alter table if exists user_role
+       add constraint FKet59o5t9q6lghggkaxlu2c593
+       foreign key (user_id)
        references usr;

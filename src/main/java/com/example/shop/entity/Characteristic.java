@@ -13,5 +13,5 @@ import java.util.List;
 public class Characteristic extends NameEntity {
 
     @ManyToMany(mappedBy = "characteristics",fetch = FetchType.LAZY)
-    private List<Rank> ranks;
+    private List<ProductCategory> productCategories;
 }
