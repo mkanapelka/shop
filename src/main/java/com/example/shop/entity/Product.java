@@ -14,9 +14,8 @@ public class Product extends NameEntity {
 
     @Column(unique = true)
     private String vendorCode;
-
     private int cost;
-    private Integer quantity;
+    private int quantity;
     private String description;
 
 
@@ -27,5 +26,13 @@ public class Product extends NameEntity {
             foreignKey = @ForeignKey(name = "fk_product_to_product_category")
     )
     private List<ProductCategory> productCategories;
+
+    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JoinTable(name = "link_product_characteristic",
+            joinColumns = @JoinColumn(name = "product_id"),
+            inverseJoinColumns = @JoinColumn(name = "characteristic_id"),
+            foreignKey = @ForeignKey(name = "fk_product_to_characteristic")
+    )
+    private List<Characteristic> characteristics;
 
 }

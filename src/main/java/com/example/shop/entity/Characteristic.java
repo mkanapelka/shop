@@ -12,6 +12,6 @@ import java.util.List;
 @Setter
 public class Characteristic extends NameEntity {
 
-    @ManyToMany(mappedBy = "characteristics",fetch = FetchType.LAZY)
-    private List<ProductCategory> productCategories;
+//    @ManyToMany(mappedBy = "characteristics",fetch = FetchType.LAZY)
+//    private List<ProductCategory> products;
 }
