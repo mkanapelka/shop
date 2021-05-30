@@ -1,6 +1,6 @@
 package com.example.shop.constans;
 
-public class Constans {
+public class Constants {
 
     //----------------------------------------
     public static final String PARENT_PATH = "src/main/resources/files/";
@@ -14,4 +14,10 @@ public class Constans {
     public static final int M_SIZE = 40;
     public static final int F_SIZE = 40;
     public static final int N_SIZE = 20;
+
+    //web-------------------------------------
+
+    public static final int DEFAULT_PAGE_SIZE = 12;
+    public static final int DEFAULT_PAGE = 0;
+
 }
