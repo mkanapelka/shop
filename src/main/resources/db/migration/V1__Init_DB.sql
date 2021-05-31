@@ -80,17 +80,13 @@ create sequence hibernate_sequence start 1 increment 1;
         roles varchar(255)
     );
 
-    create table user_status (
-       user_id int8 not null,
-        status varchar(255)
-    );
-
     create table usr (
        id bigserial not null,
         created timestamp,
         updated timestamp,
         email varchar(255),
         first_name varchar(255),
+        is_active boolean,
         last_name varchar(255),
         name varchar(255),
         password varchar(255),
@@ -164,10 +160,5 @@ create sequence hibernate_sequence start 1 increment 1;
 
     alter table if exists user_role
        add constraint fk_user_to_role
-       foreign key (user_id)
-       references usr;
-
-    alter table if exists user_status
-       add constraint fk_user_to_status
        foreign key (user_id)
        references usr;

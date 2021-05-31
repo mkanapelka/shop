@@ -25,18 +25,10 @@ import static com.example.shop.constans.Constants.DEFAULT_PAGE_SIZE;
 public class UserController {
 
     private final UserService userService;
-    private final AuthenticationManager authenticationManager;
-
-    //TODO move somewhere else
-    //    @GetMapping("/")
-    //    public ResponseEntity<String> showStartPage(){
-    //        return new ResponseEntity<>("Hello", HttpStatus.OK);
-    //    }
 
     @GetMapping("/{id}")
-    public ResponseEntity<User> showUserInfo(@PathVariable Long id) {
-        User user = userService.findUserById(id);
-        return new ResponseEntity<>(user, HttpStatus.OK);
+    public ResponseEntity<UserProfileDto> showUserInfo(@PathVariable Long id) {
+        return new ResponseEntity<>(userService.findUserById(id), HttpStatus.OK);
     }
 
     //TODO it's a part of back office logic. may be should be moved to other controller
@@ -48,20 +40,4 @@ public class UserController {
         return new ResponseEntity<>(userPage, HttpStatus.OK);
     }
 
-
-    //    @PostMapping("/registration")
-    //    public ResponseEntity<UserDto> registrationUser(@Valid @RequestBody UserRegistryDto userRegistryDto) {
-    //        User user = UserConvertForRegistry.convertToModel(userRegistryDto);
-    //        userService.saveUser(user);
-    //        return new ResponseEntity<>(UserConverter.convertToDto(user), HttpStatus.OK);
-    //    }
-    //
-
-    //    @PostMapping("/login")
-    //    public ResponseEntity<UserProfileDto> loginUser(@Valid @RequestBody UserProfileDto userProfileDto) {
-    //        authenticationManager
-    //                .authenticate(new UsernamePasswordAuthenticationToken(userProfileDto.getName(), userProfileDto.getPassword()));
-    //        User user = userService.findUserByName(userProfileDto.getName());
-    //        return new ResponseEntity<>(conversionService.convert(user, UserProfileDto.class), HttpStatus.OK);
-    //    }
 }

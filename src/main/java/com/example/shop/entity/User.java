@@ -2,9 +2,12 @@ package com.example.shop.entity;
 
 import com.example.shop.entity.parent.BaseEntity;
 import lombok.*;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
 import javax.validation.constraints.Email;
+import java.util.Collection;
 import java.util.Set;
 
 @Entity
@@ -15,7 +18,7 @@ import java.util.Set;
 @NoArgsConstructor
 @Table(name = "usr")
 
-public class User extends BaseEntity {
+public class User extends BaseEntity implements UserDetails {
 
 
     @Column(unique = true)
@@ -26,12 +29,7 @@ public class User extends BaseEntity {
     @Email
     private String email;
     private String password;
-
-
-    @ElementCollection(targetClass = Status.class, fetch = FetchType.EAGER)
-    @CollectionTable(name = "user_status", joinColumns = @JoinColumn(name = "user_id"))
-    @Enumerated(EnumType.STRING)
-    private Set<Status> status;
+    private Boolean isActive;
 
 
     @ElementCollection(targetClass = Role.class, fetch = FetchType.EAGER)
@@ -45,6 +43,39 @@ public class User extends BaseEntity {
 
     @OneToOne(mappedBy = "user", fetch = FetchType.LAZY)
     private Cart cart;
+
+
+
+//    ----------------------------------------
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return getRoles();
+    }
+
+    @Override
+    public String getUsername() {
+        return getName();
+    }
+
+    @Override
+    public boolean isAccountNonExpired() {
+        return getIsActive();
+    }
+
+    @Override
+    public boolean isAccountNonLocked() {
+        return getIsActive();
+    }
+
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return getIsActive();
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return getIsActive();
+    }
 
     //    ----------------------------------------------------
 

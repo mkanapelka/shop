@@ -14,8 +14,8 @@ public class Product extends NameEntity {
 
     @Column(unique = true)
     private String vendorCode;
-    private int cost;
-    private int quantity;
+    private Integer cost;
+    private Integer quantity;
     private String description;
 
 

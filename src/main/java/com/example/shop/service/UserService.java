@@ -6,6 +6,7 @@ import com.example.shop.entity.User;
 import com.example.shop.exception.UserNotFoundException;
 import com.example.shop.repository.UserRepository;
 import com.example.shop.specification.UserSpecification;
+import com.example.shop.util.CastClassUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.core.convert.ConversionService;
 import org.springframework.data.domain.Page;
@@ -29,8 +30,9 @@ public class UserService {
         return userRepository.save(user);
     }
 
-    public User findUserById(Long id) {
-        return userRepository.findById(id).orElseThrow(UserNotFoundException::new);
+    public UserProfileDto findUserById(Long id) {
+        User user = userRepository.findById(id).orElseThrow(UserNotFoundException::new);
+        return conversionService.convert(user, UserProfileDto.class);
     }
 
     public Page<UserProfileDto> findAll(/*TODO add filters*/ Pageable pageable) {
@@ -42,13 +44,7 @@ public class UserService {
         Page<User> users = userRepository.findAll(UserSpecification.buildListFilter(userCriteria), pageable);
         List<UserProfileDto> profilesList =
             //            conversionService.convert(users.getContent(), (Class<List<UserProfileDto>>)(Class<?>)List.class);
-            conversionService.convert(users.getContent(), castClass(List.class));
+            conversionService.convert(users.getContent(), CastClassUtil.castClass(List.class));
         return new PageImpl<>(profilesList, pageable, users.getTotalElements());
-    }
-
-    //TODO if it works extract to some util class
-    @SuppressWarnings("unchecked")
-    public static <T> Class<T> castClass(Class<?> aClass) {
-        return (Class<T>) aClass;
     }
 }

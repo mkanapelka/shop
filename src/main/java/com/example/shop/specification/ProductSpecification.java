@@ -1,28 +1,64 @@
 package com.example.shop.specification;
 
+import com.example.shop.dto.request.ProductCriteriaDto;
 import com.example.shop.entity.Characteristic;
 import com.example.shop.entity.Product;
 import com.example.shop.entity.ProductCategory;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.data.jpa.domain.Specification;
 
-import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.Join;
+import javax.persistence.criteria.JoinType;
+import javax.persistence.criteria.Predicate;
+import java.util.ArrayList;
 import java.util.List;
 
 public class ProductSpecification {
 
-    public static Specification<Product> findAllByProductCategory(String name) {
-        return (product, criteriaQuery, criteriaBuilder) -> {
-            Join<Product, ProductCategory> productToProductCategory = product.join("productCategories");
-            return criteriaBuilder.equal(productToProductCategory.get("name"), name);
-        };
-    }
+    public static Specification<Product> buildListFilter(ProductCriteriaDto productCriteria) {
+        return ((root, query, cb) -> {
+            if (productCriteria == null) {
+                return null;
+            }
 
-    public static Specification<Product> findAllByCharacteristic(String name) {
-        return (product, criteriaQuery, criteriaBuilder) -> {
-            Join<Product, Characteristic> productToProductCategory = product.join("characteristics");
-            return criteriaBuilder.equal(productToProductCategory.get("name"), name);
-        };
+            List<Predicate> predicates = new ArrayList<>();
+
+            if (StringUtils.isNotBlank(productCriteria.getCategoryName())) {
+                Join<Product, ProductCategory> productToProductCategory = root.join("productCategories", JoinType.INNER);
+                predicates.add(cb.equal(productToProductCategory.get("name"), productCriteria.getCategoryName()));
+            }
+
+            if (StringUtils.isNotBlank(productCriteria.getCharacteristicName())) {
+                Join<Product, Characteristic> productToCharacteristic = root.join("characteristics", JoinType.INNER);
+                predicates.add(cb.equal(productToCharacteristic.get("name"), productCriteria.getCharacteristicName()));
+            }
+
+            if (productCriteria.getCost1() != null) {
+                predicates.add(cb.greaterThanOrEqualTo(root.get("cost"), productCriteria.getCost1()));
+            }
+
+            if (productCriteria.getCost2() != null) {
+                predicates.add(cb.lessThanOrEqualTo(root.get("cost"), productCriteria.getCost2()));
+            }
+
+            if (productCriteria.getQuantity1() != null) {
+                predicates.add(cb.greaterThanOrEqualTo(root.get("quantity"), productCriteria.getQuantity1()));
+            }
+
+            if (productCriteria.getQuantity2() != null) {
+                predicates.add(cb.lessThanOrEqualTo(root.get("quantity"), productCriteria.getQuantity2()));
+            }
+
+            if (StringUtils.isNotBlank(productCriteria.getVendorCode())) {
+                predicates.add(cb.equal(root.get("vendorCode"), "%"+productCriteria.getVendorCode()+"%"));
+            }
+
+            if (StringUtils.isNotBlank(productCriteria.getDescription())) {
+                predicates.add(cb.like(root.get("description"), "%"+productCriteria.getDescription()+"%"));
+            }
+
+            return cb.and(predicates.toArray(new Predicate[0]));
+        });
     }
 
 

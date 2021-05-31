@@ -1,6 +1,5 @@
 package com.example.shop.security;
 
-import com.example.shop.entity.User;
 import com.example.shop.exception.UserNotFoundException;
 import com.example.shop.repository.UserRepository;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -19,7 +18,6 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String name) throws UsernameNotFoundException {
-        User user = userRepository.findByName(name).orElseThrow(UserNotFoundException::new);
-        return SecurityUser.fromUser(user);
+        return userRepository.findByName(name).orElseThrow(UserNotFoundException::new);
     }
 }

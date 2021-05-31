@@ -4,11 +4,13 @@ import com.example.shop.dto.request.UserListCriteriaDto;
 import com.example.shop.entity.User;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.data.jpa.domain.Specification;
+
 import javax.persistence.criteria.Predicate;
 import java.util.ArrayList;
 import java.util.List;
 
 public class UserSpecification {
+
     public static Specification<User> buildListFilter(UserListCriteriaDto userCriteria) {
         return ((root, query, cb) -> {
             if (userCriteria == null) {
@@ -33,9 +35,8 @@ public class UserSpecification {
                 predicates.add(cb.equal(root.get("name"), userCriteria.getUsername()));
             }
             if (userCriteria.getIsActive() != null) {
-                //TODO add filter
+                predicates.add(cb.equal(root.get("isActive"), userCriteria.getIsActive()));
             }
-
             return cb.and(predicates.toArray(new Predicate[0]));
         });
     }
