@@ -1,6 +1,7 @@
 package com.example.shop.controller;
 
 import com.example.shop.dto.ProductDto;
+import com.example.shop.dto.ProductSearchDto;
 import com.example.shop.service.ProductService;
 import org.springframework.core.convert.ConversionService;
 import org.springframework.data.domain.Page;
@@ -8,10 +9,10 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("api/open/products")
@@ -33,11 +34,20 @@ public class ProductController {
         return new ResponseEntity<>(productDtoPage, HttpStatus.OK);
     }
 
-    @GetMapping("/allByCategory")
-    public ResponseEntity<Page<ProductDto>> findAllByCategory(@RequestParam("name") String name,
+//    @GetMapping("/allByCategory")
+//    public ResponseEntity<Page<ProductDto>> findAllByCategory(@RequestParam("name") String name,
+//                                                              @PageableDefault Pageable pageable) {
+//        Page<ProductDto> productDtoPage = productService
+//                .findAllByCategory(name, pageable)
+//                .map(item -> conversionService.convert(item, ProductDto.class));
+//        return new ResponseEntity<>(productDtoPage, HttpStatus.OK);
+//    }
+
+    @PostMapping("/allByCategory")
+    public ResponseEntity<Page<ProductDto>> findAllByCategory(@RequestBody Map<String, String> nameCategory,
                                                               @PageableDefault Pageable pageable) {
         Page<ProductDto> productDtoPage = productService
-                .findAllByCategory(name, pageable)
+                .findAllByCategory(nameCategory, pageable)
                 .map(item -> conversionService.convert(item, ProductDto.class));
         return new ResponseEntity<>(productDtoPage, HttpStatus.OK);
     }
@@ -87,6 +97,15 @@ public class ProductController {
                                                                  @PageableDefault Pageable pageable) {
         Page<ProductDto> productDtoPage = productService
                 .findAllByDescription(description, pageable)
+                .map(item -> conversionService.convert(item, ProductDto.class));
+        return new ResponseEntity<>(productDtoPage, HttpStatus.OK);
+    }
+
+    @PostMapping("/allExp")
+    public ResponseEntity<Page<ProductDto>> findAllExp(@RequestBody ProductSearchDto productSearchDto,
+                                                       @PageableDefault Pageable pageable) {
+        Page<ProductDto> productDtoPage = productService
+                .findAll2(productSearchDto, pageable)
                 .map(item -> conversionService.convert(item, ProductDto.class));
         return new ResponseEntity<>(productDtoPage, HttpStatus.OK);
     }
