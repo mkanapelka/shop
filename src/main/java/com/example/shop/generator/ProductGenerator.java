@@ -1,13 +1,12 @@
 package com.example.shop.generator;
 
-import com.example.shop.constans.Constans;
+import com.example.shop.constans.Constants;
 import com.example.shop.entity.Product;
 import com.example.shop.entity.ProductCategory;
 import com.example.shop.repository.ProductCategoryRepository;
 import com.example.shop.repository.ProductRepository;
 import lombok.SneakyThrows;
 import org.springframework.stereotype.Component;
-
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -39,23 +38,23 @@ public class ProductGenerator {
 
     public void generationMasculineProduct() throws IOException {
 
-        List<String> adjectiveMasculine = readAllLines(Constans.MASCULINE_ADJECTIVE_PATH);
-        List<String> nounMasculine = readAllLines(Constans.MASCULINE_NOUN_PATH);
-        saveProduct(adjectiveMasculine, nounMasculine, Constans.M_SIZE);
+        List<String> adjectiveMasculine = readAllLines(Constants.MASCULINE_ADJECTIVE_PATH);
+        List<String> nounMasculine = readAllLines(Constants.MASCULINE_NOUN_PATH);
+        saveProduct(adjectiveMasculine, nounMasculine, Constants.M_SIZE);
     }
 
     public void generationFeminineProduct() throws IOException {
 
-        List<String> adjectiveFeminine = readAllLines(Constans.FEMININE_ADJECTIVE_PATH);
-        List<String> nounFeminine = readAllLines(Constans.FEMININE_NOUN_PATH);
-        saveProduct(adjectiveFeminine, nounFeminine, Constans.F_SIZE);
+        List<String> adjectiveFeminine = readAllLines(Constants.FEMININE_ADJECTIVE_PATH);
+        List<String> nounFeminine = readAllLines(Constants.FEMININE_NOUN_PATH);
+        saveProduct(adjectiveFeminine, nounFeminine, Constants.F_SIZE);
     }
 
     public void generationNeuterProduct() throws IOException {
 
-        List<String> adjectiveNeuter = readAllLines(Constans.NEUTER_ADJECTIVE_PATH);
-        List<String> nounNeuter = readAllLines(Constans.NEUTER_NOUN_PATH);
-        saveProduct(adjectiveNeuter, nounNeuter, Constans.N_SIZE);
+        List<String> adjectiveNeuter = readAllLines(Constants.NEUTER_ADJECTIVE_PATH);
+        List<String> nounNeuter = readAllLines(Constants.NEUTER_NOUN_PATH);
+        saveProduct(adjectiveNeuter, nounNeuter, Constants.N_SIZE);
     }
 
 
