@@ -5,3 +5,5 @@ INSERT INTO usr (created, updated, name, email, first_name, last_name, password,
 INSERT INTO user_role (user_id, roles) VALUES
 (1,'USER'),
 (2,'ADMIN');
+
+
