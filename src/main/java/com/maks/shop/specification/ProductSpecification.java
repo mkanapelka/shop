@@ -1,9 +1,8 @@
 package com.maks.shop.specification;
 
 import com.maks.shop.dto.request.ProductCriteriaDto;
-import com.maks.shop.entity.Characteristic;
 import com.maks.shop.entity.Product;
-import com.maks.shop.entity.ProductCategory;
+import com.maks.shop.entity.SubProductCategory;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.data.jpa.domain.Specification;
 
@@ -23,14 +22,9 @@ public class ProductSpecification {
 
             List<Predicate> predicates = new ArrayList<>();
 
-            if (StringUtils.isNotBlank(productCriteria.getCategoryName())) {
-                Join<Product, ProductCategory> productToProductCategory = root.join("productCategories", JoinType.INNER);
-                predicates.add(cb.equal(productToProductCategory.get("name"), productCriteria.getCategoryName()));
-            }
-
-            if (StringUtils.isNotBlank(productCriteria.getCharacteristicName())) {
-                Join<Product, Characteristic> productToCharacteristic = root.join("characteristics", JoinType.INNER);
-                predicates.add(cb.equal(productToCharacteristic.get("name"), productCriteria.getCharacteristicName()));
+            if (StringUtils.isNotBlank(productCriteria.getSubCategoryName())) {
+                Join<Product, SubProductCategory> productToSubCategory = root.join("subProductCategory", JoinType.INNER);
+                predicates.add(cb.equal(productToSubCategory.get("name"), productCriteria.getSubCategoryName()));
             }
 
             if (productCriteria.getCost1() != null) {

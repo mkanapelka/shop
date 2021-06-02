@@ -3,9 +3,12 @@ package com.maks.shop.generator;
 import com.maks.shop.constans.Constants;
 import com.maks.shop.entity.Product;
 import com.maks.shop.entity.ProductCategory;
+import com.maks.shop.entity.SubProductCategory;
 import com.maks.shop.repository.ProductCategoryRepository;
 import com.maks.shop.repository.ProductRepository;
+import com.maks.shop.repository.SubProductCategoryRepository;
 import org.springframework.stereotype.Component;
+
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -18,11 +21,11 @@ import java.util.Random;
 public class ProductGenerator {
 
     private ProductRepository productRepository;
-    private ProductCategoryRepository productCategoryRepository;
+    private SubProductCategoryRepository subProductCategoryRepository;
 
-    public ProductGenerator(ProductRepository productRepository, ProductCategoryRepository productCategoryRepository) {
+    public ProductGenerator(ProductRepository productRepository, SubProductCategoryRepository subProductCategoryRepository) {
         this.productRepository = productRepository;
-        this.productCategoryRepository = productCategoryRepository;
+        this.subProductCategoryRepository = subProductCategoryRepository;
     }
 
     public void allProductGeneration() {
@@ -63,16 +66,12 @@ public class ProductGenerator {
     }
 
 
-    public List<ProductCategory> addRandomProductCategory() {
+    public SubProductCategory addRandomSubProductCategory() {
 
-        List<ProductCategory> productCategoryList = new ArrayList<>(2);
         Random random = new Random();
+        Long randId = (long) random.nextInt(19);
 
-        for (int i = 0; i < 2; i++) {
-            Long randId = (long) random.nextInt(9);
-            productCategoryList.add(productCategoryRepository.findProductCategoryById(randId));
-        }
-        return productCategoryList;
+        return subProductCategoryRepository.findSubProductCategoryById(randId);
     }
 
     public String genVendorCode() {
@@ -105,7 +104,7 @@ public class ProductGenerator {
                     + ", " + adjective.get(random.nextInt(100))
                     + ", " + adjective.get(random.nextInt(100)));
 
-            product.setProductCategories(addRandomProductCategory());
+            product.setSubProductCategory(addRandomSubProductCategory());
             product.setQuantity(random.nextInt(30));
             product.setVendorCode(genVendorCode());
             product.setCreated(LocalDateTime.now());
@@ -113,7 +112,7 @@ public class ProductGenerator {
 
             try {
                 productRepository.save(product);
-            } catch (Exception exception){
+            } catch (Exception exception) {
                 size = size - i;
                 saveProduct(adjective, noun, size);
             }

@@ -8,7 +8,6 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -29,8 +28,6 @@ public class ProductRepositoryTest extends IntegrationTestBase {
                         .quantity(7)
                         .vendorCode("AL-123456789")
                         .description("чёткий и красный")
-                        .characteristics(Collections.emptyList())
-                        .productCategories(Collections.emptyList())
                         .build()
         );
 
@@ -47,8 +44,11 @@ public class ProductRepositoryTest extends IntegrationTestBase {
 
 
         List<Product> productList = productRepository.findAll(ProductSpecification.buildListFilter(productCriteria));
-//        assertEquals(productsExpected, listPage);
         assertEquals(productsExpected.size(), productList.size());
-        assertEquals(productsExpected.get(0), productList.get(0));
+        assertEquals(productsExpected.get(0).getName(), productList.get(0).getName());
+        assertEquals(productsExpected.get(0).getCost(), productList.get(0).getCost());
+        assertEquals(productsExpected.get(0).getDescription(), productList.get(0).getDescription());
+        assertEquals(productsExpected.get(0).getVendorCode(), productList.get(0).getVendorCode());
+        assertEquals(productsExpected.get(0).getQuantity(), productList.get(0).getQuantity());
     }
 }
