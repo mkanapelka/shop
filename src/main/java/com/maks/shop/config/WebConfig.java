@@ -23,7 +23,7 @@ public class WebConfig implements WebMvcConfigurer {
     }
 
     private Set<Class<? extends Converter>> findConverters() {
-        Reflections reflections = new Reflections("com.example.shop.converter", new SubTypesScanner());
+        Reflections reflections = new Reflections("com.maks.shop.converter", new SubTypesScanner());
         return reflections.getSubTypesOf(Converter.class);
     }
 

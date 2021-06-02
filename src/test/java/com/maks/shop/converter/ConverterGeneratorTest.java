@@ -1,5 +1,6 @@
 package com.maks.shop.converter;
 
+import com.maks.shop.IntegrationTestBase;
 import com.maks.shop.dto.ProductDto;
 import com.maks.shop.dto.UserProfileDto;
 import com.maks.shop.entity.Product;
@@ -15,7 +16,7 @@ import java.util.Collections;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @SpringBootTest
-public class ConverterGeneratorTest {
+public class ConverterGeneratorTest{
 
     @Autowired
     private ConversionService conversionService;
