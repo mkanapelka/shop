@@ -15,9 +15,8 @@ import org.springframework.web.bind.annotation.RestController;
 import static com.maks.shop.constans.Constants.DEFAULT_PAGE_SIZE;
 
 @RestController
-@RequestMapping("api/open/products")
+@RequestMapping("/api/public/products")
 public class ProductController {
-
 
     private final ProductService productService;
 
@@ -25,10 +24,10 @@ public class ProductController {
         this.productService = productService;
     }
 
-    @GetMapping()
+    @GetMapping
     public ResponseEntity<Page<ProductDto>> listUsers(
-            @PageableDefault(size = DEFAULT_PAGE_SIZE) Pageable pageable,
-            ProductCriteriaDto productCriteria) {
+        @PageableDefault(size = DEFAULT_PAGE_SIZE) Pageable pageable,
+        ProductCriteriaDto productCriteria) {
         Page<ProductDto> productPage = productService.listProducts(productCriteria, pageable);
         return new ResponseEntity<>(productPage, HttpStatus.OK);
     }

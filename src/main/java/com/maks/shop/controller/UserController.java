@@ -18,7 +18,7 @@ import static com.maks.shop.constans.Constants.DEFAULT_PAGE_SIZE;
 
 
 @RestController
-@RequestMapping("/users")
+@RequestMapping("/api/users")
 @RequiredArgsConstructor
 public class UserController {
 
