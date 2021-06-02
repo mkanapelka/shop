@@ -15,6 +15,7 @@ public class Order extends BaseEntity {
 
     private String orderNumber;
     private int totalCost;
+    private int quantityProduct;
 
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(name = "link_product_order",

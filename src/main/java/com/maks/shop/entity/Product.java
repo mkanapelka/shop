@@ -5,6 +5,7 @@ import lombok.*;
 
 import javax.persistence.*;
 import java.util.List;
+import java.util.Set;
 
 @EqualsAndHashCode(callSuper = false)
 @Entity
@@ -24,20 +25,14 @@ public class Product extends BaseEntity {
     private Integer quantity;
     private String description;
 
-    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    @JoinTable(name = "link_product_product_category",
-            joinColumns = @JoinColumn(name = "product_id"),
-            inverseJoinColumns = @JoinColumn(name = "product_category_id"),
-            foreignKey = @ForeignKey(name = "fk_product_to_product_category")
-    )
-    private List<ProductCategory> productCategories;
+    @OneToOne(mappedBy = "product", fetch = FetchType.LAZY)
+    private SmallImage thumbnail;
 
-    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    @JoinTable(name = "link_product_characteristic",
-            joinColumns = @JoinColumn(name = "product_id"),
-            inverseJoinColumns = @JoinColumn(name = "characteristic_id"),
-            foreignKey = @ForeignKey(name = "fk_product_to_characteristic")
-    )
-    private List<Characteristic> characteristics;
+    @OneToMany(mappedBy = "product", fetch = FetchType.LAZY)
+    private Set<BigImage> bigImages;
+
+    @ManyToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "subProductCategory_id")
+    private SubProductCategory subProductCategory;
 
 }

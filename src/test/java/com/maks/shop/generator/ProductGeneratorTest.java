@@ -27,10 +27,9 @@ class ProductGeneratorTest {
     }
 
     @Test
-    void addRandomProductCategoryTest() {
+    void addRandomSubProductCategoryTest() {
         int sizeExpected = 2;
-        assertNotNull(productGenerator.addRandomProductCategory());
-        assertEquals(sizeExpected, productGenerator.addRandomProductCategory().size());
+        assertNotNull(productGenerator.addRandomSubProductCategory());
     }
 
 }

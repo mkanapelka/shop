@@ -1,17 +1,13 @@
 package com.maks.shop.converter;
 
-import com.maks.shop.IntegrationTestBase;
 import com.maks.shop.dto.ProductDto;
 import com.maks.shop.dto.UserProfileDto;
 import com.maks.shop.entity.Product;
 import com.maks.shop.entity.User;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.core.convert.ConversionService;
-
-import java.util.Collections;
 
 import static org.assertj.core.api.Assertions.assertThat;
 

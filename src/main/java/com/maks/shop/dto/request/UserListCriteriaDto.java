@@ -15,13 +15,7 @@ public class UserListCriteriaDto {
     private String email;
     private LocalDate dateCreatedFrom;
     private LocalDate dateCreatedTo;
-    private Boolean isActive;//TODO add isActive
-
-    public UserListCriteriaDto(String username, String email, Boolean isActive) {
-        this.username = username;
-        this.email = email;
-        this.isActive = isActive;
-    }
+    private Boolean isActive;
 }
 
 
