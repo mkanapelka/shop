@@ -30,8 +30,6 @@ import java.util.Set;
 @AllArgsConstructor
 @NoArgsConstructor
 @Table(name = "usr")
-//@EqualsAndHashCode(callSuper = false)
-
 public class User extends BaseEntity implements UserDetails {
 
 
@@ -60,7 +58,7 @@ public class User extends BaseEntity implements UserDetails {
 
 
 
-//    ----------------------------------------
+    //    ----------------------------------------
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return getRoles();
