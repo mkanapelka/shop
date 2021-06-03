@@ -9,10 +9,11 @@ import javax.persistence.*;
 @Entity
 @Getter
 @Setter
-public class SmallImage extends BaseEntity {
+public class Image extends BaseEntity {
 
-    private byte[] smallImageArray;
+    private byte[] bigImageArray;
 
-    @OneToOne
+    @ManyToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "product_id")
     private Product product;
 }

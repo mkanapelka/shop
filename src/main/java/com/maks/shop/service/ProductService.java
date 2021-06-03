@@ -20,7 +20,6 @@ public class ProductService {
     private final ProductRepository productRepository;
     private final MapperService conversionService;
 
-
     public Page<ProductDto> listProducts(ProductCriteriaDto productCriteria, Pageable pageable) {
         Page<Product> products =
             productRepository.findAll(ProductSpecification.buildListFilter(productCriteria), pageable);

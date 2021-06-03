@@ -1,5 +1,6 @@
 package com.maks.shop.converter;
 
+import com.maks.shop.converter.UserProfileMapper;
 import com.maks.shop.dto.UserProfileDto;
 import com.maks.shop.entity.User;
 import org.mapstruct.Mapper;

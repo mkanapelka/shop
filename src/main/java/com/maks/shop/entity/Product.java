@@ -4,10 +4,9 @@ import com.maks.shop.entity.parent.BaseEntity;
 import lombok.*;
 
 import javax.persistence.*;
-import java.util.List;
 import java.util.Set;
 
-@EqualsAndHashCode(callSuper = false)
+
 @Entity
 @Getter
 @Setter
@@ -25,11 +24,10 @@ public class Product extends BaseEntity {
     private Integer quantity;
     private String description;
 
-    @OneToOne(mappedBy = "product", fetch = FetchType.LAZY)
-    private SmallImage thumbnail;
+    private Long thumbnailId;
 
     @OneToMany(mappedBy = "product", fetch = FetchType.LAZY)
-    private Set<BigImage> bigImages;
+    private Set<Image> images;
 
     @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "subProductCategory_id")

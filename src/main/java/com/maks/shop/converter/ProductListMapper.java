@@ -1,5 +1,6 @@
 package com.maks.shop.converter;
 
+import com.maks.shop.converter.ProductMapper;
 import com.maks.shop.dto.ProductDto;
 import com.maks.shop.entity.Product;
 import org.mapstruct.Mapper;

@@ -12,6 +12,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.transaction.Transactional;
+
 import static com.maks.shop.constans.Constants.DEFAULT_PAGE_SIZE;
 
 @RestController
@@ -24,6 +26,7 @@ public class ProductController {
         this.productService = productService;
     }
 
+    
     @GetMapping
     public ResponseEntity<Page<ProductDto>> listUsers(
         @PageableDefault(size = DEFAULT_PAGE_SIZE) Pageable pageable,

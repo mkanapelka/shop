@@ -1,13 +1,13 @@
-package com.maks.shop.dto.request;
+package com.maks.shop.dto;
 
 import lombok.*;
 
 @Getter
 @Setter
-@Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class CategoryCriteriaDto {
+@Builder
+public class SubCategoryDto {
 
     private String name;
 }

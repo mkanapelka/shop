@@ -1,13 +1,13 @@
-insert into product_category (created, updated, name)
-values (now(),now(),'компьютеры'),
-       (now(),now(),'бытовая техника'),
-       (now(),now(),'мужская одежда'),
-       (now(),now(),'женская одежда'),
-       (now(),now(),'детская одежда'),
-       (now(),now(),'декор'),
-       (now(),now(),'мебель'),
-       (now(),now(),'хозяйственные товары'),
-       (now(),now(),'продовольственные товары');
+insert into product_category (created, updated, name, thumbnail)
+values (now(),now(),'компьютеры','ComputerIcon'),
+       (now(),now(),'бытовая техника','TvIcon'),
+       (now(),now(),'мужская одежда','AccessibilityIcon;'),
+       (now(),now(),'женская одежда','PregnantWomanIcon'),
+       (now(),now(),'детская одежда','ChildCareIcon'),
+       (now(),now(),'декор','LocalFloristIcon'),
+       (now(),now(),'мебель','DeckIcon'),
+       (now(),now(),'хозяйственные товары','EmojiFoodBeverageIcon'),
+       (now(),now(),'продовольственные товары','FastfoodIcon');
 
 insert into sub_product_category(created, updated, name, product_category_id)
 values (now(), now(), 'ноутбуки', 1),
