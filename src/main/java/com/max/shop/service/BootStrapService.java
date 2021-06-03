@@ -21,8 +21,8 @@ public class BootStrapService implements ApplicationRunner {
 
     @Override
     public void run(ApplicationArguments args) {
-        if (productRepository.countProducts() < 10) {
-            productGenerator.allProductGeneration();
-        }
+        //        if (productRepository.countProducts() < 10) {
+        //            productGenerator.allProductGeneration();
+        //        }
     }
 }
