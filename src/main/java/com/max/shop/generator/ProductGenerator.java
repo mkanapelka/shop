@@ -3,8 +3,10 @@ package com.max.shop.generator;
 import com.max.shop.constans.Constants;
 import com.max.shop.entity.Product;
 import com.max.shop.entity.SubProductCategory;
+import com.max.shop.exception.SubCategoryNotFoundException;
 import com.max.shop.repository.ProductRepository;
 import com.max.shop.repository.SubProductCategoryRepository;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
@@ -15,15 +17,11 @@ import java.util.List;
 import java.util.Random;
 
 @Component
+@RequiredArgsConstructor
 public class ProductGenerator {
 
-    private ProductRepository productRepository;
-    private SubProductCategoryRepository subProductCategoryRepository;
-
-    public ProductGenerator(ProductRepository productRepository, SubProductCategoryRepository subProductCategoryRepository) {
-        this.productRepository = productRepository;
-        this.subProductCategoryRepository = subProductCategoryRepository;
-    }
+    private final ProductRepository productRepository;
+    private final SubProductCategoryRepository subProductCategoryRepository;
 
     public void allProductGeneration() {
         try {
@@ -66,9 +64,9 @@ public class ProductGenerator {
     public SubProductCategory addRandomSubProductCategory() {
 
         Random random = new Random();
-        Long randId = (long) random.nextInt(19);
+        Long randId = (long) random.nextInt(18) + 1;
 
-        return subProductCategoryRepository.findSubProductCategoryById(randId);
+        return subProductCategoryRepository.findById(randId).orElseThrow(SubCategoryNotFoundException::new);
     }
 
     public String genVendorCode() {

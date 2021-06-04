@@ -14,6 +14,7 @@ public class Constants {
     public static final int M_SIZE = 40;
     public static final int F_SIZE = 40;
     public static final int N_SIZE = 20;
+    public static final int QUANTITY_PRODUCT = M_SIZE + F_SIZE + N_SIZE;
 
     //web-------------------------------------
 

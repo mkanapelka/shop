@@ -4,10 +4,7 @@ import com.max.shop.entity.parent.BaseEntity;
 import lombok.Getter;
 import lombok.Setter;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.OneToMany;
+import javax.persistence.*;
 import java.util.List;
 
 @Entity
@@ -19,7 +16,7 @@ public class ProductCategory extends BaseEntity {
     private String name;
     private String thumbnail;
 
-    @OneToMany(mappedBy = "productCategory", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "productCategory", fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
     private List<SubProductCategory> subProductCategories;
 
 }

@@ -6,7 +6,6 @@ import com.max.shop.entity.User;
 import com.max.shop.specification.UserSpecification;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-
 import java.util.ArrayList;
 import java.util.List;
 

@@ -1,9 +1,9 @@
 package com.max.shop.controller;
 
+import com.max.shop.constans.Constants;
 import com.max.shop.dto.ProductDto;
 import com.max.shop.dto.request.ProductCriteriaDto;
 import com.max.shop.service.ProductService;
-import com.max.shop.constans.Constants;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
@@ -23,7 +23,7 @@ public class ProductController {
         this.productService = productService;
     }
 
-    
+
     @GetMapping
     public ResponseEntity<Page<ProductDto>> listUsers(
         @PageableDefault(size = Constants.DEFAULT_PAGE_SIZE) Pageable pageable,

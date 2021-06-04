@@ -4,7 +4,6 @@ import com.max.shop.dto.request.CategoryCriteriaDto;
 import com.max.shop.entity.ProductCategory;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.data.jpa.domain.Specification;
-
 import javax.persistence.criteria.Predicate;
 import java.util.ArrayList;
 import java.util.List;

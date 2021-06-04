@@ -1,11 +1,24 @@
 package com.max.shop.entity;
 
 import com.max.shop.entity.parent.BaseEntity;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
-
-import javax.persistence.*;
+import javax.persistence.CollectionTable;
+import javax.persistence.Column;
+import javax.persistence.ElementCollection;
+import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
+import javax.persistence.FetchType;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
+import javax.persistence.Table;
 import javax.validation.constraints.Email;
 import java.util.Collection;
 import java.util.Set;
@@ -17,8 +30,6 @@ import java.util.Set;
 @AllArgsConstructor
 @NoArgsConstructor
 @Table(name = "usr")
-//@EqualsAndHashCode(callSuper = false)
-
 public class User extends BaseEntity implements UserDetails {
 
 
@@ -33,10 +44,10 @@ public class User extends BaseEntity implements UserDetails {
     private Boolean isActive;
 
 
-    @ElementCollection(targetClass = Role.class, fetch = FetchType.EAGER)
-    @CollectionTable(name = "user_role", joinColumns = @JoinColumn(name = "user_id"))
-    @Enumerated(EnumType.STRING)
-    private Set<Role> roles;
+//    @ElementCollection(targetClass = Role.class, fetch = FetchType.EAGER)
+//    @CollectionTable(name = "user_role", joinColumns = @JoinColumn(name = "user_id"))
+//    @Enumerated(EnumType.STRING)
+//    private Set<Role> roles;
 
 
     @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
@@ -47,10 +58,10 @@ public class User extends BaseEntity implements UserDetails {
 
 
 
-//    ----------------------------------------
+    //    ----------------------------------------
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return getRoles();
+        return null;
     }
 
     @Override

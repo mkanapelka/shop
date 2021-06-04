@@ -5,7 +5,6 @@ import com.max.shop.entity.Product;
 import com.max.shop.entity.SubProductCategory;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.data.jpa.domain.Specification;
-
 import javax.persistence.criteria.Join;
 import javax.persistence.criteria.JoinType;
 import javax.persistence.criteria.Predicate;

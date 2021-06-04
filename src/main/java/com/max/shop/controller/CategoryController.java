@@ -1,5 +1,6 @@
 package com.max.shop.controller;
 
+import com.max.shop.constans.Constants;
 import com.max.shop.dto.CategoryDto;
 import com.max.shop.dto.request.CategoryCriteriaDto;
 import com.max.shop.service.ProductCategoryService;
@@ -11,8 +12,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-
-import static com.max.shop.constans.Constants.DEFAULT_PAGE_SIZE;
 
 @RestController
 @RequestMapping("/api/public/categories")
@@ -26,8 +25,8 @@ public class CategoryController {
 
     @GetMapping
     public ResponseEntity<Page<CategoryDto>> listUsers(
-            @PageableDefault(size = DEFAULT_PAGE_SIZE) Pageable pageable,
-            CategoryCriteriaDto categoryCriteria) {
+        @PageableDefault(size = Constants.DEFAULT_PAGE_SIZE) Pageable pageable,
+        CategoryCriteriaDto categoryCriteria) {
         Page<CategoryDto> categoryPage = productCategoryService.listCategories(categoryCriteria, pageable);
         return new ResponseEntity<>(categoryPage, HttpStatus.OK);
     }
