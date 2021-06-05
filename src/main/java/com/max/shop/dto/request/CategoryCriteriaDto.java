@@ -14,4 +14,5 @@ import lombok.Setter;
 public class CategoryCriteriaDto {
 
     private String name;
+    private String subCategoryName;
 }

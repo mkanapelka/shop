@@ -1,9 +1,14 @@
 package com.max.shop.specification;
 
 import com.max.shop.dto.request.CategoryCriteriaDto;
+import com.max.shop.entity.Product;
 import com.max.shop.entity.ProductCategory;
+import com.max.shop.entity.SubProductCategory;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.data.jpa.domain.Specification;
+
+import javax.persistence.criteria.Join;
+import javax.persistence.criteria.JoinType;
 import javax.persistence.criteria.Predicate;
 import java.util.ArrayList;
 import java.util.List;
@@ -17,6 +22,11 @@ public class ProductCategorySpecification {
             }
 
             List<Predicate> predicates = new ArrayList<>();
+
+            if (StringUtils.isNotBlank(categoryCriteria.getSubCategoryName())) {
+                Join<ProductCategory, SubProductCategory> categoryToSubCategory = root.join("subProductCategories", JoinType.INNER);
+                predicates.add(cb.equal(categoryToSubCategory.get("name"), categoryCriteria.getSubCategoryName()));
+            }
 
             if (StringUtils.isNotBlank(categoryCriteria.getName())) {
                 predicates.add(cb.equal(root.get("name"), categoryCriteria.getName()));
