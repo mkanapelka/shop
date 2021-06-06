@@ -14,18 +14,10 @@ import javax.validation.constraints.NotNull;
 @Builder
 public class ProductDto {
 
-    @NotNull
-    String name;
-
-    @NotNull
+    private Long id;
+    private String name;
     private String vendorCode;
-
-    @NotNull
     private int cost;
-
-    @NotNull
     private Integer quantity;
-
-    @NotNull
     private String description;
 }

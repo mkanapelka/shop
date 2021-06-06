@@ -36,7 +36,7 @@ public class CategoryController {
     }
 
     @GetMapping("/one/{id}")
-    public ResponseEntity<CategoryDto> listAllCategories(@PathVariable Long id) {
+    public ResponseEntity<CategoryDto> oneCategory(@PathVariable Long id) {
         CategoryDto categoryDto = productCategoryService.findCategoryById(id);
         return new ResponseEntity<>(categoryDto, HttpStatus.OK);
     }
@@ -47,7 +47,10 @@ public class CategoryController {
         return new ResponseEntity<>(productCategory, HttpStatus.OK);
     }
 
-
+    @GetMapping("/remove/{id}")
+    public void removeCategory(@PathVariable Long id) {
+        productCategoryService.removeCategory(id);
+    }
 
 
 

@@ -16,6 +16,7 @@ import java.util.List;
 @Builder
 public class SubCategoryDto {
 
+    private Long id;
     private String name;
     private List<Characteristic> characteristics;
 }

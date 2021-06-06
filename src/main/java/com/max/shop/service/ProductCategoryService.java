@@ -14,6 +14,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
 import java.util.List;
 import java.util.Optional;
 
@@ -42,6 +44,7 @@ public class ProductCategoryService {
         return conversionService.convert(productCategory, CategoryDto.class);
     }
 
+    @Transactional
     public ProductCategory saveCategory(CategoryDto categoryDto) {
 
         ProductCategory productCategory = new ProductCategory();
@@ -52,6 +55,8 @@ public class ProductCategoryService {
         return categoryRepository.save(productCategory);
     }
 
-
+    public void removeCategory(Long id){
+        categoryRepository.deleteById(id);
+    }
 
 }
