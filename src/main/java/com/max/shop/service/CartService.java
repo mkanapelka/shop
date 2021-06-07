@@ -8,10 +8,9 @@ import com.max.shop.entity.Product;
 import com.max.shop.exception.ProductNotFoundException;
 import com.max.shop.repository.CartRepository;
 import com.max.shop.repository.ProductRepository;
-import com.max.shop.util.UserContextUtil;
+import com.max.shop.util.SecurityUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-
 import java.util.List;
 
 @Service
@@ -23,13 +22,13 @@ public class CartService {
     private final MapperService conversionService;
 
     public CartDto showCart() {
-        Cart cart = cartRepository.findCartByUserId(UserContextUtil.getUserContextId());
+        Cart cart = cartRepository.findCartByUserId(SecurityUtil.getUserId());
         return conversionService.convert(cart, CartDto.class);
     }
 
     public CartDto addProductInCart(ProductDto productDto) {
         Product product = productRepository.findById(productDto.getId()).orElseThrow(ProductNotFoundException::new);
-        Cart cart = cartRepository.findCartByUserId(UserContextUtil.getUserContextId());
+        Cart cart = cartRepository.findCartByUserId(SecurityUtil.getUserId());
         List<Product> productList = cart.getProducts();
         productList.add(product);
         cart.setProducts(productList);
@@ -41,7 +40,7 @@ public class CartService {
     //    TODO: Do it;
     public CartDto removeProductFromCart(ProductDto productDto) {
         Product product = productRepository.findById(productDto.getId()).orElseThrow(ProductNotFoundException::new);
-        Cart cart = cartRepository.findCartByUserId(UserContextUtil.getUserContextId());
+        Cart cart = cartRepository.findCartByUserId(SecurityUtil.getUserId());
         List<Product> productList = cart.getProducts();
 
         if (productList.contains(productDto)) {

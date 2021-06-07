@@ -1,10 +1,12 @@
 package com.max.shop.dto.request;
 
+import com.max.shop.validation.PasswordUpdate;
 import lombok.Getter;
 import lombok.Setter;
 
 @Getter
 @Setter
+@PasswordUpdate
 public class UserFormDto {
 
     private Long id;
@@ -12,6 +14,8 @@ public class UserFormDto {
     private String firstName;
     private String lastName;
     private String email;
-    private String password;
     private Boolean isActive;
+
+    private String newPassword;
+    private String repeatPassword;
 }

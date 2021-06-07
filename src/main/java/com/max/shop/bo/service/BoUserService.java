@@ -2,6 +2,7 @@ package com.max.shop.bo.service;
 
 import com.max.shop.converter.MapperService;
 import com.max.shop.dto.UserProfileDto;
+import com.max.shop.dto.UserProfileListDto;
 import com.max.shop.dto.request.UserFormDto;
 import com.max.shop.dto.request.UserListCriteriaDto;
 import com.max.shop.entity.User;
@@ -12,6 +13,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.Optional;
@@ -22,26 +24,32 @@ public class BoUserService {
 
     private final MapperService conversionService;
     private final UserRepository userRepository;
+    private final PasswordEncoder passwordEncoder;
 
-    public User saveUser(UserFormDto userForm) {
+    public UserProfileDto saveUser(UserFormDto userForm) {
 
         User user = Optional.ofNullable(userForm.getId())
             .flatMap(userRepository::findById)
             .orElseGet(User::new);
 
         conversionService.update(userForm, user);
-        return userRepository.save(user);
+        if (userForm.getNewPassword() != null) {
+            user.setPassword(passwordEncoder.encode(userForm.getNewPassword()));
+        }
+
+        return conversionService.convert(userRepository.save(user), UserProfileDto.class);
     }
 
     public UserProfileDto findUserById(Long id) {
-        User user = userRepository.findById(id).orElseThrow(UserNotFoundException::new);
-        return conversionService.convert(user, UserProfileDto.class);
+        return userRepository.findById(id)
+            .map(user -> conversionService.convert(user, UserProfileDto.class))
+            .orElseThrow(UserNotFoundException::new);
     }
 
-    public Page<UserProfileDto> listUsers(UserListCriteriaDto userCriteria, Pageable pageable) {
+    public Page<UserProfileListDto> listUsers(UserListCriteriaDto userCriteria, Pageable pageable) {
         Page<User> users = userRepository.findAll(UserSpecification.buildListFilter(userCriteria), pageable);
-        List<UserProfileDto> profilesList =
-            conversionService.convertList(users.getContent(), UserProfileDto.class);
+        List<UserProfileListDto> profilesList =
+            conversionService.convertList(users.getContent(), UserProfileListDto.class);
         return new PageImpl<>(profilesList, pageable, users.getTotalElements());
     }
 }
