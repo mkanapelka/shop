@@ -27,12 +27,13 @@ public class CartService {
         return conversionService.convert(cart, CartDto.class);
     }
 
-    public CartDto addProductInCart(ProductDto productDto) {
+    public CartDto addProductInCart(ProductDto productDto, int quantityProduct) {
         Product product = productRepository.findById(productDto.getId()).orElseThrow(ProductNotFoundException::new);
         Cart cart = cartRepository.findCartByUserId(UserContextUtil.getUserContextId());
+
         List<Product> productList = cart.getProducts();
         productList.add(product);
-        cart.setProducts(productList);
+//        cart.setProducts(productList);
         cart.setQuantityProduct(cart.getQuantityProduct() + 1);
         cart.setTotalCost(cart.getTotalCost() + product.getCost());
         return conversionService.convert(cart, CartDto.class);

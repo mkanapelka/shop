@@ -21,33 +21,27 @@ public class CategoryController {
     private final ProductCategoryService productCategoryService;
 
     @GetMapping
-    public ResponseEntity<Page<CategoryDto>> listCategories(
+    @ResponseStatus(HttpStatus.OK)
+    public Page<CategoryDto> listCategories(
             @PageableDefault(size = Constants.DEFAULT_PAGE_SIZE) Pageable pageable,
             CategoryCriteriaDto categoryCriteria) {
-        Page<CategoryDto> categoryPage = productCategoryService.listCategories(categoryCriteria, pageable);
-        return new ResponseEntity<>(categoryPage, HttpStatus.OK);
+        return productCategoryService.listCategories(categoryCriteria, pageable);
     }
 
-    @GetMapping("/all")
-    public ResponseEntity<Page<CategoryDto>> listAllCategories(
-            @PageableDefault(size = Constants.DEFAULT_PAGE_SIZE) Pageable pageable) {
-        Page<CategoryDto> categoryPage = productCategoryService.listAllCategories(pageable);
-        return new ResponseEntity<>(categoryPage, HttpStatus.OK);
+    @GetMapping("/{id}")
+    @ResponseStatus(HttpStatus.OK)
+    public CategoryDto oneCategory(@PathVariable Long id) {
+        return productCategoryService.findCategoryById(id);
     }
 
-    @GetMapping("/one/{id}")
-    public ResponseEntity<CategoryDto> oneCategory(@PathVariable Long id) {
-        CategoryDto categoryDto = productCategoryService.findCategoryById(id);
-        return new ResponseEntity<>(categoryDto, HttpStatus.OK);
+    @PostMapping
+    @ResponseStatus(HttpStatus.OK)
+    public ProductCategory saveCategory(@RequestBody CategoryDto categoryDto) {
+        return productCategoryService.saveCategory(categoryDto);
     }
 
-    @PostMapping("/save")
-    public ResponseEntity<ProductCategory> saveCategory(@RequestBody CategoryDto categoryDto) {
-        ProductCategory productCategory = productCategoryService.saveCategory(categoryDto);
-        return new ResponseEntity<>(productCategory, HttpStatus.OK);
-    }
-
-    @GetMapping("/remove/{id}")
+    @DeleteMapping("/{id}")
+    @ResponseStatus(HttpStatus.OK)
     public void removeCategory(@PathVariable Long id) {
         productCategoryService.removeCategory(id);
     }

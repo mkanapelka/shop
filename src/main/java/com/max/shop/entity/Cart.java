@@ -31,5 +31,7 @@ public class Cart extends BaseEntity {
 
     @OneToOne
     private User user;
+
+//    todo: add ProductInCart Entity
 }
 

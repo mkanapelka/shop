@@ -10,7 +10,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -21,33 +20,28 @@ public class SubCategoryController {
     private final SubCategoryService subCategoryService;
 
     @GetMapping
-    public ResponseEntity<Page<SubCategoryDto>> listSubCategories(
+    @ResponseStatus(HttpStatus.OK)
+    public Page<SubCategoryDto> listSubCategories(
             @PageableDefault(size = Constants.DEFAULT_PAGE_SIZE) Pageable pageable,
             SubCategoryCriteriaDto subCategoryCriteria) {
-        Page<SubCategoryDto> subCategoryPage = subCategoryService.listSubCategories(subCategoryCriteria, pageable);
-        return new ResponseEntity<>(subCategoryPage, HttpStatus.OK);
+        return subCategoryService.listSubCategories(subCategoryCriteria, pageable);
     }
 
-    @GetMapping("/all")
-    public ResponseEntity<Page<SubCategoryDto>> listAllSubCategories(
-            @PageableDefault(size = Constants.DEFAULT_PAGE_SIZE) Pageable pageable) {
-        Page<SubCategoryDto> subCategoryPage = subCategoryService.listAllSubCategories(pageable);
-        return new ResponseEntity<>(subCategoryPage, HttpStatus.OK);
+
+    @GetMapping("/{id}")
+    @ResponseStatus(HttpStatus.OK)
+    public SubCategoryDto oneSubCategory(@PathVariable Long id) {
+        return subCategoryService.findSubCategoryById(id);
     }
 
-    @GetMapping("/one/{id}")
-    public ResponseEntity<SubCategoryDto> oneSubCategory(@PathVariable Long id) {
-        SubCategoryDto subCategoryDto = subCategoryService.findSubCategoryById(id);
-        return new ResponseEntity<>(subCategoryDto, HttpStatus.OK);
+    @PostMapping
+    @ResponseStatus(HttpStatus.OK)
+    public SubProductCategory saveSubCategory(@RequestBody SubCategoryDto subCategoryDto) {
+        return subCategoryService.saveSubCategory(subCategoryDto);
     }
 
-    @PostMapping("/save")
-    public ResponseEntity<SubProductCategory> saveSubCategory(@RequestBody SubCategoryDto subCategoryDto) {
-        SubProductCategory subProductCategory = subCategoryService.saveSubCategory(subCategoryDto);
-        return new ResponseEntity<>(subProductCategory, HttpStatus.OK);
-    }
-
-    @GetMapping("/remove/{id}")
+    @DeleteMapping("{id}")
+    @ResponseStatus(HttpStatus.OK)
     public void removeSubCategory(@PathVariable Long id) {
         subCategoryService.removeSubCategory(id);
     }
