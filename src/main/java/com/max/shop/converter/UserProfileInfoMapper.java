@@ -1,6 +1,6 @@
 package com.max.shop.converter;
 
-import com.max.shop.dto.UserProfileDto;
+import com.max.shop.dto.UserProfileListDto;
 import com.max.shop.entity.User;
 import org.mapstruct.Mapper;
 import org.springframework.core.convert.converter.Converter;
@@ -8,7 +8,7 @@ import java.util.Collection;
 import java.util.List;
 
 @Mapper(uses = {UserProfileMapper.class})
-public interface UserProfileListMapper extends Converter<Collection<User>, List<UserProfileDto>> {
+public interface UserProfileInfoMapper extends Converter<Collection<User>, List<UserProfileListDto>> {
 
-    List<UserProfileDto> convert(Collection<User> source);
+    List<UserProfileListDto> convert(Collection<User> source);
 }

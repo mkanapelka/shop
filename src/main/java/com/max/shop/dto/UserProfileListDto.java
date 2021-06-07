@@ -3,11 +3,10 @@ package com.max.shop.dto;
 import lombok.Getter;
 import lombok.Setter;
 import java.time.LocalDateTime;
-import java.util.List;
 
 @Getter
 @Setter
-public class UserProfileDto {
+public class UserProfileListDto {
 
     private Long id;
     private String name;
@@ -15,6 +14,4 @@ public class UserProfileDto {
     private String lastName;
     private String email;
     private LocalDateTime created;
-    private List<OrderInfoListDto> orders;
-    private Long cartId;
 }

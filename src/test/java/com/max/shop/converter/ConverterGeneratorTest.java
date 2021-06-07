@@ -1,7 +1,7 @@
 package com.max.shop.converter;
 
 import com.max.shop.dto.ProductDto;
-import com.max.shop.dto.UserProfileDto;
+import com.max.shop.dto.UserProfileListDto;
 import com.max.shop.entity.Product;
 import com.max.shop.entity.User;
 import org.junit.jupiter.api.Test;
@@ -39,7 +39,7 @@ public class ConverterGeneratorTest {
             .description("чёткий и красный")
             .build()));
 
-        List<UserProfileDto> usersDtoList = conversionService.convertList(users, UserProfileDto.class);
+        List<UserProfileListDto> usersDtoList = conversionService.convertList(users, UserProfileListDto.class);
         assertThat(usersDtoList).hasSize(1);
 
         List<ProductDto> productsDtoList = conversionService.convertList(products, ProductDto.class);
@@ -57,13 +57,13 @@ public class ConverterGeneratorTest {
             .build();
 
 
-        UserProfileDto dto = conversionService.convert(user, UserProfileDto.class);
+        UserProfileListDto dto = conversionService.convert(user, UserProfileListDto.class);
 
         assertThat(dto)
-            .extracting(UserProfileDto::getName,
-                UserProfileDto::getEmail,
-                UserProfileDto::getFirstName,
-                UserProfileDto::getLastName)
+            .extracting(UserProfileListDto::getName,
+                UserProfileListDto::getEmail,
+                UserProfileListDto::getFirstName,
+                UserProfileListDto::getLastName)
             .containsExactly("user2", "usr@mail.com", "Homer", "Simpson");
     }
 
