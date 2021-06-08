@@ -1,7 +1,11 @@
 package com.max.shop.security;
 
+import lombok.extern.slf4j.Slf4j;
+import lombok.val;
+import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.Ordered;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
@@ -11,10 +15,15 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+import org.springframework.web.filter.CorsFilter;
+import java.util.Collections;
 
 @Configuration
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(prePostEnabled = true)
+@Slf4j
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     private final UserDetailsServiceImpl userDetailsService;
@@ -23,10 +32,10 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         this.userDetailsService = userDetailsService;
     }
 
-
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        http
+        http.cors()
+            .and()
             .csrf().disable()
             .requestMatchers().antMatchers("/api/**")
             .and()
@@ -66,5 +75,19 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         return super.authenticationManager();
     }
 
-
+    @Bean
+    public FilterRegistrationBean<CorsFilter> initCorsFilter() {
+        val source = new UrlBasedCorsConfigurationSource();
+        val conf = new CorsConfiguration();
+        log.debug("CORS configuration");
+        conf.setAllowedOrigins(Collections.singletonList("http://localhost:3000"));
+        conf.setAllowedMethods(Collections.singletonList("*"));
+        conf.setAllowCredentials(true);
+        conf.setMaxAge(3600L);
+        conf.setAllowedHeaders(Collections.singletonList("*"));
+        source.registerCorsConfiguration("/**", conf);
+        FilterRegistrationBean<CorsFilter> bean = new FilterRegistrationBean<>(new CorsFilter(source));
+        bean.setOrder(Ordered.HIGHEST_PRECEDENCE);
+        return bean;
+    }
 }
