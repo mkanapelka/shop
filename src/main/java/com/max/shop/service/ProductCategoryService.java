@@ -13,7 +13,6 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
 import java.util.List;
 
 @Service
@@ -25,18 +24,15 @@ public class ProductCategoryService {
 
     public Page<CategoryDto> listCategories(CategoryCriteriaDto categoryCriteria, Pageable pageable) {
         Page<ProductCategory> categories =
-                categoryRepository.findAll(ProductCategorySpecification.buildListFilter(categoryCriteria), pageable);
+            categoryRepository.findAll(
+                ProductCategorySpecification.buildListFilter(categoryCriteria)
+                    .and(ProductCategorySpecification.fetchSubcategories()), pageable);
         List<CategoryDto> categoryList =
-                conversionService.convertList(categories.getContent(), CategoryDto.class);
+            conversionService.convertList(categories.getContent(), CategoryDto.class);
         return new PageImpl<>(categoryList, pageable, categories.getTotalElements());
     }
 
-    public Page<CategoryDto> listAllCategories(Pageable pageable) {
-        List<CategoryDto> categoryList = conversionService.convertList(categoryRepository.findAll(), CategoryDto.class);
-        return new PageImpl<>(categoryList, pageable, categoryList.size());
-    }
-
-    public CategoryDto findCategoryById(Long id){
+    public CategoryDto findCategoryById(Long id) {
         ProductCategory productCategory = categoryRepository.findById(id).orElseThrow(CategoryNotFoundException::new);
         return conversionService.convert(productCategory, CategoryDto.class);
     }
@@ -45,14 +41,14 @@ public class ProductCategoryService {
     public ProductCategory saveCategory(CategoryDto categoryDto) {
 
         ProductCategory productCategory = new ProductCategory();
-        if (categoryDto.getId() != null){
+        if (categoryDto.getId() != null) {
             productCategory = categoryRepository.findById(categoryDto.getId()).orElse(new ProductCategory());
         }
         conversionService.update(categoryDto, productCategory);
         return categoryRepository.save(productCategory);
     }
 
-    public void removeCategory(Long id){
+    public void removeCategory(Long id) {
         categoryRepository.deleteById(id);
     }
 
