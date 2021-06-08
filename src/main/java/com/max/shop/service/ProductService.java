@@ -4,6 +4,7 @@ import com.max.shop.converter.MapperService;
 import com.max.shop.dto.ProductDto;
 import com.max.shop.dto.request.ProductCriteriaDto;
 import com.max.shop.entity.Product;
+import com.max.shop.exception.ProductNotFoundException;
 import com.max.shop.repository.ProductRepository;
 import com.max.shop.specification.ProductSpecification;
 import lombok.RequiredArgsConstructor;
@@ -26,6 +27,10 @@ public class ProductService {
         List<ProductDto> profilesList =
             conversionService.convertList(products.getContent(), ProductDto.class);
         return new PageImpl<>(profilesList, pageable, products.getTotalElements());
+    }
+
+    public Product findObeById(Long id){
+        return productRepository.findById(id).orElseThrow(ProductNotFoundException::new);
     }
 
 

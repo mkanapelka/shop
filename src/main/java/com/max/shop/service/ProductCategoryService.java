@@ -3,9 +3,7 @@ package com.max.shop.service;
 import com.max.shop.converter.MapperService;
 import com.max.shop.dto.CategoryDto;
 import com.max.shop.dto.request.CategoryCriteriaDto;
-import com.max.shop.dto.request.UserFormDto;
 import com.max.shop.entity.ProductCategory;
-import com.max.shop.entity.User;
 import com.max.shop.exception.CategoryNotFoundException;
 import com.max.shop.repository.ProductCategoryRepository;
 import com.max.shop.specification.ProductCategorySpecification;
@@ -17,7 +15,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
