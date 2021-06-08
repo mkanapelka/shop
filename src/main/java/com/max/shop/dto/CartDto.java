@@ -11,8 +11,7 @@ import java.util.List;
 @Builder
 public class CartDto {
 
-    private String orderNumber;
     private int totalCost;
     private int quantityProduct;
-    private List<ProductDto> products;
+    private List<ProductInCartDto> productInCarts;
 }
