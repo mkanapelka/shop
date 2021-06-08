@@ -3,7 +3,7 @@ package com.max.shop.bo.controller;
 import com.max.shop.bo.service.BoUserService;
 import com.max.shop.constans.Constants;
 import com.max.shop.dto.UserProfileDto;
-import com.max.shop.dto.UserProfileListDto;
+import com.max.shop.dto.UserProfileInfoDto;
 import com.max.shop.dto.request.UserFormDto;
 import com.max.shop.dto.request.UserListCriteriaDto;
 import lombok.RequiredArgsConstructor;
@@ -45,7 +45,7 @@ public class BoUserController {
     }
 
     @GetMapping
-    public Page<UserProfileListDto> listUsers(
+    public Page<UserProfileInfoDto> listUsers(
         @PageableDefault(size = Constants.DEFAULT_PAGE_SIZE) Pageable pageable,
         UserListCriteriaDto userCriteria) {
         return userService.listUsers(userCriteria, pageable);

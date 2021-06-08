@@ -6,7 +6,7 @@ import java.time.LocalDateTime;
 
 @Getter
 @Setter
-public class UserProfileListDto {
+public class UserProfileInfoDto {
 
     private Long id;
     private String name;

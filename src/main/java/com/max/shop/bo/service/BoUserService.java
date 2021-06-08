@@ -2,7 +2,7 @@ package com.max.shop.bo.service;
 
 import com.max.shop.converter.MapperService;
 import com.max.shop.dto.UserProfileDto;
-import com.max.shop.dto.UserProfileListDto;
+import com.max.shop.dto.UserProfileInfoDto;
 import com.max.shop.dto.request.UserFormDto;
 import com.max.shop.dto.request.UserListCriteriaDto;
 import com.max.shop.entity.User;
@@ -46,10 +46,10 @@ public class BoUserService {
             .orElseThrow(UserNotFoundException::new);
     }
 
-    public Page<UserProfileListDto> listUsers(UserListCriteriaDto userCriteria, Pageable pageable) {
+    public Page<UserProfileInfoDto> listUsers(UserListCriteriaDto userCriteria, Pageable pageable) {
         Page<User> users = userRepository.findAll(UserSpecification.buildListFilter(userCriteria), pageable);
-        List<UserProfileListDto> profilesList =
-            conversionService.convertList(users.getContent(), UserProfileListDto.class);
+        List<UserProfileInfoDto> profilesList =
+            conversionService.convertList(users.getContent(), UserProfileInfoDto.class);
         return new PageImpl<>(profilesList, pageable, users.getTotalElements());
     }
 }
