@@ -31,11 +31,6 @@ public class SubCategoryService {
         return new PageImpl<>(subCategoryList, pageable, subCategories.getTotalElements());
     }
 
-    public Page<SubCategoryDto> listAllSubCategories(Pageable pageable) {
-        List<SubCategoryDto> subCategoryList = conversionService.convertList(subCategoryRepository.findAll(), SubCategoryDto.class);
-        return new PageImpl<>(subCategoryList, pageable, subCategoryList.size());
-    }
-
     public SubCategoryDto findSubCategoryById(Long id){
         SubProductCategory subCategory = subCategoryRepository.findById(id).orElseThrow(CategoryNotFoundException::new);
         return conversionService.convert(subCategory, SubCategoryDto.class);

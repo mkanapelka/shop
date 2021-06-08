@@ -14,7 +14,9 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 
 @Service
 @RequiredArgsConstructor
@@ -25,6 +27,7 @@ public class CartService {
     private final ProductInCartService productInCartService;
     private final MapperService conversionService;
 
+    @Transactional
     public CartDto showCart() {
         Cart cart = cartRepository.findCartByUserId(SecurityUtil.getUserId());
         if (cart == null) {
@@ -42,26 +45,26 @@ public class CartService {
             cartRepository.save(cart);
         }
 
-        ProductInCart productInCart = checkAvailability(cart, id);
+        ProductInCart productInCart = findOrCreate(cart, id);
         List<ProductInCart> productInCartList = cart.getProductInCarts();
 
-        boolean check = cart.getProductInCarts().contains(productInCart);
+        boolean check = cart.getProductInCarts().stream()
+                .anyMatch(pic -> Objects.equals(pic.getProductId(), id));
+
         if (!check) {
             productInCart.setQuantity(quantityProduct);
             productInCartList.add(productInCart);
             cart.setProductInCarts(productInCartList);
         } else {
             productInCart = findOneProductInCart(cart, id);
-            ProductInCart newProductInCart = productInCart;
-            productInCartList.remove(productInCart);
-            newProductInCart.setQuantity(newProductInCart.getQuantity() + quantityProduct);
-            productInCartList.add(newProductInCart);
+            productInCart.setQuantity(productInCart.getQuantity() + quantityProduct);
+            productInCartList.add(productInCart);
+            cart.setProductInCarts(productInCartList);
         }
 
         cart.setQuantityProduct(cart.getQuantityProduct() + quantityProduct);
         cart.setTotalCost(cart.getTotalCost()
                 + productInCart.getCost() * quantityProduct);
-        cart.setUpdated(LocalDateTime.now());
         cartRepository.save(cart);
         return conversionService.convert(cart, CartDto.class);
     }
@@ -95,8 +98,6 @@ public class CartService {
         } else {
         cart.setTotalCost(cart.getTotalCost() - productInCart.getCost() * quantityProduct);
         }
-
-        cart.setUpdated(LocalDateTime.now());
         cartRepository.save(cart);
         return conversionService.convert(cart, CartDto.class);
     }
@@ -106,7 +107,14 @@ public class CartService {
     public CartDto cleanCart() {
 
         Cart cart = cartRepository.findCartByUserId(SecurityUtil.getUserId());
-        cart.getProductInCarts().clear();
+        cart.setQuantityProduct(0);
+        cart.setTotalCost(0);
+        cart.setProductInCarts(Collections.emptyList());
+        List<ProductInCart> productInCartList = productInCartService.findAllByCartId(cart.getId());
+        for (ProductInCart productInCart : productInCartList) {
+            productInCartService.findByProductId(productInCart.getProductId()).setCart(null);
+            productInCartService.removeByProductId(productInCart.getProductId());
+        }
         cartRepository.save(cart);
         return conversionService.convert(cart, CartDto.class);
     }
@@ -126,13 +134,11 @@ public class CartService {
         cart.setUser(SecurityUtil.getUser());
         cart.setQuantityProduct(0);
         cart.setProductInCarts(new ArrayList<>());
-        cart.setCreated(LocalDateTime.now());
-        cart.setUpdated(LocalDateTime.now());
         cartRepository.save(cart);
         return cart;
     }
 
-    private ProductInCart checkAvailability(Cart cart, Long id) {
+    private ProductInCart findOrCreate(Cart cart, Long id) {
         ProductInCart productInCart = productInCartService.findByProductId(id);
         Product product = productService.findObeById(id);
         if (productInCart == null) {
@@ -141,8 +147,6 @@ public class CartService {
             productInCart.setProductId(id);
             productInCart.setName(product.getName());
             productInCart.setCost(product.getCost());
-            productInCart.setCreated(LocalDateTime.now());
-            productInCart.setUpdated(LocalDateTime.now());
             productInCart.setCart(cart);
             productInCartService.saveProductInCart(productInCart);
         }

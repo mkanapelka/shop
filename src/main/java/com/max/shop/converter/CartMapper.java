@@ -9,6 +9,7 @@ import org.springframework.core.convert.converter.Converter;
 @Mapper(uses = {ProductInCartMapper.class})
 public interface CartMapper extends Converter<Cart, CartDto> {
 
+
     @Mapping(source = "productInCarts", target = "productInCarts")
     CartDto convert(Cart cart);
 

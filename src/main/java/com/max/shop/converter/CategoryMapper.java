@@ -6,7 +6,7 @@ import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.springframework.core.convert.converter.Converter;
 
-@Mapper(uses = {SubCategoryListMapper.class})
+@Mapper(uses = {SubCategoryInfoListMapper.class})
 public interface CategoryMapper extends Converter<ProductCategory, CategoryDto> {
 
     @Mapping(source = "subProductCategories", target = "subCategories")

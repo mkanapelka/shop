@@ -16,7 +16,7 @@ public class ProductCategory extends BaseEntity {
     private String name;
     private String thumbnail;
 
-    @OneToMany(mappedBy = "productCategory", fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
+    @OneToMany(mappedBy = "productCategory", fetch = FetchType.EAGER, cascade = CascadeType.PERSIST)
     private List<SubProductCategory> subProductCategories;
 
 }

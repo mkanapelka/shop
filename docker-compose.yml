@@ -2,7 +2,7 @@ version: '3.7'
 
 services:
   postgres:
-    image: postgres:13.0
+    image: postgres:13.2
     volumes:
       - ./init.sql:/docker-entrypoint-initdb.d/init.sql
     environment:

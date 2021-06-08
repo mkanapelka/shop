@@ -3,10 +3,7 @@ package com.max.shop.entity;
 import com.max.shop.entity.parent.BaseEntity;
 import lombok.*;
 
-import javax.persistence.CascadeType;
-import javax.persistence.Entity;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
+import javax.persistence.*;
 
 @Entity
 @Getter
@@ -22,7 +19,7 @@ public class ProductInCart extends BaseEntity {
     private int quantity;
     private Integer cost;
 
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "cart_id")
     private Cart cart;
 }
