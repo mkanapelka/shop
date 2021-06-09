@@ -6,15 +6,16 @@ import com.max.shop.dto.request.SubCategoryCriteriaDto;
 import com.max.shop.entity.SubProductCategory;
 import com.max.shop.exception.CategoryNotFoundException;
 import com.max.shop.repository.SubProductCategoryRepository;
-import com.max.shop.specification.SubCategorySpecification;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
 import java.util.List;
+
+import static com.max.shop.specification.SubCategorySpecification.buildListFilter;
+import static com.max.shop.specification.SubCategorySpecification.fetchCharacteristics;
 
 @Service
 @RequiredArgsConstructor
@@ -25,10 +26,10 @@ public class SubCategoryService {
 
     public Page<SubCategoryDto> listSubCategories(SubCategoryCriteriaDto subCategoryCriteria, Pageable pageable) {
         Page<SubProductCategory> subCategories =
-                subCategoryRepository.findAll(
-                        SubCategorySpecification.buildListFilter(subCategoryCriteria), pageable);
+            subCategoryRepository.findAll(buildListFilter(subCategoryCriteria)
+                .and(fetchCharacteristics()), pageable);
         List<SubCategoryDto> subCategoryList =
-                conversionService.convertList(subCategories.getContent(), SubCategoryDto.class);
+            conversionService.convertList(subCategories.getContent(), SubCategoryDto.class);
         return new PageImpl<>(subCategoryList, pageable, subCategories.getTotalElements());
     }
 

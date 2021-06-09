@@ -1,6 +1,5 @@
 package com.max.shop.dto;
 
-import com.max.shop.entity.OrderStatus;
 import lombok.*;
 
 import java.util.List;
@@ -10,9 +9,10 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class CartDto {
+public class OrderDto {
 
     private int totalCost;
     private int quantityProduct;
-    private List<ProductInCartDto> productInCarts;
+    private String status;
+    private List<ProductInOrderDto> productInOrders;
 }
