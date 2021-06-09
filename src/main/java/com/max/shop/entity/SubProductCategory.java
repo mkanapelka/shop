@@ -10,9 +10,6 @@ import java.util.List;
 @Entity
 @Getter
 @Setter
-@NamedEntityGraph(name = "SubCategory.characteristics",
-        attributeNodes = @NamedAttributeNode("characteristics")
-)
 public class SubProductCategory extends BaseEntity {
 
     @Column(unique = true)
