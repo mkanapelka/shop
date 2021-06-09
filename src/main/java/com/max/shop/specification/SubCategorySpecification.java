@@ -34,6 +34,8 @@ public class SubCategorySpecification {
                 predicates.add(cb.equal(root.get("name"), subCategoryCriteria.getName()));
             }
 
+
+            root.fetch("characteristics", JoinType.LEFT);
             return cb.and(predicates.toArray(new Predicate[0]));
         });
     }
