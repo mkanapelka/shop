@@ -25,7 +25,8 @@ public class SubCategoryService {
 
     public Page<SubCategoryDto> listSubCategories(SubCategoryCriteriaDto subCategoryCriteria, Pageable pageable) {
         Page<SubProductCategory> subCategories =
-                subCategoryRepository.findAll(SubCategorySpecification.buildListFilter(subCategoryCriteria), pageable);
+                subCategoryRepository.findAll(SubCategorySpecification.buildListFilter(subCategoryCriteria)
+                        .and(SubCategorySpecification.fetchCharacteristic()), pageable);
         List<SubCategoryDto> subCategoryList =
                 conversionService.convertList(subCategories.getContent(), SubCategoryDto.class);
         return new PageImpl<>(subCategoryList, pageable, subCategories.getTotalElements());

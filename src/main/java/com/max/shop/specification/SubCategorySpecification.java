@@ -35,8 +35,15 @@ public class SubCategorySpecification {
             }
 
 
-            root.fetch("characteristics", JoinType.LEFT);
+//            root.fetch("characteristics", JoinType.LEFT);
             return cb.and(predicates.toArray(new Predicate[0]));
+        });
+    }
+
+    public static Specification<SubProductCategory> fetchCharacteristic() {
+        return ((root, query, cb) -> {
+            root.fetch("characteristics", JoinType.LEFT);
+            return null;
         });
     }
 }

@@ -31,7 +31,7 @@ public class ProductCategorySpecification {
                 predicates.add(cb.equal(root.get("name"), categoryCriteria.getName()));
             }
 
-            //            root.fetch("subProductCategories", JoinType.LEFT);
+//                        root.fetch("subProductCategories", JoinType.LEFT);
             return cb.and(predicates.toArray(new Predicate[0]));
         });
     }
