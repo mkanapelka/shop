@@ -3,21 +3,16 @@ package com.max.shop.entity;
 import com.max.shop.entity.parent.BaseEntity;
 import lombok.Getter;
 import lombok.Setter;
-import javax.persistence.CascadeType;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.ForeignKey;
-import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
-import javax.persistence.ManyToMany;
-import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
+
+import javax.persistence.*;
 import java.util.List;
 
 @Entity
 @Getter
 @Setter
+@NamedEntityGraph(name = "SubCategory.characteristics",
+        attributeNodes = @NamedAttributeNode("characteristics")
+)
 public class SubProductCategory extends BaseEntity {
 
     @Column(unique = true)

@@ -16,6 +16,28 @@ import java.util.List;
 
 public class SubCategorySpecification {
 
+//    public static Specification<SubProductCategory> buildListFilter(SubCategoryCriteriaDto subCategoryCriteria) {
+//        return ((root, query, cb) -> {
+//            if (subCategoryCriteria == null) {
+//                return null;
+//            }
+//
+//            List<Predicate> predicates = new ArrayList<>();
+//
+//            if (StringUtils.isNotBlank(subCategoryCriteria.getCharacteristicName())) {
+//                Join<SubProductCategory, Characteristic> subCategoryToCharacteristic
+//                        = root.join("characteristics", JoinType.INNER);
+//                predicates.add(cb.equal(subCategoryToCharacteristic.get("name"), subCategoryCriteria.getCharacteristicName()));
+//            }
+//
+//            if (StringUtils.isNotBlank(subCategoryCriteria.getName())) {
+//                predicates.add(cb.equal(root.get("name"), subCategoryCriteria.getName()));
+//            }
+//
+//            return cb.and(predicates.toArray(new Predicate[0]));
+//        });
+//    }
+
     public static Specification<SubProductCategory> buildListFilter(SubCategoryCriteriaDto subCategoryCriteria) {
         return ((root, query, cb) -> {
             if (subCategoryCriteria == null) {
@@ -34,14 +56,13 @@ public class SubCategorySpecification {
                 predicates.add(cb.equal(root.get("name"), subCategoryCriteria.getName()));
             }
 
-
-//            root.fetch("characteristics", JoinType.LEFT);
             return cb.and(predicates.toArray(new Predicate[0]));
         });
     }
 
     public static Specification<SubProductCategory> fetchCharacteristic() {
         return ((root, query, cb) -> {
+
             root.fetch("characteristics", JoinType.LEFT);
             return null;
         });

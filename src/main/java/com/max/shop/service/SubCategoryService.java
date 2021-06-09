@@ -25,14 +25,14 @@ public class SubCategoryService {
 
     public Page<SubCategoryDto> listSubCategories(SubCategoryCriteriaDto subCategoryCriteria, Pageable pageable) {
         Page<SubProductCategory> subCategories =
-                subCategoryRepository.findAll(SubCategorySpecification.buildListFilter(subCategoryCriteria)
-                        .and(SubCategorySpecification.fetchCharacteristic()), pageable);
+                subCategoryRepository.findAll(
+                        SubCategorySpecification.buildListFilter(subCategoryCriteria), pageable);
         List<SubCategoryDto> subCategoryList =
                 conversionService.convertList(subCategories.getContent(), SubCategoryDto.class);
         return new PageImpl<>(subCategoryList, pageable, subCategories.getTotalElements());
     }
 
-    public SubCategoryDto findSubCategoryById(Long id){
+    public SubCategoryDto findSubCategoryById(Long id) {
         SubProductCategory subCategory = subCategoryRepository.findById(id).orElseThrow(CategoryNotFoundException::new);
         return conversionService.convert(subCategory, SubCategoryDto.class);
     }
@@ -41,14 +41,14 @@ public class SubCategoryService {
     public SubProductCategory saveSubCategory(SubCategoryDto subCategoryDto) {
 
         SubProductCategory subCategory = new SubProductCategory();
-        if (subCategoryDto.getId() != null){
+        if (subCategoryDto.getId() != null) {
             subCategory = subCategoryRepository.findById(subCategoryDto.getId()).orElse(new SubProductCategory());
         }
         conversionService.update(subCategoryDto, subCategory);
         return subCategoryRepository.save(subCategory);
     }
 
-    public void removeSubCategory(Long id){
+    public void removeSubCategory(Long id) {
         subCategoryRepository.deleteById(id);
     }
 }
