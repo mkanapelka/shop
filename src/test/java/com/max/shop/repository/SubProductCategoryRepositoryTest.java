@@ -32,14 +32,6 @@ class SubProductCategoryRepositoryTest {
     }
 
     @Test
-    public void shouldFetchCharacteristics() {
-
-        val result = testSubject.findTop5ByIdIsNotNull();
-
-        assertThat(result).asList().isNotEmpty();
-    }
-
-    @Test
     public void shouldFetchCharacteristicsWithSpecification() {
 
         val result = testSubject.findAll(
