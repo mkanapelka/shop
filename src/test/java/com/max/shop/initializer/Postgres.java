@@ -9,17 +9,23 @@ import org.testcontainers.containers.PostgreSQLContainer;
 @UtilityClass
 public class Postgres {
 
-    public static final PostgreSQLContainer<?> container
-            = new PostgreSQLContainer<>("postgres:13.2");
+    public final PostgreSQLContainer<?> container
+        = new PostgreSQLContainer<>("postgres:13.2");
 
-    public static class Initializer implements ApplicationContextInitializer<ConfigurableApplicationContext> {
+    public void start() {
+        if (!container.isRunning()) {
+            container.start();
+        }
+    }
+
+    public class Initializer implements ApplicationContextInitializer<ConfigurableApplicationContext> {
 
         @Override
         public void initialize(ConfigurableApplicationContext applicationContext) {
             TestPropertyValues.of(
-                    "spring.datasource.url=" + container.getJdbcUrl(),
-                    "spring.datasource.username=" + container.getUsername(),
-                    "spring.datasource.password=" + container.getPassword()
+                "spring.datasource.url=" + container.getJdbcUrl(),
+                "spring.datasource.username=" + container.getUsername(),
+                "spring.datasource.password=" + container.getPassword()
             ).applyTo(applicationContext);
         }
     }

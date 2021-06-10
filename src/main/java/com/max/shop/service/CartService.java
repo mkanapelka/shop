@@ -8,9 +8,9 @@ import com.max.shop.entity.ProductInCart;
 import com.max.shop.repository.CartRepository;
 import com.max.shop.util.SecurityUtil;
 import lombok.RequiredArgsConstructor;
+import lombok.val;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -100,20 +100,18 @@ public class CartService {
 
     private ProductInCart findOrCreate(Cart cart, Long id) {
 
-        ProductInCart productInCart = cart.getProductInCarts().stream()
-                .filter(pic -> Objects.equals(pic.getProductId(), id))
-                .findFirst()
-                .orElse(null);
-        if (productInCart == null) {
-            Product product = productService.findObeById(id);
-            productInCart = new ProductInCart();
-            productInCart.setProductId(id);
-            productInCart.setName(product.getName());
-            productInCart.setCost(product.getCost());
-            productInCart.setCart(cart);
-            productInCartService.saveProductInCart(productInCart);
-        }
-        return productInCart;
+        return cart.getProductInCarts().stream()
+            .filter(pic -> Objects.equals(pic.getProductId(), id))
+            .findFirst()
+            .orElseGet(() -> {
+                Product product = productService.findObeById(id);
+                val productInCart = new ProductInCart();
+                productInCart.setProductId(id);
+                productInCart.setName(product.getName());
+                productInCart.setCost(product.getCost());
+                productInCart.setCart(cart);
+                return productInCartService.saveProductInCart(productInCart);
+            });
     }
 
     private Cart ensureCart() {
