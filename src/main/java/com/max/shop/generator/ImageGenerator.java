@@ -1,14 +1,15 @@
 package com.max.shop.generator;
 
-import com.max.shop.constans.Constants;
 import com.max.shop.entity.Image;
 import com.max.shop.repository.ImageRepository;
+import com.max.shop.repository.ProductRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.SneakyThrows;
+import lombok.val;
 import org.apache.commons.io.IOUtils;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Component;
-
-import java.io.IOException;
+import org.springframework.transaction.annotation.Transactional;
 import java.time.LocalDateTime;
 
 @Component
@@ -16,15 +17,26 @@ import java.time.LocalDateTime;
 public class ImageGenerator {
 
     private final ImageRepository imageRepository;
+    private final ProductRepository productRepository;
 
-    public void addImages() throws IOException {
-        for (int i = 0; i < Constants.QUANTITY_PRODUCT; i++) {
-            byte[] imageArray = IOUtils.toByteArray(new ClassPathResource("/images/logo.png").getInputStream());
-            Image image = new Image();
-            image.setBigImageArray(imageArray);
-            image.setCreated(LocalDateTime.now());
-            image.setUpdated(LocalDateTime.now());
-            imageRepository.save(image);
-        }
+    @Transactional
+    public void addImages() {
+        productRepository.findAllInStream()
+            .forEach(product -> {
+                val image = saveImage();
+                product.setThumbnailId(image.getId());
+                productRepository.save(product);
+            });
+
+    }
+
+    @SneakyThrows
+    private Image saveImage() {
+        byte[] imageArray = IOUtils.toByteArray(new ClassPathResource("/images/default512.png").getInputStream());
+        Image image = new Image();
+        image.setBigImageArray(imageArray);
+        image.setCreated(LocalDateTime.now());
+        image.setUpdated(LocalDateTime.now());
+        return imageRepository.save(image);
     }
 }

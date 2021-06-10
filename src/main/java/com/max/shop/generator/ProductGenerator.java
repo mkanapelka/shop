@@ -2,17 +2,16 @@ package com.max.shop.generator;
 
 import com.max.shop.constans.Constants;
 import com.max.shop.entity.Product;
+import com.max.shop.entity.ProductStatus;
 import com.max.shop.entity.SubProductCategory;
 import com.max.shop.exception.SubCategoryNotFoundException;
 import com.max.shop.repository.ProductRepository;
 import com.max.shop.repository.SubProductCategoryRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
-
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Random;
 
@@ -102,8 +101,7 @@ public class ProductGenerator {
             product.setSubProductCategory(addRandomSubProductCategory());
             product.setQuantity(random.nextInt(30));
             product.setVendorCode(genVendorCode());
-            product.setCreated(LocalDateTime.now());
-            product.setUpdated(LocalDateTime.now());
+            product.setStatus(ProductStatus.AVAILABLE);
 
             try {
                 productRepository.save(product);
