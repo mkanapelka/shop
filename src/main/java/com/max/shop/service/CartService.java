@@ -5,14 +5,11 @@ import com.max.shop.dto.CartDto;
 import com.max.shop.entity.Cart;
 import com.max.shop.entity.Product;
 import com.max.shop.entity.ProductInCart;
-import com.max.shop.exception.ProductNotFoundException;
 import com.max.shop.repository.CartRepository;
 import com.max.shop.util.SecurityUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -27,77 +24,51 @@ public class CartService {
     private final ProductInCartService productInCartService;
     private final MapperService conversionService;
 
-    @Transactional
     public CartDto showCart() {
-        Cart cart = cartRepository.findCartByUserId(SecurityUtil.getUserId());
-        if (cart == null) {
-            cart = createEmptyCart();
-        }
+        Cart cart = ensureCart();
         return conversionService.convert(cart, CartDto.class);
     }
 
     @Transactional
     public CartDto addProductInCart(Long id, int quantityProduct) {
-        Cart cart = cartRepository.findCartByUserId(SecurityUtil.getUserId());
-
-        if (cart == null) {
-            cart = createEmptyCart();
-            cartRepository.save(cart);
-        }
+        Cart cart = ensureCart();
 
         ProductInCart productInCart = findOrCreate(cart, id);
         List<ProductInCart> productInCartList = cart.getProductInCarts();
 
-        boolean check = cart.getProductInCarts().stream()
-                .anyMatch(pic -> Objects.equals(pic.getProductId(), id));
-
-        if (!check) {
-            productInCart.setQuantity(quantityProduct);
-            productInCartList.add(productInCart);
-            cart.setProductInCarts(productInCartList);
-        } else {
-            productInCart = findOneProductInCart(cart, id);
-            productInCart.setQuantity(productInCart.getQuantity() + quantityProduct);
-            productInCartList.add(productInCart);
-            cart.setProductInCarts(productInCartList);
-        }
+        productInCart.setQuantity(productInCart.getQuantity() + quantityProduct);
+        productInCartList.add(productInCart);
 
         cart.setQuantityProduct(cart.getQuantityProduct() + quantityProduct);
-        cart.setTotalCost(cart.getTotalCost()
-                + productInCart.getCost() * quantityProduct);
+        cart.setTotalCost(cart.getTotalCost() + productInCart.getCost() * quantityProduct);
+
         cartRepository.save(cart);
         return conversionService.convert(cart, CartDto.class);
     }
 
 
     @Transactional
-    public CartDto removeProductFromCart(Long id, int quantityProduct) {
+    public CartDto removeProductFromCart(Long productId, int quantityProduct) {
         Cart cart = cartRepository.findCartByUserId(SecurityUtil.getUserId());
-        ProductInCart productInCart = findOneProductInCart(cart, id);
-        List<ProductInCart> productInCartList = cart.getProductInCarts();
-        ProductInCart newProductInCart = productInCart;
+        ProductInCart productInCart = cart.getProductInCarts().stream()
+            .filter(pic -> Objects.equals(pic.getProductId(), productId))
+            .findFirst()
+            .orElse(null);
 
-        if (quantityProduct < newProductInCart.getQuantity()) {
-            productInCartList.remove(productInCart);
-            newProductInCart.setQuantity(newProductInCart.getQuantity() - quantityProduct);
-            productInCartList.add(newProductInCart);
-        } else {
-            productInCartList.remove(productInCart);
-            productInCartService.findByProductId(id).setCart(null);
-            productInCartService.removeByProductId(id);
+        if (productInCart == null) {
+            return conversionService.convert(cart, CartDto.class);
         }
 
-        if (cart.getQuantityProduct() - quantityProduct <= 0){
-        cart.setQuantityProduct(0);
+        if (quantityProduct < productInCart.getQuantity()) {
+            productInCart.setQuantity(productInCart.getQuantity() - quantityProduct);
         } else {
-        cart.setQuantityProduct(cart.getQuantityProduct() - quantityProduct);
+            productInCartService.removeByProductId(productInCart.getId());
+            cart.getProductInCarts().remove(productInCart);//not sure if we need to do this
         }
 
-        if ((cart.getTotalCost() - productInCart.getCost() * quantityProduct) <= 0){
-            cart.setTotalCost(0);
-        } else {
-        cart.setTotalCost(cart.getTotalCost() - productInCart.getCost() * quantityProduct);
-        }
+        cart.setQuantityProduct(Math.max(cart.getQuantityProduct() - quantityProduct, 0));
+        cart.setTotalCost(Math.max((cart.getTotalCost() - productInCart.getCost() * quantityProduct), 0));
+
         cartRepository.save(cart);
         return conversionService.convert(cart, CartDto.class);
     }
@@ -110,6 +81,8 @@ public class CartService {
         cart.setQuantityProduct(0);
         cart.setTotalCost(0);
         cart.setProductInCarts(Collections.emptyList());
+
+        //TODO NO
         List<ProductInCart> productInCartList = productInCartService.findAllByCartId(cart.getId());
         for (ProductInCart productInCart : productInCartList) {
             productInCartService.findByProductId(productInCart.getProductId()).setCart(null);
@@ -121,18 +94,9 @@ public class CartService {
 
 
     //--------------------------------------
-    private ProductInCart findOneProductInCart(Cart cart, Long id) {
-        return cart.getProductInCarts()
-                .stream().filter(item -> item.getProductId().equals(id))
-                .findFirst()
-                .orElseThrow(ProductNotFoundException::new);
-    }
-
     private Cart createEmptyCart() {
         Cart cart = new Cart();
-        cart.setTotalCost(0);
         cart.setUser(SecurityUtil.getUser());
-        cart.setQuantityProduct(0);
         cart.setProductInCarts(new ArrayList<>());
         cartRepository.save(cart);
         return cart;
@@ -140,10 +104,9 @@ public class CartService {
 
     private ProductInCart findOrCreate(Cart cart, Long id) {
         ProductInCart productInCart = productInCartService.findByProductId(id);
-        Product product = productService.findObeById(id);
         if (productInCart == null) {
+            Product product = productService.findObeById(id);
             productInCart = new ProductInCart();
-            productInCart.setQuantity(1);
             productInCart.setProductId(id);
             productInCart.setName(product.getName());
             productInCart.setCost(product.getCost());
@@ -151,6 +114,15 @@ public class CartService {
             productInCartService.saveProductInCart(productInCart);
         }
         return productInCart;
+    }
+
+    private Cart ensureCart() {
+        Cart cart = cartRepository.findCartByUserId(SecurityUtil.getUserId());
+
+        if (cart == null) {
+            cart = createEmptyCart();
+        }
+        return cart;
     }
 
 }
