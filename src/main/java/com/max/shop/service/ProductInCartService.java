@@ -26,7 +26,10 @@ public class ProductInCartService {
         return productInCartRepository.findAllByCartId(id);
     }
 
-    @Transactional
+    public void removeAllByCartId(Long id){
+        productInCartRepository.removeAllByCartId(id);
+    }
+
     public void removeByProductId(Long id){
         productInCartRepository.removeByProductId(id);
     }

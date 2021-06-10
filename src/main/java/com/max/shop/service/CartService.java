@@ -10,8 +10,8 @@ import com.max.shop.util.SecurityUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 
@@ -62,7 +62,6 @@ public class CartService {
         if (quantityProduct < productInCart.getQuantity()) {
             productInCart.setQuantity(productInCart.getQuantity() - quantityProduct);
         } else {
-            productInCartService.removeByProductId(productInCart.getId());
             cart.getProductInCarts().remove(productInCart);//not sure if we need to do this
         }
 
@@ -80,15 +79,12 @@ public class CartService {
         Cart cart = cartRepository.findCartByUserId(SecurityUtil.getUserId());
         cart.setQuantityProduct(0);
         cart.setTotalCost(0);
-        cart.setProductInCarts(Collections.emptyList());
 
-        //TODO NO
-        List<ProductInCart> productInCartList = productInCartService.findAllByCartId(cart.getId());
-        for (ProductInCart productInCart : productInCartList) {
-            productInCartService.findByProductId(productInCart.getProductId()).setCart(null);
-            productInCartService.removeByProductId(productInCart.getProductId());
+        for (int i = 0; i < cart.getProductInCarts().size(); i++) {
+            cart.getProductInCarts().remove(i);
         }
         cartRepository.save(cart);
+
         return conversionService.convert(cart, CartDto.class);
     }
 
@@ -103,7 +99,11 @@ public class CartService {
     }
 
     private ProductInCart findOrCreate(Cart cart, Long id) {
-        ProductInCart productInCart = productInCartService.findByProductId(id);
+
+        ProductInCart productInCart = cart.getProductInCarts().stream()
+                .filter(pic -> Objects.equals(pic.getProductId(), id))
+                .findFirst()
+                .orElse(null);
         if (productInCart == null) {
             Product product = productService.findObeById(id);
             productInCart = new ProductInCart();

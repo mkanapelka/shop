@@ -21,7 +21,7 @@ import static com.max.shop.specification.OrderSpecification.*;
 
 @Service
 @RequiredArgsConstructor
-public class OrderService {
+public class OrderServiceForAdmin {
 
     private final OrderRepository orderRepository;
     private final CartService cartService;
@@ -35,11 +35,6 @@ public class OrderService {
         List<OrderDto> orderDtoList =
                 conversionService.convertList(orders.getContent(), OrderDto.class);
         return new PageImpl<>(orderDtoList, pageable, orders.getTotalElements());
-    }
-
-    public OrderDto showOrderByUserIdForUser() {
-        List<Order> orders = orderRepository.findOrdersByUserId(SecurityUtil.getUserId());
-        return conversionService.convert(orders, OrderDto.class);
     }
 
     public OrderDto showOrderByUserId(Long id) {
