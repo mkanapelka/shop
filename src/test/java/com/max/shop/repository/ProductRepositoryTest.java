@@ -61,6 +61,5 @@ public class ProductRepositoryTest extends IntegrationTestBase {
         assertThat(idList).hasSize(1);
         assertEquals(idList.get(0).getId(),10001L);
 
-
     }
 }

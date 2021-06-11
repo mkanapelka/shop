@@ -3,7 +3,6 @@ package com.max.shop.repository;
 import com.max.shop.entity.Cart;
 import com.max.shop.entity.ProductInCart;
 import com.max.shop.repository.parent.BaseRepositoryTest;
-import com.max.shop.repository.parent.IntegrationTestBase;
 import lombok.val;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;

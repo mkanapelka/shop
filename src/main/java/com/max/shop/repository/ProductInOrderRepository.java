@@ -11,5 +11,7 @@ public interface ProductInOrderRepository extends JpaRepository<ProductInOrder, 
 
     List<ProductInOrder> findAllByOrderId(Long Id);
 
+    void removeAllByOrderId(Long id);
+
     void removeByProductId(Long id);
 }
