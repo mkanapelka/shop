@@ -1,4 +1,4 @@
-package com.max.shop;
+package com.max.shop.repository.parent;
 
 import com.max.shop.initializer.Postgres;
 import org.junit.jupiter.api.BeforeAll;

@@ -37,9 +37,14 @@ public class OrderServiceForAdmin {
         return new PageImpl<>(orderDtoList, pageable, orders.getTotalElements());
     }
 
-    public OrderDto showOrderByUserId(Long id) {
+    public List<OrderDto>showOrderByUserId(Long id) {
         List<Order> orders = orderRepository.findOrdersByUserId(id);
-        return conversionService.convert(orders, OrderDto.class);
+        return conversionService.convertList(orders, OrderDto.class);
+    }
+
+    public OrderDto showOneOrderById(Long id) {
+        Order order = orderRepository.findOrderById(id);
+        return conversionService.convert(order, OrderDto.class);
     }
 
 

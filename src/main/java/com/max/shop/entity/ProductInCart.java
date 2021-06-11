@@ -26,7 +26,7 @@ public class ProductInCart extends BaseEntity {
     @EqualsAndHashCode.Include
     private Long productId;
     private String name;
-    private int quantity;
+    private Integer quantity;
     private Integer cost;
 
     @ManyToOne(fetch = FetchType.LAZY)

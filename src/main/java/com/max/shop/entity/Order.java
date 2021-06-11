@@ -1,9 +1,13 @@
 package com.max.shop.entity;
 
 import com.max.shop.entity.parent.BaseEntity;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.experimental.SuperBuilder;
 
 import javax.persistence.*;
 import java.util.List;
@@ -13,6 +17,9 @@ import java.util.List;
 @Setter
 @Table(name = "user_order")
 @EqualsAndHashCode(callSuper = false)
+@AllArgsConstructor
+@NoArgsConstructor
+@Builder
 public class Order extends BaseEntity {
 
     private int totalCost;

@@ -1,14 +1,17 @@
 package com.max.shop.repository;
 
-import com.max.shop.IntegrationTestBase;
 import com.max.shop.dto.request.ProductCriteriaDto;
 import com.max.shop.entity.Product;
+import com.max.shop.repository.parent.IntegrationTestBase;
 import com.max.shop.specification.ProductSpecification;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class ProductRepositoryTest extends IntegrationTestBase {
@@ -49,5 +52,15 @@ public class ProductRepositoryTest extends IntegrationTestBase {
         assertEquals(productsExpected.get(0).getDescription(), productList.get(0).getDescription());
         assertEquals(productsExpected.get(0).getVendorCode(), productList.get(0).getVendorCode());
         assertEquals(productsExpected.get(0).getQuantity(), productList.get(0).getQuantity());
+    }
+
+    @Test
+    void testFindAllByIdInProductsId(){
+        List<Long> expectedIdList = Collections.singletonList(10001L);
+        List<Product> idList = productRepository.findAllByIdInProductsId(expectedIdList).collect(Collectors.toList());
+        assertThat(idList).hasSize(1);
+        assertEquals(idList.get(0).getId(),10001L);
+
+
     }
 }

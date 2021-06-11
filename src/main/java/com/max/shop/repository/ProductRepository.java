@@ -4,6 +4,8 @@ import com.max.shop.entity.Product;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Query;
+
+import java.util.List;
 import java.util.stream.Stream;
 
 public interface ProductRepository extends JpaRepository<Product, Long>, JpaSpecificationExecutor<Product> {
@@ -13,4 +15,7 @@ public interface ProductRepository extends JpaRepository<Product, Long>, JpaSpec
 
     @Query("from Product p")
     Stream<Product> findAllInStream();
+
+    @Query("SELECT p FROM Product p WHERE p.id in :productsId")
+    Stream<Product> findAllByIdInProductsId(Iterable<Long> productsId);
 }

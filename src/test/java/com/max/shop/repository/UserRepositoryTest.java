@@ -1,8 +1,9 @@
 package com.max.shop.repository;
 
-import com.max.shop.IntegrationTestBase;
 import com.max.shop.dto.request.UserListCriteriaDto;
 import com.max.shop.entity.User;
+import com.max.shop.exception.UserNotFoundException;
+import com.max.shop.repository.parent.IntegrationTestBase;
 import com.max.shop.specification.UserSpecification;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -44,6 +45,22 @@ public class UserRepositoryTest extends IntegrationTestBase {
         assertEquals(usersExpected.get(0).getEmail(), userList.get(0).getEmail());
         assertEquals(usersExpected.get(0).getIsActive(), userList.get(0).getIsActive());
 
+    }
+
+    @Test
+    void testFindByName(){
+        User userExpected = User.builder()
+                .name("ivan")
+                .firstName("Иванов")
+                .lastName("Иван")
+                .email("ivan@mail.ru")
+                .isActive(true)
+                .build();
+
+        String name = "ivan";
+        User user = userRepository.findByName(name).orElseThrow(UserNotFoundException::new);
+        assertEquals(userExpected.getName(), user.getName());
+        assertEquals(userExpected.getEmail(), user.getEmail());
     }
 }
 

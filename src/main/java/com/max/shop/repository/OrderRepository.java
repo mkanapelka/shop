@@ -10,4 +10,6 @@ public interface OrderRepository extends JpaRepository<Order, Long>,
         JpaSpecificationExecutor<Order> {
 
     List<Order> findOrdersByUserId(Long id);
+
+    Order findOrderById(Long id);
 }

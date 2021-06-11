@@ -89,6 +89,10 @@ public class CartService {
     }
 
 
+    public Cart returnCart(){
+        return cartRepository.findCartByUserId(SecurityUtil.getUserId());
+    }
+
     //--------------------------------------
     private Cart createEmptyCart() {
         Cart cart = new Cart();
@@ -105,14 +109,33 @@ public class CartService {
             .findFirst()
             .orElseGet(() -> {
                 Product product = productService.findObeById(id);
-                val productInCart = new ProductInCart();
+                ProductInCart productInCart = new ProductInCart();
                 productInCart.setProductId(id);
                 productInCart.setName(product.getName());
                 productInCart.setCost(product.getCost());
+                productInCart.setQuantity(0);
                 productInCart.setCart(cart);
                 return productInCartService.saveProductInCart(productInCart);
             });
     }
+
+//    private ProductInCart findOrCreate(Cart cart, Long id) {
+//
+//        ProductInCart productInCart = cart.getProductInCarts().stream()
+//                .filter(pic -> Objects.equals(pic.getProductId(), id))
+//                .findFirst()
+//                .orElse(null);
+//        if (productInCart == null) {
+//            Product product = productService.findObeById(id);
+//            productInCart = new ProductInCart();
+//            productInCart.setProductId(id);
+//            productInCart.setName(product.getName());
+//            productInCart.setCost(product.getCost());
+//            productInCart.setCart(cart);
+//            productInCartService.saveProductInCart(productInCart);
+//        }
+//        return productInCart;
+//    }
 
     private Cart ensureCart() {
         Cart cart = cartRepository.findCartByUserId(SecurityUtil.getUserId());

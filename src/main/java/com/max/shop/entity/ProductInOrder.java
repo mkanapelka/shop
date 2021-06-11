@@ -14,12 +14,13 @@ import javax.persistence.ManyToOne;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-@EqualsAndHashCode(callSuper = false)
+@EqualsAndHashCode(onlyExplicitlyIncluded = true, callSuper = false)
 public class ProductInOrder extends BaseEntity {
 
+    @EqualsAndHashCode.Include
     private Long productId;
     private String name;
-    private int quantity;
+    private Integer quantity;
     private Integer cost;
 
     @ManyToOne(fetch = FetchType.LAZY)
