@@ -119,25 +119,9 @@ public class CartService {
             });
     }
 
-//    private ProductInCart findOrCreate(Cart cart, Long id) {
-//
-//        ProductInCart productInCart = cart.getProductInCarts().stream()
-//                .filter(pic -> Objects.equals(pic.getProductId(), id))
-//                .findFirst()
-//                .orElse(null);
-//        if (productInCart == null) {
-//            Product product = productService.findObeById(id);
-//            productInCart = new ProductInCart();
-//            productInCart.setProductId(id);
-//            productInCart.setName(product.getName());
-//            productInCart.setCost(product.getCost());
-//            productInCart.setCart(cart);
-//            productInCartService.saveProductInCart(productInCart);
-//        }
-//        return productInCart;
-//    }
 
-    private Cart ensureCart() {
+    public Cart ensureCart() {
+//    private Cart ensureCart() {
         Cart cart = cartRepository.findCartByUserId(SecurityUtil.getUserId());
 
         if (cart == null) {

@@ -8,8 +8,8 @@ import com.max.shop.entity.OrderStatus;
 import com.max.shop.entity.Product;
 import com.max.shop.entity.ProductInCart;
 import com.max.shop.entity.ProductInOrder;
-import com.max.shop.entity.Status;
 import com.max.shop.exception.CartIsEmptyException;
+import com.max.shop.exception.OrderNotFoundException;
 import com.max.shop.exception.ProductsNotEnoughException;
 import com.max.shop.repository.OrderRepository;
 import com.max.shop.util.SecurityUtil;
@@ -29,17 +29,13 @@ public class OrderServiceForUser {
 
     private final OrderRepository orderRepository;
     private final CartService cartService;
+    private final ProductInOrderService productInOrderService;
     private final ProductService productService;
     private final MapperService conversionService;
 
     public List<OrderDto> showOrdersByUser() {
         List<Order> orders = orderRepository.findOrdersByUserId(SecurityUtil.getUserId());
         return conversionService.convertList(orders, OrderDto.class);
-    }
-
-    public OrderDto showOneOrderById(Long id) {
-        Order order = orderRepository.findOrderById(id);
-        return conversionService.convert(order, OrderDto.class);
     }
 
     @Transactional
@@ -70,25 +66,47 @@ public class OrderServiceForUser {
                 throw new ProductsNotEnoughException();
             }
         }
-        List<ProductInOrder> productInOrderList = new ArrayList<>(cart.getProductInCarts().size());
-        cart.getProductInCarts().forEach(item -> productInOrderList.add(ProductInOrder.builder()
-                .cost(item.getCost())
-                .name(item.getName())
-                .productId(item.getProductId())
-                .quantity(item.getQuantity())
-                .build()));
-
 
         Order order = Order.builder()
-                .productInOrders(productInOrderList)
+//                .productInOrders(productInOrderList)
                 .quantityProduct(cart.getQuantityProduct())
                 .totalCost(cart.getTotalCost())
                 .user(cart.getUser())
                 .status(OrderStatus.ABANDONED)
                 .build();
 
+        List<ProductInOrder> productInOrderList = new ArrayList<>(cart.getProductInCarts().size());
+
+        for (ProductInCart productInCart : cart.getProductInCarts()) {
+            ProductInOrder productInOrder = ProductInOrder.builder()
+                    .cost(productInCart.getCost())
+                    .name(productInCart.getName())
+                    .productId(productInCart.getProductId())
+                    .quantity(productInCart.getQuantity())
+                    .order(order)
+                    .build();
+            productInOrderList.add(productInOrder);
+            productInOrderService.save(productInOrder);
+        }
+
+        order.setProductInOrders(productInOrderList);
         orderRepository.save(order);
         cartService.cleanCart();
         return conversionService.convert(order, OrderDto.class);
+    }
+
+
+    public void cancelOrder(Long id) {
+        List<Order> orderList = orderRepository.findOrdersByUserId(SecurityUtil.getUserId());
+        Order order = orderList.stream()
+                .filter(item -> item.getId().equals(id))
+                .findFirst().orElseThrow(OrderNotFoundException::new);
+
+        List<ProductInOrder> productList = order.getProductInOrders();
+        for (ProductInOrder productInOrder : productList) {
+            Product product = productService.findObeById(productInOrder.getProductId());
+            product.setQuantity(product.getQuantity() + productInOrder.getQuantity());
+        }
+        orderRepository.deleteById(id);
     }
 }

@@ -25,7 +25,7 @@ public class Order extends BaseEntity {
     private int totalCost;
     private int quantityProduct;
 
-    @OneToMany(mappedBy = "order", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "order", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     private List<ProductInOrder> productInOrders;
 
     @ManyToOne(cascade = CascadeType.ALL)
