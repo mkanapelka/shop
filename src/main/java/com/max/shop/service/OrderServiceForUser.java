@@ -18,6 +18,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -96,6 +97,7 @@ public class OrderServiceForUser {
     }
 
 
+    @Transactional
     public void cancelOrder(Long id) {
         List<Order> orderList = orderRepository.findOrdersByUserId(SecurityUtil.getUserId());
         Order order = orderList.stream()
@@ -107,6 +109,12 @@ public class OrderServiceForUser {
             Product product = productService.findObeById(productInOrder.getProductId());
             product.setQuantity(product.getQuantity() + productInOrder.getQuantity());
         }
+
+        for (int i = 0; i < order.getProductInOrders().size(); i++) {
+            order.getProductInOrders().remove(i);
+        }
+        order.setUser(null);
+        orderRepository.save(order);
         orderRepository.deleteById(id);
     }
 }

@@ -6,6 +6,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -28,5 +29,11 @@ public class OrderForUserController {
     @ResponseStatus(HttpStatus.OK)
     public OrderDto createOrder(){
         return orderServiceForUser.createOrder();
+    }
+
+    @GetMapping("/remove")
+    @ResponseStatus(HttpStatus.OK)
+    public void removeOrder(@RequestParam Long id){
+        orderServiceForUser.cancelOrder(id);
     }
 }
