@@ -7,7 +7,7 @@ import lombok.*;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class OrderCriteriaDto {
+public class OrderCriteriaForAdminDto {
 
     private int totalCost1;
     private int totalCost2;

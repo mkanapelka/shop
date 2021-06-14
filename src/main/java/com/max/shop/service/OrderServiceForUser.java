@@ -13,6 +13,9 @@ import com.max.shop.exception.EntityNotFountException;
 import com.max.shop.exception.ProductsNotEnoughException;
 import com.max.shop.exception.WrongOrderException;
 import com.max.shop.repository.OrderRepository;
+import com.max.shop.service.CartService;
+import com.max.shop.service.ProductInOrderService;
+import com.max.shop.service.ProductService;
 import com.max.shop.specification.OrderSpecification;
 import com.max.shop.util.SecurityUtil;
 import lombok.RequiredArgsConstructor;
@@ -33,80 +36,80 @@ public class OrderServiceForUser {
     private final ProductService productService;
     private final MapperService conversionService;
 
-    public List<OrderDto> showOrdersByUser(OrderStatus status) {
-        List<Order> orders = orderRepository.findAll(OrderSpecification.buildListFilter());
-        return conversionService.convertList(orders, OrderDto.class);
-    }
-
-    @Transactional
-    //    TODO: It works, but i will optimize it
-    public OrderDto createOrder() {
-
-        Cart cart = cartService.returnCart();
-        if (cart == null || cart.getProductInCarts().isEmpty()) {
-            throw new CartIsEmptyException();
-        }
-
-        List<Long> productIdList = cart.getProductInCarts()
-            .stream()
-            .map(ProductInCart::getProductId).collect(Collectors.toList());
-
-        List<Product> products = productService.findAllByIdInProductsId(productIdList);
-
-        cart.getProductInCarts()
-            .forEach(pic -> {
-                val product = products.stream().filter(it -> Objects.equals(it.getId(), pic.getProductId()))
-                    .findFirst().orElseThrow(() -> new EntityNotFountException("product"));
-                if (product.getQuantity() >= pic.getQuantity()) {
-                    product.setQuantity(product.getQuantity() - pic.getQuantity());
-                } else {
-                    throw new ProductsNotEnoughException();
-                }
-            });
-
-        Order order = Order.builder()
-            //                .productInOrders(productInOrderList)
-            .quantityProduct(cart.getQuantityProduct())
-            .totalCost(cart.getTotalCost())
-            .user(cart.getUser())
-            .status(OrderStatus.PENDING)
-            .build();
-
-        List<ProductInOrder> productInOrderList = cart.getProductInCarts().stream()
-            .map(productInCart -> ProductInOrder.builder()
-                .cost(productInCart.getCost())
-                .name(productInCart.getName())
-                .productId(productInCart.getProductId())
-                .quantity(productInCart.getQuantity())
-                .order(order)
-                .build())
-            .collect(Collectors.toList());
-
-        order.setProductInOrders(productInOrderList);
-        orderRepository.save(order);
-        cartService.cleanCart();
-        return conversionService.convert(order, OrderDto.class);
-    }
-
-
-    @Transactional
-    public void cancelOrder(Long id) {
-        Order order = orderRepository.findOrderById(id);
-        if (!Objects.equals(order.getUser().getId(), SecurityUtil.getUserId())) {
-            throw new WrongOrderException();
-        }
-
-        val productList = productService.findAllByIdInProductsId(order.getProductInOrders().stream()
-            .map(ProductInOrder::getProductId)
-            .collect(Collectors.toList()))
-            .forEach(product -> product.setQuantity(product.getQuantity() + productInOrder.getQuantity()));
-
-        //        for (ProductInOrder productInOrder : productList) {
-        //            Product product = productService.findObeById(productInOrder.getProductId());
-        //            product.setQuantity(product.getQuantity() + productInOrder.getQuantity());
-        //        }
-
-        order.setStatus(OrderStatus.CANCELED);
-        orderRepository.save(order);
-    }
+//    public List<OrderDto> showOrdersByUser(OrderStatus status) {
+//        List<Order> orders = orderRepository.findAll(OrderSpecification.buildListFilterForAdmin());
+//        return conversionService.convertList(orders, OrderDto.class);
+//    }
+//
+//    @Transactional
+//    //    TODO: It works, but i will optimize it
+//    public OrderDto createOrder() {
+//
+//        Cart cart = cartService.returnCart();
+//        if (cart == null || cart.getProductInCarts().isEmpty()) {
+//            throw new CartIsEmptyException();
+//        }
+//
+//        List<Long> productIdList = cart.getProductInCarts()
+//                .stream()
+//                .map(ProductInCart::getProductId).collect(Collectors.toList());
+//
+//        List<Product> products = productService.findAllByIdInProductsId(productIdList);
+//
+//        cart.getProductInCarts()
+//                .forEach(pic -> {
+//                    val product = products.stream().filter(it -> Objects.equals(it.getId(), pic.getProductId()))
+//                            .findFirst().orElseThrow(() -> new EntityNotFountException("product"));
+//                    if (product.getQuantity() >= pic.getQuantity()) {
+//                        product.setQuantity(product.getQuantity() - pic.getQuantity());
+//                    } else {
+//                        throw new ProductsNotEnoughException();
+//                    }
+//                });
+//
+//        Order order = Order.builder()
+//                //                .productInOrders(productInOrderList)
+//                .quantityProduct(cart.getQuantityProduct())
+//                .totalCost(cart.getTotalCost())
+//                .user(cart.getUser())
+//                .status(OrderStatus.PENDING)
+//                .build();
+//
+//        List<ProductInOrder> productInOrderList = cart.getProductInCarts().stream()
+//                .map(productInCart -> ProductInOrder.builder()
+//                        .cost(productInCart.getCost())
+//                        .name(productInCart.getName())
+//                        .productId(productInCart.getProductId())
+//                        .quantity(productInCart.getQuantity())
+//                        .order(order)
+//                        .build())
+//                .collect(Collectors.toList());
+//
+//        order.setProductInOrders(productInOrderList);
+//        orderRepository.save(order);
+//        cartService.cleanCart();
+//        return conversionService.convert(order, OrderDto.class);
+//    }
+//
+//
+//    @Transactional
+//    public void cancelOrder(Long id) {
+//        Order order = orderRepository.findOrderById(id);
+//        if (!Objects.equals(order.getUser().getId(), SecurityUtil.getUserId())) {
+//            throw new WrongOrderException();
+//        }
+//
+//        val productList = productService.findAllByIdInProductsId(order.getProductInOrders().stream()
+//                .map(ProductInOrder::getProductId)
+//                .collect(Collectors.toList()))
+//                .forEach(product -> product.setQuantity(product.getQuantity() + productInOrder.getQuantity()));
+//
+//        //        for (ProductInOrder productInOrder : productList) {
+//        //            Product product = productService.findObeById(productInOrder.getProductId());
+//        //            product.setQuantity(product.getQuantity() + productInOrder.getQuantity());
+//        //        }
+//
+//        order.setStatus(OrderStatus.CANCELED);
+//        orderRepository.save(order);
+//    }
 }

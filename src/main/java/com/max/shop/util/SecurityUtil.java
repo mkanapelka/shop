@@ -14,4 +14,8 @@ public class SecurityUtil {
     public Long getUserId() {
         return getUser().getId();
     }
+
+    public String getUserName(){
+        return getUser().getName();
+    }
 }

@@ -10,8 +10,6 @@ import lombok.*;
 @EqualsAndHashCode
 public class ProductInCartDto {
 
-    private Long productId;
-    private String name;
-    private int quantity;
-    private Integer cost;
+    private Integer quantity;
+    private ProductDto product;
 }

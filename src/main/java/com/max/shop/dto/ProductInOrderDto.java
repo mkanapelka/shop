@@ -10,7 +10,6 @@ import lombok.*;
 @EqualsAndHashCode
 public class ProductInOrderDto {
 
-    private Long productId;
     private String name;
     private int quantity;
     private Integer cost;

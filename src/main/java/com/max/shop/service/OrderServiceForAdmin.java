@@ -1,14 +1,10 @@
 package com.max.shop.service;
 
 import com.max.shop.converter.MapperService;
-import com.max.shop.dto.SubCategoryDto;
-import com.max.shop.dto.request.OrderCriteriaDto;
-import com.max.shop.dto.request.SubCategoryCriteriaDto;
+import com.max.shop.dto.request.OrderCriteriaForAdminDto;
 import com.max.shop.entity.Order;
 import com.max.shop.dto.OrderDto;
-import com.max.shop.entity.SubProductCategory;
 import com.max.shop.repository.OrderRepository;
-import com.max.shop.util.SecurityUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -28,24 +24,24 @@ public class OrderServiceForAdmin {
     private final MapperService conversionService;
 
 
-    public Page<OrderDto> listOrders(OrderCriteriaDto orderCriteria, Pageable pageable) {
-        Page<Order> orders =
-                orderRepository.findAll(buildListFilter(orderCriteria)
-                        .and(fetchProductInOrder()), pageable);
-        List<OrderDto> orderDtoList =
-                conversionService.convertList(orders.getContent(), OrderDto.class);
-        return new PageImpl<>(orderDtoList, pageable, orders.getTotalElements());
-    }
-
-    public List<OrderDto>showOrderByUserId(Long id) {
-        List<Order> orders = orderRepository.findOrdersByUserId(id);
-        return conversionService.convertList(orders, OrderDto.class);
-    }
-
-    public OrderDto showOneOrderById(Long id) {
-        Order order = orderRepository.findOrderById(id);
-        return conversionService.convert(order, OrderDto.class);
-    }
+//    public Page<OrderDto> listOrders(OrderCriteriaForAdminDto orderCriteria, Pageable pageable) {
+//        Page<Order> orders =
+//                orderRepository.findAll(buildListFilter(orderCriteria)
+//                        .and(fetchProductInOrder()), pageable);
+//        List<OrderDto> orderDtoList =
+//                conversionService.convertList(orders.getContent(), OrderDto.class);
+//        return new PageImpl<>(orderDtoList, pageable, orders.getTotalElements());
+//    }
+//
+//    public List<OrderDto>showOrderByUserId(Long id) {
+//        List<Order> orders = orderRepository.findOrdersByUserId(id);
+//        return conversionService.convertList(orders, OrderDto.class);
+//    }
+//
+//    public OrderDto showOneOrderById(Long id) {
+//        Order order = orderRepository.findOrderById(id);
+//        return conversionService.convert(order, OrderDto.class);
+//    }
 
 
 

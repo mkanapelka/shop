@@ -20,16 +20,19 @@ import javax.persistence.ManyToOne;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-@EqualsAndHashCode(onlyExplicitlyIncluded = true, callSuper = false)
+@EqualsAndHashCode(callSuper = false)
+//@EqualsAndHashCode(onlyExplicitlyIncluded = true, callSuper = false)
 public class ProductInCart extends BaseEntity {
 
-    @EqualsAndHashCode.Include
-    private Long productId;
-    private String name;
+//    @EqualsAndHashCode.Include
+
     private Integer quantity;
-    private Integer cost;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "cart_id")
     private Cart cart;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "product_id")
+    private Product product;
 }

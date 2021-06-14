@@ -22,18 +22,22 @@ public class OrderForUserController {
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
     public List<OrderDto> showOrdersByUser(){
-        return orderServiceForUser.showOrdersByUser();
+//        return orderServiceForUser.showOrdersByUser();
+        return null;
     }
 
     @GetMapping("/create")
     @ResponseStatus(HttpStatus.OK)
     public OrderDto createOrder(){
-        return orderServiceForUser.createOrder();
+//        return orderServiceForUser.createOrder();
+        return null;
     }
+
 
     @GetMapping("/remove")
     @ResponseStatus(HttpStatus.OK)
     public void removeOrder(@RequestParam Long id){
-        orderServiceForUser.cancelOrder(id);
+//        orderServiceForUser.cancelOrder(id);
     }
+
 }

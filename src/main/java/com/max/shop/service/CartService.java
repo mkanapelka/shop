@@ -6,11 +6,12 @@ import com.max.shop.entity.Cart;
 import com.max.shop.entity.Product;
 import com.max.shop.entity.ProductInCart;
 import com.max.shop.repository.CartRepository;
+import com.max.shop.specification.CartSpecification;
 import com.max.shop.util.SecurityUtil;
 import lombok.RequiredArgsConstructor;
-import lombok.val;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -40,7 +41,7 @@ public class CartService {
         productInCartList.add(productInCart);
 
         cart.setQuantityProduct(cart.getQuantityProduct() + quantityProduct);
-        cart.setTotalCost(cart.getTotalCost() + productInCart.getCost() * quantityProduct);
+        cart.setTotalCost(cart.getTotalCost() + productInCart.getProduct().getCost() * quantityProduct);
 
         cartRepository.save(cart);
         return conversionService.convert(cart, CartDto.class);
@@ -51,7 +52,7 @@ public class CartService {
     public CartDto removeProductFromCart(Long productId, int quantityProduct) {
         Cart cart = cartRepository.findCartByUserId(SecurityUtil.getUserId());
         ProductInCart productInCart = cart.getProductInCarts().stream()
-            .filter(pic -> Objects.equals(pic.getProductId(), productId))
+            .filter(pic -> Objects.equals(pic.getProduct().getId(), productId))
             .findFirst()
             .orElse(null);
 
@@ -66,7 +67,7 @@ public class CartService {
         }
 
         cart.setQuantityProduct(Math.max(cart.getQuantityProduct() - quantityProduct, 0));
-        cart.setTotalCost(Math.max((cart.getTotalCost() - productInCart.getCost() * quantityProduct), 0));
+        cart.setTotalCost(Math.max((cart.getTotalCost() - productInCart.getProduct().getCost() * quantityProduct), 0));
 
         cartRepository.save(cart);
         return conversionService.convert(cart, CartDto.class);
@@ -80,16 +81,14 @@ public class CartService {
         cart.setQuantityProduct(0);
         cart.setTotalCost(0);
 
-        for (int i = 0; i < cart.getProductInCarts().size(); i++) {
-            cart.getProductInCarts().remove(i);
-        }
+        cart.getProductInCarts().clear();
         cartRepository.save(cart);
 
         return conversionService.convert(cart, CartDto.class);
     }
 
 
-    public Cart returnCart(){
+    public Cart getCart(){
         return cartRepository.findCartByUserId(SecurityUtil.getUserId());
     }
 
@@ -105,14 +104,12 @@ public class CartService {
     private ProductInCart findOrCreate(Cart cart, Long id) {
 
         return cart.getProductInCarts().stream()
-            .filter(pic -> Objects.equals(pic.getProductId(), id))
+            .filter(pic -> Objects.equals(pic.getProduct().getId(), id))
             .findFirst()
             .orElseGet(() -> {
                 Product product = productService.findObeById(id);
                 ProductInCart productInCart = new ProductInCart();
-                productInCart.setProductId(id);
-                productInCart.setName(product.getName());
-                productInCart.setCost(product.getCost());
+                productInCart.setProduct(product);
                 productInCart.setQuantity(0);
                 productInCart.setCart(cart);
                 return productInCartService.saveProductInCart(productInCart);
@@ -121,13 +118,9 @@ public class CartService {
 
 
     public Cart ensureCart() {
-//    private Cart ensureCart() {
-        Cart cart = cartRepository.findCartByUserId(SecurityUtil.getUserId());
-
-        if (cart == null) {
-            cart = createEmptyCart();
-        }
-        return cart;
+        return cartRepository
+                .findOne(CartSpecification.buildListFilter(SecurityUtil.getUserId())
+                        .and(CartSpecification.fetchProducts())).orElseGet(this::createEmptyCart);
     }
 
 }
