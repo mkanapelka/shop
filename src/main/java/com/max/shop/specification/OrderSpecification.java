@@ -33,6 +33,13 @@ public class OrderSpecification {
                 throw new WrongOrderException();
             }
 
+            if (orderCriteria.getDateCreatedFrom() != null) {
+                predicates.add(cb.greaterThanOrEqualTo(root.get("created"), orderCriteria.getDateCreatedFrom()));
+            }
+            if (orderCriteria.getDateCreatedTo() != null) {
+                predicates.add(cb.lessThanOrEqualTo(root.get("created"), orderCriteria.getDateCreatedTo()));
+            }
+
             if (StringUtils.isNotBlank(orderCriteria.getStatus())) {
                 predicates.add(cb.equal(root.get("status"), orderCriteria.getStatus()));
             }
@@ -72,6 +79,13 @@ public class OrderSpecification {
 
             if (orderCriteria.getQuantityProduct2() != 0) {
                 predicates.add(cb.lessThanOrEqualTo(root.get("quantity"), orderCriteria.getQuantityProduct2()));
+            }
+
+            if (orderCriteria.getDateCreatedFrom() != null) {
+                predicates.add(cb.greaterThanOrEqualTo(root.get("created"), orderCriteria.getDateCreatedFrom()));
+            }
+            if (orderCriteria.getDateCreatedTo() != null) {
+                predicates.add(cb.lessThanOrEqualTo(root.get("created"), orderCriteria.getDateCreatedTo()));
             }
 
             return cb.and(predicates.toArray(new Predicate[0]));
