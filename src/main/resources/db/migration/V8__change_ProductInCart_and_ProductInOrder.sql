@@ -23,6 +23,9 @@ alter table IF EXISTS product_in_order
     drop COLUMN product_id;
 
     alter table IF EXISTS product_in_order
+    drop COLUMN cost;
+
+    alter table IF EXISTS product_in_order
     add product_id int8;
 
 alter table if exists product_in_order

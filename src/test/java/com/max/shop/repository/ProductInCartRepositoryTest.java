@@ -24,37 +24,23 @@ class ProductInCartRepositoryTest extends BaseRepositoryTest {
         testSubject.deleteAll();
     }
 
-//    @Test
-//    void testFindByProductId(){
-//
-//        ProductInCart productExpected = ProductInCart.builder()
-//                .name("кефир")
-//                .productId(12L)
-//                .build();
-//
-//        testSubject.save(productExpected);
-//        ProductInCart product = testSubject.findByProductId(12L);
-//        assertEquals(productExpected.getProductId(), product.getProductId());
-//    }
-//
-//    @Test
-//    @Sql("/sql/data.sql")
-//    void  testFindAllByCartId(){
-//
-//        Cart cart = cartRepository.findCartByUserId(10001L);
-//
-//        ProductInCart productExpected = ProductInCart.builder()
-//                .name("кефир")
-//                .productId(12L)
-//                .cart(cart)
-//                .build();
-//        testSubject.save(productExpected);
-//
-//        assertThat(testSubject.findAllByCartId(cart.getId()))
-//                .hasSize(1)
-//                .extracting("name")
-//                .containsExactly("кефир");
-//    }
+    @Test
+    @Sql("/sql/data.sql")
+    void  testFindAllByCartId(){
+
+        Cart cart = cartRepository.findCartByUserId(10001L);
+
+        ProductInCart productExpected = ProductInCart.builder()
+                .quantity(10)
+                .cart(cart)
+                .build();
+        testSubject.save(productExpected);
+
+        assertThat(testSubject.findAllByCartId(cart.getId()))
+                .hasSize(1)
+                .extracting("quantity")
+                .containsExactly(10);
+    }
 
 
 }

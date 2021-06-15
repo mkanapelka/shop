@@ -19,7 +19,6 @@ import javax.persistence.ManyToOne;
 public class ProductInOrder extends BaseEntity {
 
     private Integer quantity;
-    private Integer cost;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "order_id")

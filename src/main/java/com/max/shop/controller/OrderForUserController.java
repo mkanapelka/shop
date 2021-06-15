@@ -1,9 +1,11 @@
 package com.max.shop.controller;
 
 import com.max.shop.dto.OrderDto;
+import com.max.shop.dto.request.OrderCriteriaForUserDto;
 import com.max.shop.service.OrderServiceForUser;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -21,23 +23,21 @@ public class OrderForUserController {
 
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
-    public List<OrderDto> showOrdersByUser(){
-//        return orderServiceForUser.showOrdersByUser();
-        return null;
+    public List<OrderDto> listOrdersByUser(OrderCriteriaForUserDto criteriaDto){
+        return orderServiceForUser.showOrdersByUser(criteriaDto);
     }
 
     @GetMapping("/create")
     @ResponseStatus(HttpStatus.OK)
     public OrderDto createOrder(){
-//        return orderServiceForUser.createOrder();
-        return null;
+        return orderServiceForUser.createOrder();
     }
 
 
-    @GetMapping("/remove")
+    @DeleteMapping ("/{id}}")
     @ResponseStatus(HttpStatus.OK)
     public void removeOrder(@RequestParam Long id){
-//        orderServiceForUser.cancelOrder(id);
+        orderServiceForUser.cancelOrder(id);
     }
 
 }

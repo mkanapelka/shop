@@ -9,6 +9,7 @@ import lombok.*;
 @NoArgsConstructor
 public class OrderCriteriaForAdminDto {
 
+    private Long userId;
     private int totalCost1;
     private int totalCost2;
     private int quantityProduct1;

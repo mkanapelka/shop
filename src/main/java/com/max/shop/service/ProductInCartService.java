@@ -17,20 +17,4 @@ public class ProductInCartService {
     public ProductInCart saveProductInCart(ProductInCart productInCart){
         return productInCartRepository.save(productInCart);
     }
-
-    public ProductInCart findByProductId(Long id){
-        return productInCartRepository.findByProductId(id);
-    }
-
-    public List<ProductInCart> findAllByCartId(Long id){
-        return productInCartRepository.findAllByCartId(id);
-    }
-
-    public void removeAllByCartId(Long id){
-        productInCartRepository.removeAllByCartId(id);
-    }
-
-    public void removeByProductId(Long id){
-        productInCartRepository.removeByProductId(id);
-    }
 }

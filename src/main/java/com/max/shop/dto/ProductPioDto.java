@@ -2,7 +2,6 @@ package com.max.shop.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
-import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -12,9 +11,10 @@ import lombok.Setter;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-@EqualsAndHashCode
-public class ProductInCartDto {
+public class ProductPioDto {
 
-    private Integer quantity;
-    private ProductPicDto product;
+    private String name;
+    private String vendorCode;
+    private int cost;
+    private Long thumbnailId;
 }

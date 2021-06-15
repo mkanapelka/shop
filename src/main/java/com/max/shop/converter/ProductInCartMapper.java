@@ -6,7 +6,7 @@ import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.springframework.core.convert.converter.Converter;
 
-@Mapper(uses = {ProductMapper.class})
+@Mapper(uses = {ProductPicMapper.class})
 public interface ProductInCartMapper extends Converter<ProductInCart, ProductInCartDto> {
 
     @Mapping(source = "product", target = "product")

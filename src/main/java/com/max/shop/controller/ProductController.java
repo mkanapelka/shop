@@ -11,6 +11,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
@@ -25,11 +26,12 @@ public class ProductController {
 
 
     @GetMapping
-    public ResponseEntity<Page<ProductDto>> listUsers(
+    @ResponseStatus(HttpStatus.OK)
+    public Page<ProductDto> listUsers(
         @PageableDefault(size = Constants.DEFAULT_PAGE_SIZE) Pageable pageable,
         ProductCriteriaDto productCriteria) {
         Page<ProductDto> productPage = productService.listProducts(productCriteria, pageable);
-        return new ResponseEntity<>(productPage, HttpStatus.OK);
+        return productPage;
     }
 
 

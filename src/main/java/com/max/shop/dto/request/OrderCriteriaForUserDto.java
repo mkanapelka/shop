@@ -6,6 +6,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.time.LocalDateTime;
+
 @Getter
 @Setter
 @Builder
@@ -15,4 +17,7 @@ public class OrderCriteriaForUserDto {
 
     private Long userId;
     private String status;
+    private LocalDateTime created;
+    private LocalDateTime updated;
+
 }

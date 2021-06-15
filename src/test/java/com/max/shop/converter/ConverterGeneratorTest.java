@@ -1,6 +1,7 @@
 package com.max.shop.converter;
 
 import com.max.shop.dto.ProductDto;
+import com.max.shop.dto.UserProfileDto;
 import com.max.shop.dto.UserProfileInfoDto;
 import com.max.shop.entity.Product;
 import com.max.shop.entity.User;
@@ -57,13 +58,13 @@ public class ConverterGeneratorTest {
             .build();
 
 
-        UserProfileInfoDto dto = conversionService.convert(user, UserProfileInfoDto.class);
+        UserProfileDto dto = conversionService.convert(user, UserProfileDto.class);
 
         assertThat(dto)
-            .extracting(UserProfileInfoDto::getName,
-                UserProfileInfoDto::getEmail,
-                UserProfileInfoDto::getFirstName,
-                UserProfileInfoDto::getLastName)
+            .extracting(UserProfileDto::getName,
+                    UserProfileDto::getEmail,
+                    UserProfileDto::getFirstName,
+                    UserProfileDto::getLastName)
             .containsExactly("user2", "usr@mail.com", "Homer", "Simpson");
     }
 

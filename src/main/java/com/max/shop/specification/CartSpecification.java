@@ -10,7 +10,7 @@ import javax.persistence.criteria.JoinType;
 
 public class CartSpecification {
 
-    public static Specification<Cart> buildListFilter(Long id) {
+    public static Specification<Cart> findCartByUserId(Long id) {
         return (root, query, cb) -> {
             if (id != null) {
                 Join<Cart, User> cartToUser = root.join("user", JoinType.INNER);

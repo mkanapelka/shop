@@ -89,7 +89,9 @@ public class CartService {
 
 
     public Cart getCart(){
-        return cartRepository.findCartByUserId(SecurityUtil.getUserId());
+        return cartRepository
+                .findOne(CartSpecification.findCartByUserId(SecurityUtil.getUserId())
+                        .and(CartSpecification.fetchProducts())).orElseGet(null);
     }
 
     //--------------------------------------
@@ -119,7 +121,7 @@ public class CartService {
 
     public Cart ensureCart() {
         return cartRepository
-                .findOne(CartSpecification.buildListFilter(SecurityUtil.getUserId())
+                .findOne(CartSpecification.findCartByUserId(SecurityUtil.getUserId())
                         .and(CartSpecification.fetchProducts())).orElseGet(this::createEmptyCart);
     }
 

@@ -6,7 +6,7 @@ import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.springframework.core.convert.converter.Converter;
 
-@Mapper(uses = {ProductInOrderMapper.class})
+@Mapper(uses = {ProductInOrderListMapper.class})
 public interface OrderMapper extends Converter<Order, OrderDto> {
 
     @Mapping(source = "productInOrders", target = "productInOrders")
