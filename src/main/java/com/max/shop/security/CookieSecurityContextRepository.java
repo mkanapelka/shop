@@ -18,7 +18,6 @@ import org.springframework.stereotype.Service;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.util.Collections;
 import java.util.Optional;
 import java.util.stream.Stream;
 
@@ -47,7 +46,7 @@ public class CookieSecurityContextRepository implements SecurityContextRepositor
         readUserInfoFromCookie(request)
             .ifPresent(userInfo ->
                 context.setAuthentication(
-                    new UsernamePasswordAuthenticationToken(userInfo, EMPTY_CREDENTIALS, Collections.emptyList())));
+                    new UsernamePasswordAuthenticationToken(userInfo, EMPTY_CREDENTIALS, userInfo.getAuthorities())));
 
         return context;
     }
