@@ -2,7 +2,7 @@ package com.max.shop.controller;
 
 import com.max.shop.dto.OrderDto;
 import com.max.shop.dto.request.OrderCriteriaForUserDto;
-import com.max.shop.service.OrderServiceForUser;
+import com.max.shop.service.OrderService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -19,25 +19,25 @@ import java.util.List;
 @RequiredArgsConstructor
 public class OrderForUserController {
 
-    private final OrderServiceForUser orderServiceForUser;
+    private final OrderService orderService;
 
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
     public List<OrderDto> listOrdersByUser(OrderCriteriaForUserDto criteriaDto){
-        return orderServiceForUser.showOrdersByUser(criteriaDto);
+        return orderService.showOrdersByUser(criteriaDto);
     }
 
     @GetMapping("/create")
     @ResponseStatus(HttpStatus.OK)
     public OrderDto createOrder(){
-        return orderServiceForUser.createOrder();
+        return orderService.createOrder();
     }
 
 
     @DeleteMapping ("/{id}}")
     @ResponseStatus(HttpStatus.OK)
     public void removeOrder(@RequestParam Long id){
-        orderServiceForUser.cancelOrder(id);
+        orderService.cancelOrder(id);
     }
 
 }

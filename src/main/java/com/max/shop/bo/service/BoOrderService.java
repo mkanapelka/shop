@@ -1,4 +1,4 @@
-package com.max.shop.service;
+package com.max.shop.bo.service;
 
 import com.max.shop.converter.MapperService;
 import com.max.shop.dto.OrderDto;
@@ -24,7 +24,7 @@ import static com.max.shop.specification.OrderSpecification.findOrderById;
 
 @Service
 @RequiredArgsConstructor
-public class OrderServiceForAdmin {
+public class BoOrderService {
 
     private final OrderRepository orderRepository;
     private final MapperService conversionService;
