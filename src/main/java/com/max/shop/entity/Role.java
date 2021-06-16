@@ -4,7 +4,7 @@ package com.max.shop.entity;
 import org.springframework.security.core.GrantedAuthority;
 
 public enum Role implements GrantedAuthority {
-    USER, ADMIN;
+    USER, ADMIN, ANONYMOUS;
 
     @Override
     public String getAuthority() {

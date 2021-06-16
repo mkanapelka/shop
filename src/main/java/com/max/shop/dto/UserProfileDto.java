@@ -17,4 +17,5 @@ public class UserProfileDto {
     private LocalDateTime created;
     private List<OrderInfoListDto> orders;
     private Long cartId;
+    private Boolean isActive;
 }

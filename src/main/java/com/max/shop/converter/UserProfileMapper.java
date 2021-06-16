@@ -10,5 +10,6 @@ import org.springframework.core.convert.converter.Converter;
 public interface UserProfileMapper extends Converter<User, UserProfileDto> {
 
     @Mapping(source = "cart.id", target = "cartId")
+    @Mapping(source = "isActive", target = "isActive")//TODO find out why (lombok + struct)
     UserProfileDto convert(User user);
 }

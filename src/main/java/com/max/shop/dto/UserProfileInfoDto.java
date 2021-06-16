@@ -14,4 +14,5 @@ public class UserProfileInfoDto {
     private String lastName;
     private String email;
     private LocalDateTime created;
+    private Boolean isActive;
 }
