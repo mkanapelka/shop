@@ -9,9 +9,11 @@ import com.max.shop.entity.OrderStatus;
 import com.max.shop.entity.Product;
 import com.max.shop.entity.ProductInCart;
 import com.max.shop.entity.ProductInOrder;
+import com.max.shop.entity.embeddable.OrderDetails;
 import com.max.shop.exception.CartIsEmptyException;
 import com.max.shop.exception.OrderNotFoundException;
 import com.max.shop.exception.ProductsNotEnoughException;
+import com.max.shop.exception.UserIsNotRegisteredException;
 import com.max.shop.exception.WrongOrderException;
 import com.max.shop.repository.OrderRepository;
 import com.max.shop.specification.OrderSpecification;
@@ -39,8 +41,11 @@ public class OrderService {
     }
 
     @Transactional
-    //    TODO: It works, but i will optimize it
-    public OrderDto createOrder() {
+    public OrderDto createOrder(OrderDetails orderDetails) {
+
+        if (!SecurityUtil.getUser().getIsActive()){
+            throw new UserIsNotRegisteredException();
+        }
 
         Cart cart = cartService.getCart();
         if (cart == null || cart.getProductInCarts().isEmpty()) {
@@ -58,6 +63,7 @@ public class OrderService {
         }
 
         Order order = cartToOrder(cart);
+        order.setOrderDetails(orderDetails);
         orderRepository.save(order);
         cartService.cleanCart();
         return conversionService.convert(order, OrderDto.class);

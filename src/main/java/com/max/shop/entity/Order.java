@@ -1,5 +1,6 @@
 package com.max.shop.entity;
 
+import com.max.shop.entity.embeddable.OrderDetails;
 import com.max.shop.entity.parent.BaseEntity;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -34,4 +35,12 @@ public class Order extends BaseEntity {
 
     @Enumerated(EnumType.STRING)
     private OrderStatus status = OrderStatus.PENDING;
+
+    @Embedded
+    @AttributeOverrides({
+            @AttributeOverride( name = "address", column = @Column(name = "address")),
+            @AttributeOverride( name = "deliveryMethod", column = @Column(name = "delivery_method")),
+            @AttributeOverride( name = "paymentMethod", column = @Column(name = "payment_method"))
+    })
+    private OrderDetails orderDetails;
 }

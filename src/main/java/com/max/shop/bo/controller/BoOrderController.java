@@ -1,4 +1,4 @@
-package com.max.shop.controller;
+package com.max.shop.bo.controller;
 
 import com.max.shop.constans.Constants;
 import com.max.shop.dto.OrderDto;
@@ -21,7 +21,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/api/admin/orders")
 @RequiredArgsConstructor
-public class OrderForAdminController {
+public class BoOrderController {
 
     private final BoOrderService boOrderService;
 
