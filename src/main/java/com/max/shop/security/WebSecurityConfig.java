@@ -53,6 +53,18 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
             .antMatchers("/api/login").permitAll()
             .anyRequest().permitAll()
             .and()
+            .oauth2Login()
+            .authorizationEndpoint()
+            .baseUri("/api/oauth2/authorization/")
+            .and()
+            .loginProcessingUrl("/api/login/oauth2/code/*")
+            .successHandler((request, response, authentication) -> {
+                //TODO add login handler and get user info from google token attributes to save internal User to DB
+                // and set cookie to response
+                log.info("success login with oauth2");
+                response.setStatus(200);
+            })
+            .and()
             .formLogin()
             .loginProcessingUrl("/api/login")
             .failureHandler(new AuthenticationFailureHandlerImpl())
