@@ -4,7 +4,7 @@ import com.max.shop.constans.Constants;
 import com.max.shop.dto.OrderDto;
 import com.max.shop.dto.request.OrderCriteriaForAdminDto;
 import com.max.shop.entity.OrderStatus;
-import com.max.shop.service.OrderServiceForAdmin;
+import com.max.shop.bo.service.BoOrderService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -23,30 +23,30 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 public class OrderForAdminController {
 
-    private final OrderServiceForAdmin orderService;
+    private final BoOrderService boOrderService;
 
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
     public Page<OrderDto> listOrders(OrderCriteriaForAdminDto orderCriteria,
                                      @PageableDefault(size = Constants.DEFAULT_PAGE_SIZE) Pageable pageable){
-        return orderService.listOrders(orderCriteria, pageable);
+        return boOrderService.listOrders(orderCriteria, pageable);
     }
 
     @GetMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
     public OrderDto findOne(@PathVariable Long id){
-        return orderService.fondOneById(id);
+        return boOrderService.fondOneById(id);
     }
 
     @PutMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
     public OrderDto changeOrder(@PathVariable Long id, OrderStatus status){
-        return orderService.changeOrderStatus(id, status);
+        return boOrderService.changeOrderStatus(id, status);
     }
 
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
     public void removeOrderById(@PathVariable Long id){
-        orderService.removeOrderById(id);
+        boOrderService.removeOrderById(id);
     }
 }
