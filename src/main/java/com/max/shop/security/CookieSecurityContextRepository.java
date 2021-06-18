@@ -65,7 +65,7 @@ public class CookieSecurityContextRepository implements SecurityContextRepositor
     }
 
     private Optional<User> readUserInfoFromCookie(HttpServletRequest request) {
-        return readCookieFromRequest(request)
+        return authCookieService.readCookieFromRequest(request)
             .map(cookie -> {
                 try {
                     return (User) this.userDetailsService.loadUserByUsername(cookie);
@@ -75,16 +75,6 @@ public class CookieSecurityContextRepository implements SecurityContextRepositor
             });
     }
 
-    private Optional<String> readCookieFromRequest(HttpServletRequest request) {
-        if (request.getCookies() == null) {
-            return Optional.empty();
-        }
-
-        return Stream.of(request.getCookies())
-            .filter(c -> StringUtils.equals(userCookieName, c.getName()))
-            .map(Cookie::getValue)
-            .findFirst();
-    }
 
     private class SaveToCookieResponseWrapper extends SaveContextOnUpdateOrErrorResponseWrapper {
 

@@ -1,7 +1,5 @@
 package com.max.shop.security;
 
-import com.max.shop.entity.Role;
-import com.max.shop.entity.User;
 import com.max.shop.repository.UserRepository;
 import com.max.shop.service.UserService;
 import lombok.RequiredArgsConstructor;
@@ -24,7 +22,6 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.oauth2.core.oidc.user.DefaultOidcUser;
 import org.springframework.security.web.authentication.AnonymousAuthenticationFilter;
 import org.springframework.security.web.context.SecurityContextRepository;
 import org.springframework.web.cors.CorsConfiguration;
@@ -44,7 +41,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     private final UserService userService;
     private final SecurityContextRepository cookieSecurityContextRepository;
     private final CookieBasedAuthenticationSuccessHandler cookieBasedAuthenticationSuccessHandler;
-    private final UserRepository userRepository;
+    private final OAuth2SuccessHandler oAuth2SuccessHandler;
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
@@ -64,26 +61,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .baseUri("/api/oauth2/authorization/")
                 .and()
                 .loginProcessingUrl("/api/login/oauth2/code/*")
-                .successHandler((request, response, authentication) -> {
-                    //TODO add login handler and get user info from google token attributes to save internal User to DB
-                    // and set cookie to response
-
-                    DefaultOidcUser oidcUser = (DefaultOidcUser) authentication.getPrincipal();
-                    User user = userRepository.findByEmail(oidcUser.getEmail())
-                            .orElseGet(
-                                    () -> User.builder()
-                                            .email(oidcUser.getEmail())
-                                            .name(oidcUser.getSubject())
-                                            .firstName(oidcUser.getGivenName())
-                                            .lastName(oidcUser.getFamilyName())
-                                            .isActive(false)
-                                            .roles(Collections.singleton(Role.ANONYMOUS))
-                                            .build()
-                            );
-                   userRepository.save(user);
-                    log.info("success login with oauth2");
-                    response.setStatus(200);
-                })
+                .successHandler(oAuth2SuccessHandler)
                 .and()
                 .formLogin()
                 .loginProcessingUrl("/api/login")
@@ -96,9 +74,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .and()
                 .anonymous()
                 .authenticationFilter(this.anonymousAuthenticationFilter())
-                .authenticationProvider(this.anonymousAuthenticationProvider())
-                .and()
-                .httpBasic();
+                .authenticationProvider(this.anonymousAuthenticationProvider());
     }
 
     @Bean
