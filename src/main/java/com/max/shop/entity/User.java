@@ -57,6 +57,9 @@ public class User extends BaseEntity implements UserDetails {
     @Enumerated(EnumType.STRING)
     private Set<Role> roles;
 
+    @Enumerated(EnumType.STRING)
+    private AuthType authType = AuthType.ENTRY;
+
 
     //    ----------------------------------------
     @Override

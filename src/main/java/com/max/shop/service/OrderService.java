@@ -3,6 +3,7 @@ package com.max.shop.service;
 import com.max.shop.converter.MapperService;
 import com.max.shop.dto.OrderDto;
 import com.max.shop.dto.request.OrderCriteriaForUserDto;
+import com.max.shop.entity.AuthType;
 import com.max.shop.entity.Cart;
 import com.max.shop.entity.Order;
 import com.max.shop.entity.OrderStatus;
@@ -43,7 +44,7 @@ public class OrderService {
     @Transactional
     public OrderDto createOrder(OrderDetails orderDetails) {
 
-        if (!SecurityUtil.getUser().getIsActive()){
+        if (!SecurityUtil.getUser().getAuthType().equals(AuthType.ENTRY)){
             throw new UserIsNotRegisteredException();
         }
 

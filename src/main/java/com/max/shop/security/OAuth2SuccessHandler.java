@@ -1,5 +1,6 @@
 package com.max.shop.security;
 
+import com.max.shop.entity.AuthType;
 import com.max.shop.entity.Role;
 import com.max.shop.entity.User;
 import com.max.shop.repository.UserRepository;
@@ -35,6 +36,7 @@ public class OAuth2SuccessHandler implements AuthenticationSuccessHandler {
             user.setFirstName(oidcUser.getGivenName());
             user.setLastName(oidcUser.getFamilyName());
             user.setIsActive(true);
+            user.setAuthType(AuthType.GOOGLE);
             user.setRoles(Collections.singleton(Role.USER));
         } else {
             user = userRepository.findByEmail(oidcUser.getEmail())
@@ -45,6 +47,7 @@ public class OAuth2SuccessHandler implements AuthenticationSuccessHandler {
                                     .firstName(oidcUser.getGivenName())
                                     .lastName(oidcUser.getFamilyName())
                                     .isActive(true)
+                                    .authType(AuthType.GOOGLE)
                                     .roles(Collections.singleton(Role.USER))
                                     .build()
                     );
