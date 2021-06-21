@@ -15,8 +15,10 @@ import org.springframework.security.web.context.HttpRequestResponseHolder;
 import org.springframework.security.web.context.SaveContextOnUpdateOrErrorResponseWrapper;
 import org.springframework.security.web.context.SecurityContextRepository;
 import org.springframework.stereotype.Service;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.util.Collections;
 import java.util.Optional;
 import java.util.Set;
 
@@ -33,17 +35,19 @@ public class CookieSecurityContextRepository implements SecurityContextRepositor
     private final UserService userService;
     private final AuthCookieService authCookieService;
     @Setter
-    private Set<String> pathToSkip;
+    private Set<String> pathToSkip = Collections.singleton("/api/login");
 
     @Override
     public SecurityContext loadContext(HttpRequestResponseHolder requestResponseHolder) {
         HttpServletRequest request = requestResponseHolder.getRequest();
         HttpServletResponse response = requestResponseHolder.getResponse();
         requestResponseHolder.setResponse(new SaveToCookieResponseWrapper(response, disableUrlRewriting));
-
         SecurityContext context = SecurityContextHolder.createEmptyContext();
 
-        //TODO configure request matcher to skip /api/login uri and let the UseranmePasswordAuthFilter to login user
+
+        String requestUri = request.getRequestURI();
+
+        //TODO configure request matcher to skip /api/login uri and let the UsernamePasswordAuthFilter to login user
         /* request.getRequestURI() = "/api/login";
          *
          * if(pathToSkip.contains(requestUri)
@@ -52,11 +56,14 @@ public class CookieSecurityContextRepository implements SecurityContextRepositor
          * OR
          * new AntPathRequestMatcher("/api/login","POST").matches(request);
          */
-        readUserInfoFromCookie(request)
-            .ifPresent(userInfo ->
-                context.setAuthentication(
-                    new UsernamePasswordAuthenticationToken(userInfo, EMPTY_CREDENTIALS, userInfo.getAuthorities())));
+        if (pathToSkip.contains(requestUri)) {
+            return context;
+        }
 
+        readUserInfoFromCookie(request)
+                .ifPresent(userInfo ->
+                        context.setAuthentication(
+                                new UsernamePasswordAuthenticationToken(userInfo, EMPTY_CREDENTIALS, userInfo.getAuthorities())));
         return context;
     }
 
@@ -75,13 +82,13 @@ public class CookieSecurityContextRepository implements SecurityContextRepositor
 
     private Optional<User> readUserInfoFromCookie(HttpServletRequest request) {
         return authCookieService.readCookieFromRequest(request)
-            .map(cookie -> {
-                try {
-                    return (User) this.userDetailsService.loadUserByUsername(cookie);
-                } catch (UserNotFoundException e) {
-                    return userService.createUser(cookie);
-                }
-            });
+                .map(cookie -> {
+                    try {
+                        return (User) this.userDetailsService.loadUserByUsername(cookie);
+                    } catch (UserNotFoundException e) {
+                        return userService.createUser(cookie);
+                    }
+                });
     }
 
 
@@ -95,7 +102,8 @@ public class CookieSecurityContextRepository implements SecurityContextRepositor
         protected void saveContext(SecurityContext securityContext) {
             HttpServletResponse response = (HttpServletResponse) getResponse();
             authCookieService.addAuthCookie(response, securityContext.getAuthentication(),
-                auth -> AnonymousAuthenticationToken.class.isAssignableFrom(auth.getClass()));
+                    auth -> AnonymousAuthenticationToken.class.isAssignableFrom(auth.getClass()));
         }
     }
+
 }

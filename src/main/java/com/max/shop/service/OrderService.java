@@ -44,7 +44,7 @@ public class OrderService {
     @Transactional
     public OrderDto createOrder(OrderDetails orderDetails) {
 
-        if (!SecurityUtil.getUser().getAuthType().equals(AuthType.ENTRY)){
+        if (SecurityUtil.getUser().getAuthType().equals(AuthType.ANONYMOUS)){
             throw new UserIsNotRegisteredException();
         }
 

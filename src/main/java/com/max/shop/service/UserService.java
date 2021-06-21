@@ -2,6 +2,7 @@ package com.max.shop.service;
 
 import com.max.shop.converter.MapperService;
 import com.max.shop.dto.UserProfileDto;
+import com.max.shop.entity.AuthType;
 import com.max.shop.entity.User;
 import com.max.shop.exception.UserNotFoundException;
 import com.max.shop.repository.UserRepository;
@@ -25,9 +26,10 @@ public class UserService {
 
     public User createUser(String username) {
         val user = User.builder()
-            .name(username)
-            .isActive(false)
-            .build();
+                .username(username)
+                .isActive(false)
+                .authType(AuthType.ANONYMOUS)
+                .build();
 
         return userRepository.save(user);
     }

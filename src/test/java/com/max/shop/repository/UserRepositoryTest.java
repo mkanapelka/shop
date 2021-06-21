@@ -23,7 +23,7 @@ public class UserRepositoryTest extends IntegrationTestBase {
         List<User> usersExpected = new ArrayList<>();
         usersExpected.add(
                 User.builder()
-                        .name("ivan")
+                        .username("ivan")
                         .firstName("Иванов")
                         .lastName("Иван")
                         .email("ivan@mail.ru")
@@ -39,7 +39,7 @@ public class UserRepositoryTest extends IntegrationTestBase {
 
         List<User> userList = userRepository.findAll(UserSpecification.buildListFilter(userCriteria));
         assertEquals(usersExpected.size(), userList.size());
-        assertEquals(usersExpected.get(0).getName(), userList.get(0).getName());
+        assertEquals(usersExpected.get(0).getUsername(), userList.get(0).getUsername());
         assertEquals(usersExpected.get(0).getFirstName(), userList.get(0).getFirstName());
         assertEquals(usersExpected.get(0).getLastName(), userList.get(0).getLastName());
         assertEquals(usersExpected.get(0).getEmail(), userList.get(0).getEmail());
@@ -50,7 +50,7 @@ public class UserRepositoryTest extends IntegrationTestBase {
     @Test
     void testFindByName(){
         User userExpected = User.builder()
-                .name("ivan")
+                .username("ivan")
                 .firstName("Иванов")
                 .lastName("Иван")
                 .email("ivan@mail.ru")
@@ -58,8 +58,8 @@ public class UserRepositoryTest extends IntegrationTestBase {
                 .build();
 
         String name = "ivan";
-        User user = userRepository.findByName(name).orElseThrow(UserNotFoundException::new);
-        assertEquals(userExpected.getName(), user.getName());
+        User user = userRepository.findByUsername(name).orElseThrow(UserNotFoundException::new);
+        assertEquals(userExpected.getUsername(), user.getUsername());
         assertEquals(userExpected.getEmail(), user.getEmail());
     }
 }

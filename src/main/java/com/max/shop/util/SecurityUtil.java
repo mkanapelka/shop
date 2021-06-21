@@ -16,6 +16,6 @@ public class SecurityUtil {
     }
 
     public String getUserName(){
-        return getUser().getName();
+        return getUser().getUsername();
     }
 }

@@ -26,7 +26,7 @@ public class ConverterGeneratorTest {
     void shouldConvertBothUsersAndProductsLists() {
 
         List<User> users = new ArrayList<>(Collections.singletonList(User.builder()
-            .name("user2")
+            .username("user2")
             .email("usr@mail.com")
             .firstName("Homer")
             .lastName("Simpson")
@@ -51,7 +51,7 @@ public class ConverterGeneratorTest {
     void userConverterTest() {
 
         User user = User.builder()
-            .name("user2")
+            .username("user2")
             .email("usr@mail.com")
             .firstName("Homer")
             .lastName("Simpson")
@@ -61,7 +61,7 @@ public class ConverterGeneratorTest {
         UserProfileDto dto = conversionService.convert(user, UserProfileDto.class);
 
         assertThat(dto)
-            .extracting(UserProfileDto::getName,
+            .extracting(UserProfileDto::getUsername,
                     UserProfileDto::getEmail,
                     UserProfileDto::getFirstName,
                     UserProfileDto::getLastName)

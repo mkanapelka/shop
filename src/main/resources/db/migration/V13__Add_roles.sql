@@ -8,6 +8,3 @@
        foreign key (user_id)
        references usr;
 
-insert into user_role(user_id, roles) values
-(1,'USER'),
-(2,'ADMIN');

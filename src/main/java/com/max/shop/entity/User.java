@@ -36,7 +36,7 @@ public class User extends BaseEntity implements UserDetails {
 
 
     @Column(unique = true)
-    private String name;
+    private String username;
     private String firstName;
     private String lastName;
 
@@ -61,7 +61,12 @@ public class User extends BaseEntity implements UserDetails {
     private AuthType authType = AuthType.ENTRY;
 
 
+
     //    ----------------------------------------
+    public String getName(){
+        return username;
+    }
+
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return getRoles();
