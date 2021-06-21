@@ -6,9 +6,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseCookie;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.oauth2.core.oidc.user.DefaultOidcUser;
 import org.springframework.stereotype.Service;
-
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -31,24 +29,23 @@ public class AuthCookieService {
         Optional.ofNullable(authentication)
             .filter(auth -> condition == null || condition.test(auth))
             .map(auth -> (User) auth.getPrincipal())
-            .map(user -> ResponseCookie.from(userCookieName, user.getUsername())
-                .maxAge(90 * 24 * 60 * 60)
-                .httpOnly(false)
-                .sameSite("Lax")
-                .path("/")
-                .build())
+            .map(user -> buildCookie(user.getUsername()))
             .ifPresent(cookie -> response.setHeader(HttpHeaders.SET_COOKIE, cookie.toString()));
     }
 
-    public void addAuthCookieForOAuth(HttpServletResponse response, Authentication authentication, User user) {
-        DefaultOidcUser oidcUser = (DefaultOidcUser) authentication.getPrincipal();
-        Optional.of(ResponseCookie.from(oidcUser.getName(), user.getUsername())
-                .maxAge(90 * 24 * 60 * 60)
-                .httpOnly(false)
-                .sameSite("Lax")
-                .path("/")
-                .build())
-                .ifPresent(cookie -> response.setHeader(HttpHeaders.SET_COOKIE, cookie.toString()));
+    public void addAuthCookieForUser(HttpServletResponse response, User user) {
+        Optional.ofNullable(user)
+            .map(usr -> buildCookie(usr.getUsername()))
+            .ifPresent(cookie -> response.setHeader(HttpHeaders.SET_COOKIE, cookie.toString()));
+    }
+
+    private ResponseCookie buildCookie(String username) {
+        return ResponseCookie.from(userCookieName, username)
+            .maxAge(90 * 24 * 60 * 60)
+            .httpOnly(false)
+            .sameSite("Lax")
+            .path("/")
+            .build();
     }
 
     public Optional<String> readCookieFromRequest(HttpServletRequest request) {
@@ -57,8 +54,8 @@ public class AuthCookieService {
         }
 
         return Stream.of(request.getCookies())
-                .filter(c -> StringUtils.equals(userCookieName, c.getName()))
-                .map(Cookie::getValue)
-                .findFirst();
+            .filter(c -> StringUtils.equals(userCookieName, c.getName()))
+            .map(Cookie::getValue)
+            .findFirst();
     }
 }

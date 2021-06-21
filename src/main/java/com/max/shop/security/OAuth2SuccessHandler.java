@@ -10,7 +10,6 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.oauth2.core.oidc.user.DefaultOidcUser;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.stereotype.Component;
-
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.Collections;
@@ -54,7 +53,7 @@ public class OAuth2SuccessHandler implements AuthenticationSuccessHandler {
 
         }
         userRepository.save(user);
-        this.authCookieService.addAuthCookieForOAuth(response, authentication, user);
+        this.authCookieService.addAuthCookieForUser(response, authentication, user);
         log.info("success login with oauth2");
         response.setStatus(200);
 
