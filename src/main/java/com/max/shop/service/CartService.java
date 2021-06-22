@@ -88,13 +88,13 @@ public class CartService {
     }
 
 
+    //--------------------------------------
     public Cart getCart(){
         return cartRepository
                 .findOne(CartSpecification.findCartByUserId(SecurityUtil.getUserId())
                         .and(CartSpecification.fetchProducts())).orElseGet(null);
     }
 
-    //--------------------------------------
     private Cart createEmptyCart() {
         Cart cart = new Cart();
         cart.setUser(SecurityUtil.getUser());
@@ -103,7 +103,7 @@ public class CartService {
         return cart;
     }
 
-    private ProductInCart findOrCreate(Cart cart, Long id) {
+    public ProductInCart findOrCreate(Cart cart, Long id) {
 
         return cart.getProductInCarts().stream()
             .filter(pic -> Objects.equals(pic.getProduct().getId(), id))

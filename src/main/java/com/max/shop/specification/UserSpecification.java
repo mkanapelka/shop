@@ -19,7 +19,7 @@ public class UserSpecification {
             List<Predicate> predicates = new ArrayList<>();
 
             if (StringUtils.isNotBlank(userCriteria.getUsername())) {
-                predicates.add(cb.equal(root.get("name"), userCriteria.getUsername()));
+                predicates.add(cb.equal(root.get("username"), userCriteria.getUsername()));
             }
             if (StringUtils.isNotBlank(userCriteria.getEmail())) {
                 predicates.add(cb.equal(root.get("email"), userCriteria.getEmail()));
@@ -31,7 +31,7 @@ public class UserSpecification {
                 predicates.add(cb.lessThanOrEqualTo(root.get("created"), userCriteria.getDateCreatedTo()));
             }
             if (StringUtils.isNotBlank(userCriteria.getUsername())) {
-                predicates.add(cb.equal(root.get("name"), userCriteria.getUsername()));
+                predicates.add(cb.equal(root.get("username"), userCriteria.getUsername()));
             }
             if (userCriteria.getIsActive() != null) {
                 predicates.add(cb.equal(root.get("isActive"), userCriteria.getIsActive()));

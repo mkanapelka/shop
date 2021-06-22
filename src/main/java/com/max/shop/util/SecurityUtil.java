@@ -2,6 +2,8 @@ package com.max.shop.util;
 
 import com.max.shop.entity.User;
 import lombok.experimental.UtilityClass;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 
 @UtilityClass

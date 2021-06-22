@@ -14,6 +14,7 @@ import org.springframework.stereotype.Component;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.Collections;
+import java.util.Optional;
 
 @Component
 @RequiredArgsConstructor
@@ -27,22 +28,21 @@ public class OAuth2SuccessHandler implements AuthenticationSuccessHandler {
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response,
                                         Authentication authentication) {
         DefaultOidcUser oidcUser = (DefaultOidcUser) authentication.getPrincipal();
-        User user;
-        if (authCookieService.readCookieFromRequest(request).isPresent()) {
-            String userName = authCookieService.readCookieFromRequest(request).get();
-            user = userRepository.findByUsername(userName).orElse(null);
-            if (user != null) {
-                defaultOidcUserToUser(oidcUser, user);
-            }
-        } else {
+        User user = null;
+        Optional<String> cookie = authCookieService.readCookieFromRequest(request);
+
+        if (cookie.isPresent()) {
+            String userName = cookie.get();
+            user = userRepository.findByUsername(userName)
+                    .map(usr -> defaultOidcUserToUser(oidcUser, usr))
+                    .orElse(null);
+        }
+
+        if (user == null) {
             user = userRepository.findByEmail(oidcUser.getEmail())
                     .orElse(defaultOidcUserToUser(oidcUser, new User()));
         }
-
-        if (user != null){
-        userRepository.save(user);
-        }
-
+        this.userRepository.save(user);
         this.authCookieService.addAuthCookieForUser(response, user);
         log.info("success login with oauth2");
         response.setStatus(200);
