@@ -14,19 +14,19 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.web.context.HttpRequestResponseHolder;
 import org.springframework.security.web.context.SaveContextOnUpdateOrErrorResponseWrapper;
 import org.springframework.security.web.context.SecurityContextRepository;
+import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
+import org.springframework.security.web.util.matcher.RequestMatcher;
 import org.springframework.stereotype.Service;
-
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.util.Collections;
 import java.util.Optional;
-import java.util.Set;
 
 @Service
 @RequiredArgsConstructor
 public class CookieSecurityContextRepository implements SecurityContextRepository {
 
     private static final String EMPTY_CREDENTIALS = "";
+    private static final RequestMatcher DEFAULT_PATH_TO_SKIP = new AntPathRequestMatcher("/api/login", "POST");
 
     @Value("${auth.disable-url-rewriting:false}")
     private boolean disableUrlRewriting;
@@ -34,8 +34,9 @@ public class CookieSecurityContextRepository implements SecurityContextRepositor
     private final UserDetailsService userDetailsService;
     private final UserService userService;
     private final AuthCookieService authCookieService;
+
     @Setter
-    private Set<String> pathToSkip = Collections.singleton("/api/login");
+    private RequestMatcher pathToSkip = DEFAULT_PATH_TO_SKIP;
 
     @Override
     public SecurityContext loadContext(HttpRequestResponseHolder requestResponseHolder) {
@@ -44,26 +45,14 @@ public class CookieSecurityContextRepository implements SecurityContextRepositor
         requestResponseHolder.setResponse(new SaveToCookieResponseWrapper(response, disableUrlRewriting));
         SecurityContext context = SecurityContextHolder.createEmptyContext();
 
-
-        String requestUri = request.getRequestURI();
-
-        //TODO configure request matcher to skip /api/login uri and let the UsernamePasswordAuthFilter to login user
-        /* request.getRequestURI() = "/api/login";
-         *
-         * if(pathToSkip.contains(requestUri)
-         * skip readUserInfoFromCookie()
-         *
-         * OR
-         * new AntPathRequestMatcher("/api/login","POST").matches(request);
-         */
-        if (pathToSkip.contains(requestUri)) {
+        if (pathToSkip.matches(request)) {
             return context;
         }
 
         readUserInfoFromCookie(request)
-                .ifPresent(userInfo ->
-                        context.setAuthentication(
-                                new UsernamePasswordAuthenticationToken(userInfo, EMPTY_CREDENTIALS, userInfo.getAuthorities())));
+            .ifPresent(userInfo ->
+                context.setAuthentication(
+                    new UsernamePasswordAuthenticationToken(userInfo, EMPTY_CREDENTIALS, userInfo.getAuthorities())));
         return context;
     }
 
@@ -82,13 +71,13 @@ public class CookieSecurityContextRepository implements SecurityContextRepositor
 
     private Optional<User> readUserInfoFromCookie(HttpServletRequest request) {
         return authCookieService.readCookieFromRequest(request)
-                .map(cookie -> {
-                    try {
-                        return (User) this.userDetailsService.loadUserByUsername(cookie);
-                    } catch (UserNotFoundException e) {
-                        return userService.createUser(cookie);
-                    }
-                });
+            .map(cookie -> {
+                try {
+                    return (User) this.userDetailsService.loadUserByUsername(cookie);
+                } catch (UserNotFoundException e) {
+                    return userService.createUser(cookie);
+                }
+            });
     }
 
 
@@ -102,7 +91,7 @@ public class CookieSecurityContextRepository implements SecurityContextRepositor
         protected void saveContext(SecurityContext securityContext) {
             HttpServletResponse response = (HttpServletResponse) getResponse();
             authCookieService.addAuthCookie(response, securityContext.getAuthentication(),
-                    auth -> AnonymousAuthenticationToken.class.isAssignableFrom(auth.getClass()));
+                auth -> AnonymousAuthenticationToken.class.isAssignableFrom(auth.getClass()));
         }
     }
 
