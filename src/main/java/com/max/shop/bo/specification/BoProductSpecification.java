@@ -1,20 +1,22 @@
-package com.max.shop.specification;
+package com.max.shop.bo.specification;
 
+import com.max.shop.dto.request.ProductCriteriaBoDto;
 import com.max.shop.dto.request.ProductCriteriaDto;
 import com.max.shop.entity.Product;
 import com.max.shop.entity.ProductStatus;
 import com.max.shop.entity.SubProductCategory;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.data.jpa.domain.Specification;
+
 import javax.persistence.criteria.Join;
 import javax.persistence.criteria.JoinType;
 import javax.persistence.criteria.Predicate;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ProductSpecification {
+public class BoProductSpecification {
 
-    public static Specification<Product> buildListFilter(ProductCriteriaDto productCriteria) {
+    public static Specification<Product> buildListFilter(ProductCriteriaBoDto productCriteria) {
         return ((root, query, cb) -> {
             if (productCriteria == null) {
                 return null;
@@ -54,7 +56,10 @@ public class ProductSpecification {
             if (StringUtils.isNotBlank(productCriteria.getName())) {
                 predicates.add(cb.equal(root.get("name"), productCriteria.getName()));
             }
-            predicates.add(cb.equal(root.get("status"), ProductStatus.AVAILABLE));
+
+            if(productCriteria.getStatus() != null){
+                predicates.add(cb.equal(root.get("status"), productCriteria.getStatus()));
+            }
 
             return cb.and(predicates.toArray(new Predicate[0]));
         });

@@ -27,11 +27,10 @@ public class ProductController {
 
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
-    public Page<ProductDto> listUsers(
+    public Page<ProductDto> listProducts(
         @PageableDefault(size = Constants.DEFAULT_PAGE_SIZE) Pageable pageable,
         ProductCriteriaDto productCriteria) {
-        Page<ProductDto> productPage = productService.listProducts(productCriteria, pageable);
-        return productPage;
+        return productService.listProducts(productCriteria, pageable);
     }
 
 

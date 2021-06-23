@@ -30,13 +30,7 @@ public class ProductService {
         return new PageImpl<>(profilesList, pageable, products.getTotalElements());
     }
 
-    public Product findObeById(Long id){
+    public Product findOneById(Long id){
         return productRepository.findById(id).orElseThrow(ProductNotFoundException::new);
     }
-
-    public List<Product> findAllByIdInProductsId(Iterable<Long> productsId){
-       return productRepository.findAllByIdInProductsId(productsId).collect(Collectors.toList());
-    }
-
-
 }
