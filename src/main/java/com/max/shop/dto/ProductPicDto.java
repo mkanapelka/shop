@@ -17,4 +17,5 @@ public class ProductPicDto {
     private String vendorCode;
     private int cost;
     private Long thumbnailId;
+    private Integer quantity;
 }

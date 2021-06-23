@@ -1,5 +1,6 @@
 package com.max.shop.dto.request;
 
+import com.max.shop.entity.OrderStatus;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -17,7 +18,7 @@ import java.time.LocalDateTime;
 public class OrderCriteriaForUserDto {
 
     private Long userId;
-    private String status;
+    private OrderStatus status;
     private LocalDateTime created;
     private LocalDateTime updated;
     private LocalDate dateCreatedFrom;

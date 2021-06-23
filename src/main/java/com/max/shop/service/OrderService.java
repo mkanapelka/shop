@@ -35,7 +35,7 @@ public class OrderService {
     private final CartService cartService;
     private final MapperService conversionService;
 
-    public List<OrderDto> showOrdersByUser(OrderCriteriaForUserDto criteriaDto) {
+    public List<OrderDto> showOrdersByFilter(OrderCriteriaForUserDto criteriaDto) {
         List<Order> orders = orderRepository
                 .findAll(OrderSpecification.buildListFilterForUser(criteriaDto).and(OrderSpecification.fetchProducts()));
         return conversionService.convertList(orders, OrderDto.class);
@@ -72,7 +72,7 @@ public class OrderService {
 
 
     @Transactional
-    public void cancelOrder(Long id) {
+    public OrderDto cancelOrder(Long id) {
         Order order = orderRepository
                 .findOne(OrderSpecification.findOrderById(id).and(OrderSpecification.fetchProducts()))
                 .orElseThrow(OrderNotFoundException::new);
@@ -87,12 +87,12 @@ public class OrderService {
         }
 
         order.setStatus(OrderStatus.CANCELED);
-        orderRepository.save(order);
+        return conversionService.convert(orderRepository.save(order), OrderDto.class);
     }
 
 //    -------------------------------------------------------
 
-    private Order cartToOrder(Cart cart) {
+    public Order cartToOrder(Cart cart) {
         Order order = new Order();
         List<ProductInOrder> productInOrderList = cart.getProductInCarts().stream()
                 .map(productInCart -> ProductInOrder.builder()

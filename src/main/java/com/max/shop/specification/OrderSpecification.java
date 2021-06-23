@@ -40,7 +40,7 @@ public class OrderSpecification {
                 predicates.add(cb.lessThanOrEqualTo(root.get("created"), orderCriteria.getDateCreatedTo()));
             }
 
-            if (StringUtils.isNotBlank(orderCriteria.getStatus())) {
+            if (orderCriteria.getStatus() != null) {
                 predicates.add(cb.equal(root.get("status"), orderCriteria.getStatus()));
             }
 

@@ -11,6 +11,7 @@ import java.util.List;
 @Builder
 public class OrderDto {
 
+    private Long id;
     private int totalCost;
     private int quantityProduct;
     private String status;

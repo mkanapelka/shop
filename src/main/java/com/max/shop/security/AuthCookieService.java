@@ -41,7 +41,7 @@ public class AuthCookieService {
                 .ifPresent(cookie -> response.setHeader(HttpHeaders.SET_COOKIE, cookie.toString()));
     }
 
-    private ResponseCookie buildCookie(String username) {
+    public ResponseCookie buildCookie(String username) {
         return ResponseCookie.from(userCookieName, username)
                 .maxAge(90 * 24 * 60 * 60)
                 .httpOnly(false)
