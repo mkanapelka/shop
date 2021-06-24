@@ -36,7 +36,6 @@ public class Product extends BaseEntity {
     private Integer cost;
     private Integer quantity;
     private String description;
-
     private Long thumbnailId;
 
     @ElementCollection(fetch = FetchType.LAZY)

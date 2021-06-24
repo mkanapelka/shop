@@ -23,6 +23,7 @@ public class SubProductCategory extends BaseEntity {
 
     @Column(unique = true)
     private String name;
+    private Boolean isActive;
 
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(name = "link_subcategory_characteristic",

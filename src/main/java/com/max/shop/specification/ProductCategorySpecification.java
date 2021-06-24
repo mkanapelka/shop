@@ -31,6 +31,8 @@ public class ProductCategorySpecification {
                 predicates.add(cb.equal(root.get("name"), categoryCriteria.getName()));
             }
 
+            predicates.add(cb.equal(root.get("isActive;"),true));
+
             return cb.and(predicates.toArray(new Predicate[0]));
         });
     }

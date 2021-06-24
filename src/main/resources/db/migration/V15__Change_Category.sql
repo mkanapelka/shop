@@ -1,0 +1,91 @@
+ALTER TABLE  product_category
+ADD is_active boolean;
+
+ALTER TABLE  sub_product_category
+    ADD is_active boolean;
+
+insert into product_category (created, updated, name, thumbnail, is_active)
+values (now(),now(),'компьютеры','Computer', true),
+       (now(),now(),'бытовая техника','Kitchen', true),
+       (now(),now(),'мужская одежда','Accessibility', true),
+       (now(),now(),'женская одежда','PregnantWoman', true),
+       (now(),now(),'детская одежда','ChildCare', true),
+       (now(),now(),'декор','LocalFlorist', true),
+       (now(),now(),'мебель','Deck', true),
+       (now(),now(),'хозяйственные товары','EmojiFoodBeverage', true),
+       (now(),now(),'продовольственные товары','Fastfood', true);
+
+insert into sub_product_category(created, updated, name, product_category_id, is_active)
+values (now(), now(), 'ноутбуки', 1, true),
+       (now(), now(), 'мониторы', 1, true),
+       (now(), now(), 'офисные', 1, true),
+       (now(), now(), 'микроволновки', 2, true),
+       (now(), now(), 'телевизоры', 2, true),
+       (now(), now(), 'пиджаки', 3, true),
+       (now(), now(), 'брюки', 3, true),
+       (now(), now(), 'платья', 4, true),
+       (now(), now(), 'сарафаны', 4, true),
+       (now(), now(), 'комбинезоны', 5, true),
+       (now(), now(), 'чепчики', 5, true),
+       (now(), now(), 'картины', 6, true),
+       (now(), now(), 'вазы', 6, true),
+       (now(), now(), 'шкафы', 7, true),
+       (now(), now(), 'столы', 7, true),
+       (now(), now(), 'верёвки', 8, true),
+       (now(), now(), 'мыло', 8, true),
+       (now(), now(), 'хлеб', 9, true),
+       (now(), now(), 'сыр', 9, true);
+
+insert into characteristic (created, updated, name)
+values (now(),now(),'оперативная память'),
+       (now(),now(),'процессор'),
+       (now(),now(),'размер'),
+       (now(),now(),'энергопотребление'),
+       (now(),now(),'цвет'),
+       (now(),now(),'длина'),
+       (now(),now(),'ширина'),
+       (now(),now(),'высота'),
+       (now(),now(),'материал'),
+       (now(),now(),'вес'),
+       (now(),now(),'срок годности'),
+       (now(),now(),'энергетическая ценность');
+
+insert into link_subcategory_characteristic (subcategory_id, characteristic_id)
+values (1, 1),
+       (1, 2),
+       (2, 3),
+       (2, 4),
+       (3, 5),
+       (3, 6),
+       (4, 7),
+       (4, 8),
+       (5, 9),
+       (5, 11),
+       (6, 11),
+       (6, 12),
+       (7, 3),
+       (7, 4),
+       (8, 5),
+       (8, 6),
+       (9, 7),
+       (9, 8),
+       (10, 9),
+       (10, 11),
+       (11, 10),
+       (11, 12),
+       (12, 1),
+       (12, 2),
+       (13, 3),
+       (13, 4),
+       (14, 5),
+       (14, 6),
+       (15, 7),
+       (15, 8),
+       (16, 9),
+       (16, 10),
+       (17, 11),
+       (17, 1),
+       (18, 2),
+       (18, 3),
+       (19, 4),
+       (19, 5);

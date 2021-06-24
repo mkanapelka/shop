@@ -24,6 +24,7 @@ public class ProductCategory extends BaseEntity {
     @Column(unique = true)
     private String name;
     private String thumbnail;
+    private Boolean isActive;
 
     @OneToMany(mappedBy = "productCategory", fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
     private List<SubProductCategory> subProductCategories;

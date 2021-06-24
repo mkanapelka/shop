@@ -31,7 +31,7 @@ public class SubCategorySpecification {
             if (StringUtils.isNotBlank(subCategoryCriteria.getName())) {
                 predicates.add(cb.equal(root.get("name"), subCategoryCriteria.getName()));
             }
-
+            predicates.add(cb.equal(root.get("isActive;"),true));
             return cb.and(predicates.toArray(new Predicate[0]));
         });
     }
