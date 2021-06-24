@@ -76,7 +76,7 @@ public class ProductSpecification {
     }
 
     public static Specification<Product> fetchCharacteristics() {
-        return BaseSpecification.withFetch("subProductCategory.characteristics");
+        return BaseSpecification.withFetch("subProductCategory", "characteristics");
     }
 
 }
