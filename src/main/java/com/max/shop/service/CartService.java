@@ -109,7 +109,7 @@ public class CartService {
             .filter(pic -> Objects.equals(pic.getProduct().getId(), id))
             .findFirst()
             .orElseGet(() -> {
-                Product product = productService.findObeById(id);
+                Product product = productService.findOneById(id);
                 ProductInCart productInCart = new ProductInCart();
                 productInCart.setProduct(product);
                 productInCart.setQuantity(0);

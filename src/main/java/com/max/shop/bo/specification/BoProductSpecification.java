@@ -1,31 +1,31 @@
-package com.max.shop.specification;
+package com.max.shop.bo.specification;
 
+import com.max.shop.dto.request.ProductCriteriaBoDto;
 import com.max.shop.dto.request.ProductCriteriaDto;
 import com.max.shop.entity.Product;
 import com.max.shop.entity.ProductStatus;
 import com.max.shop.entity.SubProductCategory;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.data.jpa.domain.Specification;
+
 import javax.persistence.criteria.Join;
 import javax.persistence.criteria.JoinType;
 import javax.persistence.criteria.Predicate;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ProductSpecification {
+public class BoProductSpecification {
 
-    public static Specification<Product> buildListFilter(ProductCriteriaDto productCriteria) {
+    public static Specification<Product> buildListFilter(ProductCriteriaBoDto productCriteria) {
         return ((root, query, cb) -> {
             if (productCriteria == null) {
                 return null;
             }
 
             List<Predicate> predicates = new ArrayList<>();
-            predicates.add(cb.equal(root.get("status"), ProductStatus.AVAILABLE.name()));
 
             if (StringUtils.isNotBlank(productCriteria.getSubCategoryName())) {
-                Join<Product, SubProductCategory> productToSubCategory =
-                    root.join("subProductCategory", JoinType.INNER);
+                Join<Product, SubProductCategory> productToSubCategory = root.join("subProductCategory", JoinType.INNER);
                 predicates.add(cb.equal(productToSubCategory.get("name"), productCriteria.getSubCategoryName()));
             }
 
@@ -56,27 +56,12 @@ public class ProductSpecification {
             if (StringUtils.isNotBlank(productCriteria.getName())) {
                 predicates.add(cb.equal(root.get("name"), productCriteria.getName()));
             }
-            predicates.add(cb.equal(root.get("status"), ProductStatus.AVAILABLE));
 
-            return cb.and(predicates.toArray(new Predicate[0]));
-        });
-    }
-
-    public static Specification<Product> buildSingleFilter(Long id) {
-        return ((root, query, cb) -> {
-            if (id == null) {
-                return null;
+            if(productCriteria.getStatus() != null){
+                predicates.add(cb.equal(root.get("status"), productCriteria.getStatus()));
             }
 
-            List<Predicate> predicates = new ArrayList<>();
-            predicates.add(cb.equal(root.get("status"), ProductStatus.AVAILABLE.name()));
-
             return cb.and(predicates.toArray(new Predicate[0]));
         });
     }
-
-    public static Specification<Product> fetchCharacteristics() {
-        return BaseSpecification.withFetch("subProductCategory.characteristics");
-    }
-
 }

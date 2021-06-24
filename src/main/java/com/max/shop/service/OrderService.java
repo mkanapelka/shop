@@ -10,6 +10,7 @@ import com.max.shop.entity.OrderStatus;
 import com.max.shop.entity.Product;
 import com.max.shop.entity.ProductInCart;
 import com.max.shop.entity.ProductInOrder;
+import com.max.shop.entity.ProductStatus;
 import com.max.shop.entity.embeddable.OrderDetails;
 import com.max.shop.exception.CartIsEmptyException;
 import com.max.shop.exception.OrderNotFoundException;
@@ -55,9 +56,13 @@ public class OrderService {
 
         List<ProductInCart> productIdList = cart.getProductInCarts();
         for (ProductInCart productInCart : productIdList) {
-            if (productInCart.getProduct().getQuantity() >= productInCart.getQuantity()) {
+            if (productInCart.getProduct().getQuantity() > productInCart.getQuantity()) {
                 Product product = productInCart.getProduct();
                 product.setQuantity(product.getQuantity() - productInCart.getQuantity());
+            }else if(productInCart.getProduct().getQuantity().equals(productInCart.getQuantity())){
+                Product product = productInCart.getProduct();
+                product.setQuantity(0);
+                product.setStatus(ProductStatus.SOLD_OUT);
             } else {
                 throw new ProductsNotEnoughException();
             }
@@ -84,6 +89,9 @@ public class OrderService {
         for (ProductInOrder productInOrder : productInOrderList) {
             Product product = productInOrder.getProduct();
             product.setQuantity(product.getQuantity() + productInOrder.getQuantity());
+            if (product.getStatus().equals(ProductStatus.SOLD_OUT)){
+                product.setStatus(ProductStatus.AVAILABLE);
+            }
         }
 
         order.setStatus(OrderStatus.CANCELED);
