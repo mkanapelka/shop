@@ -2,6 +2,7 @@ package com.max.shop.specification;
 
 import com.max.shop.dto.request.ProductCriteriaDto;
 import com.max.shop.entity.Product;
+import com.max.shop.entity.ProductStatus;
 import com.max.shop.entity.SubProductCategory;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.data.jpa.domain.Specification;
@@ -20,9 +21,11 @@ public class ProductSpecification {
             }
 
             List<Predicate> predicates = new ArrayList<>();
+            predicates.add(cb.equal(root.get("status"), ProductStatus.AVAILABLE.name()));
 
             if (StringUtils.isNotBlank(productCriteria.getSubCategoryName())) {
-                Join<Product, SubProductCategory> productToSubCategory = root.join("subProductCategory", JoinType.INNER);
+                Join<Product, SubProductCategory> productToSubCategory =
+                    root.join("subProductCategory", JoinType.INNER);
                 predicates.add(cb.equal(productToSubCategory.get("name"), productCriteria.getSubCategoryName()));
             }
 
@@ -58,6 +61,21 @@ public class ProductSpecification {
         });
     }
 
+    public static Specification<Product> buildSingleFilter(Long id) {
+        return ((root, query, cb) -> {
+            if (id == null) {
+                return null;
+            }
 
+            List<Predicate> predicates = new ArrayList<>();
+            predicates.add(cb.equal(root.get("status"), ProductStatus.AVAILABLE.name()));
+
+            return cb.and(predicates.toArray(new Predicate[0]));
+        });
+    }
+
+    public static Specification<Product> fetchCharacteristics() {
+        return BaseSpecification.withFetch("subProductCategory.characteristics");
+    }
 
 }

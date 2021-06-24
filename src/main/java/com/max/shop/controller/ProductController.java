@@ -7,11 +7,8 @@ import com.max.shop.service.ProductService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
@@ -26,14 +23,15 @@ public class ProductController {
 
 
     @GetMapping
-    @ResponseStatus(HttpStatus.OK)
-    public Page<ProductDto> listUsers(
+    public Page<ProductDto> listProducts(
         @PageableDefault(size = Constants.DEFAULT_PAGE_SIZE) Pageable pageable,
         ProductCriteriaDto productCriteria) {
-        Page<ProductDto> productPage = productService.listProducts(productCriteria, pageable);
-        return productPage;
+        return productService.listProducts(productCriteria, pageable);
     }
 
-
+    @GetMapping("/{id}")
+    public ProductDto getProduct(Long id) {
+        return productService.getProduct(id);
+    }
 }
 
