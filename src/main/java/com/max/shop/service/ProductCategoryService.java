@@ -37,19 +37,4 @@ public class ProductCategoryService {
         return conversionService.convert(productCategory, CategoryDto.class);
     }
 
-    @Transactional
-    public ProductCategory saveCategory(CategoryDto categoryDto) {
-
-        ProductCategory productCategory = new ProductCategory();
-        if (categoryDto.getId() != null) {
-            productCategory = categoryRepository.findById(categoryDto.getId()).orElse(new ProductCategory());
-        }
-        conversionService.update(categoryDto, productCategory);
-        return categoryRepository.save(productCategory);
-    }
-
-    public void removeCategory(Long id) {
-        categoryRepository.deleteById(id);
-    }
-
 }

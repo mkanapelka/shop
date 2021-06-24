@@ -45,7 +45,7 @@ public class Product extends BaseEntity {
     @Column(name = "image_id")
     private Set<Long> images;
 
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne(cascade = CascadeType.ALL,fetch = FetchType.LAZY)
     @JoinColumn(name = "subProductCategory_id")
     private SubProductCategory subProductCategory;
 

@@ -21,7 +21,7 @@ public class ProductSpecification {
             }
 
             List<Predicate> predicates = new ArrayList<>();
-            predicates.add(cb.equal(root.get("status"), ProductStatus.AVAILABLE.name()));
+//            predicates.add(cb.equal(root.get("status"), ProductStatus.AVAILABLE.name()));
 
             if (StringUtils.isNotBlank(productCriteria.getSubCategoryName())) {
                 Join<Product, SubProductCategory> productToSubCategory =
@@ -69,8 +69,9 @@ public class ProductSpecification {
             }
 
             List<Predicate> predicates = new ArrayList<>();
-            predicates.add(cb.equal(root.get("status"), ProductStatus.AVAILABLE.name()));
-
+//            predicates.add(cb.equal(root.get("status"), ProductStatus.AVAILABLE.name()));
+            predicates.add(cb.equal(root.get("status"), ProductStatus.AVAILABLE));
+            predicates.add(cb.equal(root.get("id"), id));
             return cb.and(predicates.toArray(new Predicate[0]));
         });
     }

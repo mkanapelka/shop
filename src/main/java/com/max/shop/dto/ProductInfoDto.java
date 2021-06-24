@@ -1,4 +1,4 @@
-package com.max.shop.dto.request;
+package com.max.shop.dto;
 
 import com.max.shop.entity.ProductStatus;
 import lombok.AllArgsConstructor;
@@ -9,19 +9,17 @@ import lombok.Setter;
 
 @Getter
 @Setter
-@Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class ProductCriteriaDto {
+@Builder
+public class ProductInfoDto {
 
+    private Long id;
     private String name;
-    private String subCategoryName;
-    private Integer cost1;
-    private Integer cost2;
-    private Integer quantity1;
-    private Integer quantity2;
     private String vendorCode;
+    private int cost;
+    private Integer quantity;
     private String description;
+    private Long thumbnailId;
     private ProductStatus status;
-    private boolean joinSubCategory;
 }

@@ -2,6 +2,7 @@ package com.max.shop.service;
 
 import com.max.shop.converter.MapperService;
 import com.max.shop.dto.ProductDto;
+import com.max.shop.dto.ProductInfoDto;
 import com.max.shop.dto.request.ProductCriteriaDto;
 import com.max.shop.entity.Product;
 import com.max.shop.exception.ProductNotFoundException;
@@ -25,20 +26,22 @@ public class ProductService {
     private final ProductRepository productRepository;
     private final MapperService conversionService;
 
-    public Page<ProductDto> listProducts(ProductCriteriaDto productCriteria, Pageable pageable) {
+    public Page<ProductInfoDto> listProducts(ProductCriteriaDto productCriteria, Pageable pageable) {
         Page<Product> products =
             productRepository.findAll(buildListFilter(productCriteria), pageable);
-        List<ProductDto> profilesList =
-            conversionService.convertList(products.getContent(), ProductDto.class);
+        List<ProductInfoDto> profilesList =
+            conversionService.convertList(products.getContent(), ProductInfoDto.class);
         return new PageImpl<>(profilesList, pageable, products.getTotalElements());
     }
 
-    public Product findObeById(Long id) {
+    public Product findOneById(Long id) {
         return productRepository.findById(id).orElseThrow(ProductNotFoundException::new);
     }
 
     public ProductDto getProduct(Long id) {
-        val product = productRepository.findOne(buildSingleFilter(id).and(fetchCharacteristics()));
+        Product product = productRepository
+                .findOne(buildSingleFilter(id).and(fetchCharacteristics()))
+                .orElseThrow(ProductNotFoundException::new);
         return conversionService.convert(product, ProductDto.class);
     }
 }

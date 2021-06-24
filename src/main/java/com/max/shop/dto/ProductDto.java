@@ -22,4 +22,5 @@ public class ProductDto {
     private String description;
     private Long thumbnailId;
     private ProductStatus status;
+    private SubCategoryDto subProductCategory;
 }
