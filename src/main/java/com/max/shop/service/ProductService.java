@@ -1,5 +1,6 @@
 package com.max.shop.service;
 
+import com.max.shop.cache.CustomKeyGenerator;
 import com.max.shop.converter.MapperService;
 import com.max.shop.dto.ProductDto;
 import com.max.shop.dto.ProductInfoDto;
@@ -8,6 +9,7 @@ import com.max.shop.entity.Product;
 import com.max.shop.exception.ProductNotFoundException;
 import com.max.shop.repository.ProductRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
@@ -25,6 +27,7 @@ public class ProductService {
     private final ProductRepository productRepository;
     private final MapperService conversionService;
 
+    @Cacheable(value = "products", keyGenerator = "customKeyGenerator")
     public Page<ProductInfoDto> listProducts(ProductCriteriaDto productCriteria, Pageable pageable) {
         Page<Product> products =
             productRepository.findAll(buildListFilter(productCriteria), pageable);
