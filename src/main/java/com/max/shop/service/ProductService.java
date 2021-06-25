@@ -8,7 +8,6 @@ import com.max.shop.entity.Product;
 import com.max.shop.exception.ProductNotFoundException;
 import com.max.shop.repository.ProductRepository;
 import lombok.RequiredArgsConstructor;
-import lombok.val;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
@@ -40,8 +39,9 @@ public class ProductService {
 
     public ProductDto getProduct(Long id) {
         Product product = productRepository
-                .findOne(buildSingleFilter(id).and(fetchCharacteristics()))
-                .orElseThrow(ProductNotFoundException::new);
+            //TODO just want to draw your attention to orElseThrow() method. in java 11 u can use it without params.
+            // But Actually creating some generic exception is better. Like new EntityNotFountException("product")
+            .findOne(buildSingleFilter(id).and(fetchCharacteristics())).orElseThrow();
         return conversionService.convert(product, ProductDto.class);
     }
 }
