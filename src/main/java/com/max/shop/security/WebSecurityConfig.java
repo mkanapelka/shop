@@ -61,6 +61,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .baseUri("/api/oauth2/authorization/")
                 .and()
                 .loginProcessingUrl("/api/login/oauth2/code/*")
+                .failureHandler(new AuthenticationFailureHandlerImpl())
                 .successHandler(oAuth2SuccessHandler)
                 .and()
                 .formLogin()
