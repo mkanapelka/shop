@@ -10,6 +10,7 @@ import org.springframework.data.annotation.LastModifiedDate;
 
 import javax.persistence.Entity;
 import java.time.LocalDate;
+import java.util.function.Supplier;
 
 @Entity
 @Getter
@@ -17,7 +18,7 @@ import java.time.LocalDate;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class UserStat extends BaseEntity {
+public class UserStat extends BaseEntity{
 
     private Long userId;
     private Long productId;

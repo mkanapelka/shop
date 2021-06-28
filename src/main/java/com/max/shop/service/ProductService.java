@@ -1,5 +1,6 @@
 package com.max.shop.service;
 
+import com.max.shop.aspect.UserStatistics;
 import com.max.shop.cache.CustomKeyGenerator;
 import com.max.shop.converter.MapperService;
 import com.max.shop.dto.ProductDto;
@@ -36,10 +37,12 @@ public class ProductService {
         return new PageImpl<>(profilesList, pageable, products.getTotalElements());
     }
 
+
     public Product findOneById(Long id) {
         return productRepository.findById(id).orElseThrow(ProductNotFoundException::new);
     }
 
+    @UserStatistics
     public ProductDto getProduct(Long id) {
         Product product = productRepository
             //TODO just want to draw your attention to orElseThrow() method. in java 11 u can use it without params.
