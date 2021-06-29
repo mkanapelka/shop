@@ -1,6 +1,5 @@
-package com.max.shop.entity;
+package com.max.shop.entity.stat;
 
-import com.max.shop.entity.parent.BaseEntity;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.EqualsAndHashCode;
@@ -21,16 +20,15 @@ import java.time.LocalDate;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class UserStat{
+public class OrderStat {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @EqualsAndHashCode.Include
     private Long id;
-
     private Long userId;
-    private Long productId;
-    private Integer quantityViews;
+    private Integer quantityOrders;
+    private Integer totalCost;
 
     @LastModifiedDate
     private LocalDate dateViews;

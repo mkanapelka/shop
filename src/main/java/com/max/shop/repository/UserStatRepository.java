@@ -1,6 +1,6 @@
 package com.max.shop.repository;
 
-import com.max.shop.entity.UserStat;
+import com.max.shop.entity.stat.UserStat;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.time.LocalDate;

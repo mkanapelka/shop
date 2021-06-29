@@ -1,5 +1,7 @@
 package com.max.shop.service;
 
+import com.max.shop.aspect.StatisticsType;
+import com.max.shop.aspect.UserStatistics;
 import com.max.shop.converter.MapperService;
 import com.max.shop.dto.CartDto;
 import com.max.shop.entity.Cart;
@@ -31,6 +33,7 @@ public class CartService {
     }
 
     @Transactional
+    @UserStatistics(value = StatisticsType.PRODUCT_TO_CART)
     public CartDto addProductInCart(Long id, int quantityProduct) {
         Cart cart = ensureCart();
 
@@ -49,6 +52,7 @@ public class CartService {
 
 
     @Transactional
+    @UserStatistics(value = StatisticsType.PRODUCT_TO_CART)
     public CartDto removeProductFromCart(Long productId, int quantityProduct) {
         Cart cart = cartRepository.findCartByUserId(SecurityUtil.getUserId());
         ProductInCart productInCart = cart.getProductInCarts().stream()
@@ -75,6 +79,7 @@ public class CartService {
 
 
     @Transactional
+    @UserStatistics(value = StatisticsType.PRODUCT_TO_CART)
     public CartDto cleanCart() {
 
         Cart cart = cartRepository.findCartByUserId(SecurityUtil.getUserId());

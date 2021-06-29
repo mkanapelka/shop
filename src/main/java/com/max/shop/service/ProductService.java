@@ -1,5 +1,6 @@
 package com.max.shop.service;
 
+import com.max.shop.aspect.StatisticsType;
 import com.max.shop.aspect.UserStatistics;
 import com.max.shop.converter.MapperService;
 import com.max.shop.dto.ProductDto;
@@ -42,7 +43,7 @@ public class ProductService {
         return productRepository.findById(id).orElseThrow(() -> new EntityNotFountException("Product"));
     }
 
-    @UserStatistics
+    @UserStatistics(StatisticsType.PRODUCT_VIEW)
     public ProductDto getProduct(Long id) {
         Product product = productRepository
             .findOne(buildSingleFilter(id).and(fetchCharacteristics())).orElseThrow(() -> new EntityNotFountException("Product"));
