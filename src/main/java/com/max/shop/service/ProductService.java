@@ -1,13 +1,12 @@
 package com.max.shop.service;
 
 import com.max.shop.aspect.UserStatistics;
-import com.max.shop.cache.CustomKeyGenerator;
 import com.max.shop.converter.MapperService;
 import com.max.shop.dto.ProductDto;
 import com.max.shop.dto.ProductInfoDto;
 import com.max.shop.dto.request.ProductCriteriaDto;
 import com.max.shop.entity.Product;
-import com.max.shop.exception.ProductNotFoundException;
+import com.max.shop.exception.EntityNotFountException;
 import com.max.shop.repository.ProductRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.cache.annotation.Cacheable;
@@ -15,6 +14,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+
 import java.util.List;
 
 import static com.max.shop.specification.ProductSpecification.buildListFilter;
@@ -39,15 +39,13 @@ public class ProductService {
 
 
     public Product findOneById(Long id) {
-        return productRepository.findById(id).orElseThrow(ProductNotFoundException::new);
+        return productRepository.findById(id).orElseThrow(() -> new EntityNotFountException("Product"));
     }
 
     @UserStatistics
     public ProductDto getProduct(Long id) {
         Product product = productRepository
-            //TODO just want to draw your attention to orElseThrow() method. in java 11 u can use it without params.
-            // But Actually creating some generic exception is better. Like new EntityNotFountException("product")
-            .findOne(buildSingleFilter(id).and(fetchCharacteristics())).orElseThrow();
+            .findOne(buildSingleFilter(id).and(fetchCharacteristics())).orElseThrow(() -> new EntityNotFountException("Product"));
         return conversionService.convert(product, ProductDto.class);
     }
 }

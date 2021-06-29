@@ -6,7 +6,7 @@ import com.max.shop.dto.UserProfileInfoDto;
 import com.max.shop.dto.request.UserFormDto;
 import com.max.shop.dto.request.UserListCriteriaDto;
 import com.max.shop.entity.User;
-import com.max.shop.exception.UserNotFoundException;
+import com.max.shop.exception.EntityNotFountException;
 import com.max.shop.repository.UserRepository;
 import com.max.shop.specification.UserSpecification;
 import lombok.RequiredArgsConstructor;
@@ -43,7 +43,7 @@ public class BoUserService {
     public UserProfileDto findUserById(Long id) {
         return userRepository.findById(id)
             .map(user -> conversionService.convert(user, UserProfileDto.class))
-            .orElseThrow(UserNotFoundException::new);
+            .orElseThrow(() -> new EntityNotFountException("User"));
     }
 
     public Page<UserProfileInfoDto> listUsers(UserListCriteriaDto userCriteria, Pageable pageable) {

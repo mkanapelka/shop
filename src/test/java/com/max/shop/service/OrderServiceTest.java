@@ -9,7 +9,7 @@ import com.max.shop.entity.User;
 import com.max.shop.entity.embeddable.DeliveryMethod;
 import com.max.shop.entity.embeddable.OrderDetails;
 import com.max.shop.entity.embeddable.PaymentMethod;
-import com.max.shop.exception.UserNotFoundException;
+import com.max.shop.exception.EntityNotFountException;
 import com.max.shop.repository.OrderRepository;
 import com.max.shop.repository.UserRepository;
 import com.max.shop.repository.parent.IntegrationTestBase;
@@ -42,7 +42,7 @@ public class OrderServiceTest extends IntegrationTestBase {
 
     @BeforeEach
     void updateContext(){
-        User user = userRepository.findById(10001L).orElseThrow(UserNotFoundException::new);
+        User user = userRepository.findById(10001L).orElseThrow(() -> new EntityNotFountException("User"));
 
         SecurityContextHolder.getContext()
                 .setAuthentication(new UsernamePasswordAuthenticationToken(user,"", user.getAuthorities()));

@@ -13,7 +13,7 @@ import com.max.shop.entity.ProductInOrder;
 import com.max.shop.entity.ProductStatus;
 import com.max.shop.entity.embeddable.OrderDetails;
 import com.max.shop.exception.CartIsEmptyException;
-import com.max.shop.exception.OrderNotFoundException;
+import com.max.shop.exception.EntityNotFountException;
 import com.max.shop.exception.ProductsNotEnoughException;
 import com.max.shop.exception.UserIsNotRegisteredException;
 import com.max.shop.exception.WrongOrderException;
@@ -80,7 +80,7 @@ public class OrderService {
     public OrderDto cancelOrder(Long id) {
         Order order = orderRepository
                 .findOne(OrderSpecification.findOrderById(id).and(OrderSpecification.fetchProducts()))
-                .orElseThrow(OrderNotFoundException::new);
+                .orElseThrow(() -> new EntityNotFountException("Order"));
         if (!Objects.equals(order.getUser().getId(), SecurityUtil.getUserId())) {
             throw new WrongOrderException();
         }

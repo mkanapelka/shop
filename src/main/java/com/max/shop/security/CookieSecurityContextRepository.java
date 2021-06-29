@@ -1,7 +1,7 @@
 package com.max.shop.security;
 
 import com.max.shop.entity.User;
-import com.max.shop.exception.UserNotFoundException;
+import com.max.shop.exception.EntityNotFountException;
 import com.max.shop.service.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
@@ -74,7 +74,7 @@ public class CookieSecurityContextRepository implements SecurityContextRepositor
             .map(cookie -> {
                 try {
                     return (User) this.userDetailsService.loadUserByUsername(cookie);
-                } catch (UserNotFoundException e) {
+                } catch (EntityNotFountException ex) {
                     return userService.createUser(cookie);
                 }
             });

@@ -4,7 +4,7 @@ import com.max.shop.converter.MapperService;
 import com.max.shop.dto.UserProfileDto;
 import com.max.shop.entity.AuthType;
 import com.max.shop.entity.User;
-import com.max.shop.exception.UserNotFoundException;
+import com.max.shop.exception.EntityNotFountException;
 import com.max.shop.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.val;
@@ -20,7 +20,7 @@ public class UserService {
 
     public UserProfileDto findUserById() {
         User userContext = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        User user = userRepository.findById(userContext.getId()).orElseThrow(UserNotFoundException::new);
+        User user = userRepository.findById(userContext.getId()).orElseThrow(() -> new EntityNotFountException("User"));
         return conversionService.convert(user, UserProfileDto.class);
     }
 

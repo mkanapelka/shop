@@ -4,7 +4,7 @@ import com.max.shop.converter.MapperService;
 import com.max.shop.dto.SubCategoryDto;
 import com.max.shop.dto.request.SubCategoryCriteriaDto;
 import com.max.shop.entity.SubProductCategory;
-import com.max.shop.exception.CategoryNotFoundException;
+import com.max.shop.exception.EntityNotFountException;
 import com.max.shop.repository.SubProductCategoryRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -34,7 +34,7 @@ public class SubCategoryService {
     }
 
     public SubCategoryDto findSubCategoryById(Long id) {
-        SubProductCategory subCategory = subCategoryRepository.findById(id).orElseThrow(CategoryNotFoundException::new);
+        SubProductCategory subCategory = subCategoryRepository.findById(id).orElseThrow(() -> new EntityNotFountException("Category"));
         return conversionService.convert(subCategory, SubCategoryDto.class);
     }
 

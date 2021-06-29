@@ -5,10 +5,8 @@ import com.max.shop.dto.OrderDto;
 import com.max.shop.dto.request.OrderCriteriaForAdminDto;
 import com.max.shop.entity.Order;
 import com.max.shop.entity.OrderStatus;
-import com.max.shop.entity.Status;
-import com.max.shop.exception.OrderNotFoundException;
+import com.max.shop.exception.EntityNotFountException;
 import com.max.shop.repository.OrderRepository;
-import com.max.shop.specification.OrderSpecification;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -40,14 +38,14 @@ public class BoOrderService {
 
     public OrderDto fondOneById(Long id){
         Order order = orderRepository
-                .findOne(findOrderById(id).and(fetchProducts())).orElseThrow(OrderNotFoundException::new);
+                .findOne(findOrderById(id).and(fetchProducts())).orElseThrow(() -> new EntityNotFountException("Order"));
         return conversionService.convert(order, OrderDto.class);
     }
 
     @Transactional
     public OrderDto changeOrderStatus(Long id, OrderStatus status){
         Order order = orderRepository
-                .findOne(findOrderById(id).and(fetchProducts())).orElseThrow(OrderNotFoundException::new);
+                .findOne(findOrderById(id).and(fetchProducts())).orElseThrow(() -> new EntityNotFountException("Order"));
         order.setStatus(status);
         orderRepository.save(order);
         return conversionService.convert(order, OrderDto.class);

@@ -4,7 +4,7 @@ import com.max.shop.constans.Constants;
 import com.max.shop.entity.Product;
 import com.max.shop.entity.ProductStatus;
 import com.max.shop.entity.SubProductCategory;
-import com.max.shop.exception.SubCategoryNotFoundException;
+import com.max.shop.exception.EntityNotFountException;
 import com.max.shop.repository.ProductRepository;
 import com.max.shop.repository.SubProductCategoryRepository;
 import lombok.RequiredArgsConstructor;
@@ -65,7 +65,7 @@ public class ProductGenerator {
         Random random = new Random();
         Long randId = (long) random.nextInt(18) + 1;
 
-        return subProductCategoryRepository.findById(randId).orElseThrow(SubCategoryNotFoundException::new);
+        return subProductCategoryRepository.findById(randId).orElseThrow(() -> new EntityNotFountException("SubProductCategory"));
     }
 
     public String genVendorCode() {

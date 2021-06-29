@@ -4,7 +4,7 @@ import com.max.shop.converter.MapperService;
 import com.max.shop.dto.CategoryDto;
 import com.max.shop.dto.request.CategoryCriteriaDto;
 import com.max.shop.entity.ProductCategory;
-import com.max.shop.exception.CategoryNotFoundException;
+import com.max.shop.exception.EntityNotFountException;
 import com.max.shop.repository.ProductCategoryRepository;
 import com.max.shop.specification.ProductCategorySpecification;
 import lombok.RequiredArgsConstructor;
@@ -12,7 +12,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
+
 import java.util.List;
 
 @Service
@@ -33,7 +33,7 @@ public class ProductCategoryService {
     }
 
     public CategoryDto findCategoryById(Long id) {
-        ProductCategory productCategory = categoryRepository.findById(id).orElseThrow(CategoryNotFoundException::new);
+        ProductCategory productCategory = categoryRepository.findById(id).orElseThrow(() -> new EntityNotFountException("Category"));
         return conversionService.convert(productCategory, CategoryDto.class);
     }
 

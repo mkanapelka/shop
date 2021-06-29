@@ -4,12 +4,10 @@ import com.max.shop.bo.specification.BoProductSpecification;
 import com.max.shop.converter.MapperService;
 import com.max.shop.dto.ProductDto;
 import com.max.shop.dto.request.ProductCriteriaBoDto;
-import com.max.shop.dto.request.ProductCriteriaDto;
 import com.max.shop.entity.Product;
 import com.max.shop.entity.ProductStatus;
-import com.max.shop.exception.ProductNotFoundException;
+import com.max.shop.exception.EntityNotFountException;
 import com.max.shop.repository.ProductRepository;
-import com.max.shop.specification.ProductSpecification;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -38,14 +36,14 @@ public class BoProductService {
     }
 
     public ProductDto setStatus(Long id, ProductStatus status){
-        Product product = productRepository.findById(id).orElseThrow(ProductNotFoundException::new);
+        Product product = productRepository.findById(id).orElseThrow(() -> new EntityNotFountException("Product"));
         product.setStatus(status);
         product = productRepository.save(product);
         return conversionService.convert(product, ProductDto.class);
     }
 
     public void removeProduct(Long id){
-        Product product = productRepository.findById(id).orElseThrow(ProductNotFoundException::new);
+        Product product = productRepository.findById(id).orElseThrow(() -> new EntityNotFountException("Product"));
         product.setStatus(ProductStatus.DELETED);
     }
 }

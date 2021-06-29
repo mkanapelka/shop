@@ -4,7 +4,7 @@ import com.max.shop.dto.CartDto;
 import com.max.shop.entity.Cart;
 import com.max.shop.entity.ProductInCart;
 import com.max.shop.entity.User;
-import com.max.shop.exception.UserNotFoundException;
+import com.max.shop.exception.EntityNotFountException;
 import com.max.shop.repository.CartRepository;
 import com.max.shop.repository.UserRepository;
 import com.max.shop.repository.parent.IntegrationTestBase;
@@ -38,7 +38,7 @@ class CartServiceTest extends IntegrationTestBase {
 
     @BeforeEach
     void updateContext(){
-        User user = userRepository.findById(10001L).orElseThrow(UserNotFoundException::new);
+        User user = userRepository.findById(10001L).orElseThrow(() -> new EntityNotFountException("User"));
 
         SecurityContextHolder.getContext()
                 .setAuthentication(new UsernamePasswordAuthenticationToken(user,"", user.getAuthorities()));

@@ -2,7 +2,7 @@ package com.max.shop.repository;
 
 import com.max.shop.dto.request.UserListCriteriaDto;
 import com.max.shop.entity.User;
-import com.max.shop.exception.UserNotFoundException;
+import com.max.shop.exception.EntityNotFountException;
 import com.max.shop.repository.parent.IntegrationTestBase;
 import com.max.shop.specification.UserSpecification;
 import org.junit.jupiter.api.Test;
@@ -58,7 +58,7 @@ public class UserRepositoryTest extends IntegrationTestBase {
                 .build();
 
         String name = "ivan";
-        User user = userRepository.findByUsername(name).orElseThrow(UserNotFoundException::new);
+        User user = userRepository.findByUsername(name).orElseThrow(() -> new EntityNotFountException("User"));
         assertEquals(userExpected.getUsername(), user.getUsername());
         assertEquals(userExpected.getEmail(), user.getEmail());
     }

@@ -3,7 +3,7 @@ package com.max.shop.bo.service;
 import com.max.shop.converter.MapperService;
 import com.max.shop.dto.CategoryDto;
 import com.max.shop.entity.ProductCategory;
-import com.max.shop.exception.CategoryNotFoundException;
+import com.max.shop.exception.EntityNotFountException;
 import com.max.shop.repository.ProductCategoryRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -24,7 +24,7 @@ public class BoCategoryService {
     @Transactional
     public void excludeCategory(Long id){
         ProductCategory productCategory = categoryRepository.findById(id)
-                .orElseThrow(CategoryNotFoundException::new);
+                .orElseThrow(() -> new EntityNotFountException("Category"));
         productCategory.setIsActive(false);
         categoryRepository.save(productCategory);
     }
