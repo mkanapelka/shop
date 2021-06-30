@@ -33,7 +33,6 @@ public class CartService {
     }
 
     @Transactional
-    @UserStatistics(value = StatisticsType.PRODUCT_TO_CART)
     public CartDto addProductInCart(Long id, int quantityProduct) {
         Cart cart = ensureCart();
 
@@ -52,7 +51,6 @@ public class CartService {
 
 
     @Transactional
-    @UserStatistics(value = StatisticsType.PRODUCT_TO_CART)
     public CartDto removeProductFromCart(Long productId, int quantityProduct) {
         Cart cart = cartRepository.findCartByUserId(SecurityUtil.getUserId());
         ProductInCart productInCart = cart.getProductInCarts().stream()
@@ -79,7 +77,6 @@ public class CartService {
 
 
     @Transactional
-    @UserStatistics(value = StatisticsType.PRODUCT_TO_CART)
     public CartDto cleanCart() {
 
         Cart cart = cartRepository.findCartByUserId(SecurityUtil.getUserId());
