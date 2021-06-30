@@ -1,5 +1,7 @@
 package com.max.shop.service;
 
+import com.max.shop.aspect.StatisticsType;
+import com.max.shop.aspect.UserStatistics;
 import com.max.shop.converter.MapperService;
 import com.max.shop.dto.OrderDto;
 import com.max.shop.dto.request.OrderCriteriaForUserDto;
@@ -43,6 +45,7 @@ public class OrderService {
     }
 
     @Transactional
+    @UserStatistics(StatisticsType.ORDER_CREATE)
     public OrderDto createOrder(OrderDetails orderDetails) {
 
         if (SecurityUtil.getUser().getAuthType().equals(AuthType.ANONYMOUS)){

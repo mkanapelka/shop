@@ -1,19 +1,19 @@
-package com.max.shop.aspect;
+package com.max.shop.aspect.handler;
 
+import com.max.shop.aspect.handler.Handler;
 import com.max.shop.dto.ProductDto;
 import com.max.shop.entity.stat.UserStat;
 import com.max.shop.repository.UserStatRepository;
 import com.max.shop.util.SecurityUtil;
 import lombok.RequiredArgsConstructor;
 import org.aspectj.lang.ProceedingJoinPoint;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDate;
 
 @Component
 @RequiredArgsConstructor
-public class ProductViewHandler implements Command{
+public class ProductViewHandler implements Handler {
 
     private final UserStatRepository userStatRepository;
 
