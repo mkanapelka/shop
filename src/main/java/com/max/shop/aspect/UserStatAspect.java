@@ -23,7 +23,7 @@ public class UserStatAspect {
         //may be void
         Object returnValue = joinPoint.proceed(joinPoint.getArgs());
         Handler handler = this.statisticsHandlerFactory.getHandler(userStatistics.value());
-        handler.writeStatistics(joinPoint.getArgs());
+        handler.writeStatistics(returnValue);
 
         return returnValue;
     }
