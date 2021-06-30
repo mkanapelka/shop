@@ -1,14 +1,12 @@
 package com.max.shop.aspect.handler;
 
-import com.max.shop.aspect.handler.Handler;
+import com.max.shop.aspect.StatisticsType;
 import com.max.shop.dto.ProductDto;
 import com.max.shop.entity.stat.UserStat;
 import com.max.shop.repository.UserStatRepository;
 import com.max.shop.util.SecurityUtil;
 import lombok.RequiredArgsConstructor;
-import org.aspectj.lang.ProceedingJoinPoint;
 import org.springframework.stereotype.Component;
-
 import java.time.LocalDate;
 
 @Component
@@ -18,13 +16,13 @@ public class ProductViewHandler implements Handler {
     private final UserStatRepository userStatRepository;
 
     @Override
-    public Object exist(ProceedingJoinPoint joinPoint) throws Throwable {
+    public void writeStatistics(Object product) {
         Long userId = SecurityUtil.getUserId();
-        ProductDto productDto = (ProductDto) joinPoint.proceed();
+        ProductDto productDto = (ProductDto) product;
         Long productId = productDto.getId();
         LocalDate date = LocalDate.now();
         UserStat userStat = userStatRepository.findByUserIdAndProductIdAndDateViews(userId, productId, date)
-                .orElseGet(UserStat::new);
+            .orElseGet(UserStat::new);
         userStat.setUserId(userId);
         userStat.setProductId(productId);
         if (userStat.getQuantityViews() == null) {
@@ -34,6 +32,9 @@ public class ProductViewHandler implements Handler {
         }
         userStat.setDateViews(date);
         userStatRepository.save(userStat);
-        return productDto;
+    }
+
+    @Override public boolean supports(StatisticsType type) {
+        return type == StatisticsType.PRODUCT_VIEW;
     }
 }

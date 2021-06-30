@@ -1,10 +1,10 @@
 package com.max.shop.aspect.handler;
 
-import org.aspectj.lang.ProceedingJoinPoint;
-import org.springframework.stereotype.Component;
+import com.max.shop.aspect.StatisticsType;
 
-@Component
 public interface Handler {
 
-    Object exist(ProceedingJoinPoint joinPoint) throws Throwable;
+    Object writeStatistics(Object target);
+
+    boolean supports(StatisticsType type);
 }
