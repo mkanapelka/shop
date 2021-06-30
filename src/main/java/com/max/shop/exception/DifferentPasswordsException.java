@@ -1,6 +1,6 @@
 package com.max.shop.exception;
 
-public class DifferentPasswordsException extends RuntimeException{
+public class DifferentPasswordsException extends BaseException{
 
     public DifferentPasswordsException() {
         super("different password");

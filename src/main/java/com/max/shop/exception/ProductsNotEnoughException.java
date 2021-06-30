@@ -1,6 +1,6 @@
 package com.max.shop.exception;
 
-public class ProductsNotEnoughException extends RuntimeException{
+public class ProductsNotEnoughException extends BaseException{
 
     public ProductsNotEnoughException() {
         super("Products not enough");

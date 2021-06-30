@@ -1,14 +1,12 @@
 package com.max.shop.exception;
 
-import com.max.shop.entity.parent.BaseEntity;
-
-public class EntityNotFountException extends RuntimeException {
+public class EntityNotFountException extends BaseException {
 
     public EntityNotFountException(String entityName) {
         super("Entity '" + entityName + "' not found");
     }
 
-//    public EntityNotFountException(Class<?> targetClass) {
-//        super("Entity '" + entityName + "' not found");
-//    }
+    public EntityNotFountException(Class<?> targetClass) {
+        super("Entity '" + targetClass.getSimpleName() + "' not found");
+    }
 }

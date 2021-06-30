@@ -4,7 +4,7 @@ import com.max.shop.aspect.StatisticsType;
 
 public interface Handler {
 
-    Object writeStatistics(Object target);
+    void writeStatistics(Object target) throws Throwable;
 
     boolean supports(StatisticsType type);
 }

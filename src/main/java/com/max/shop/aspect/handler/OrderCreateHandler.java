@@ -6,8 +6,8 @@ import com.max.shop.entity.stat.OrderStat;
 import com.max.shop.repository.OrderStatRepository;
 import com.max.shop.util.SecurityUtil;
 import lombok.RequiredArgsConstructor;
-import org.aspectj.lang.ProceedingJoinPoint;
 import org.springframework.stereotype.Component;
+
 import java.time.LocalDate;
 
 @Component
@@ -17,9 +17,9 @@ public class OrderCreateHandler implements Handler {
     private final OrderStatRepository orderStatRepository;
 
     @Override
-    public Object writeStatistics(ProceedingJoinPoint joinPoint) {
+    public void writeStatistics(Object order) {
         Long userId = SecurityUtil.getUserId();
-        OrderDto orderDto = (OrderDto) joinPoint.proceed();
+        OrderDto orderDto = (OrderDto) order;
         OrderStat orderStat = orderStatRepository
             .findByUserIdAndDateViews(userId, LocalDate.now())
             .orElseGet(() -> OrderStat.builder()
@@ -31,7 +31,6 @@ public class OrderCreateHandler implements Handler {
         orderStat.setQuantityOrders(orderStat.getQuantityOrders() + 1);
         orderStat.setTotalCost(orderStat.getTotalCost() + orderDto.getTotalCost());
         orderStatRepository.save(orderStat);
-        return orderDto;
     }
 
     @Override public boolean supports(StatisticsType type) {

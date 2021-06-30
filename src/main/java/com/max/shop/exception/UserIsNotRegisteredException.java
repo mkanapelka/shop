@@ -1,6 +1,6 @@
 package com.max.shop.exception;
 
-public class UserIsNotRegisteredException extends RuntimeException{
+public class UserIsNotRegisteredException extends BaseException{
 
     public UserIsNotRegisteredException() {
         super("User is not registered");
