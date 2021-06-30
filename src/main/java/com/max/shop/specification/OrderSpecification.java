@@ -17,7 +17,6 @@ import java.util.List;
 import java.util.Objects;
 
 public class OrderSpecification {
-//TODO: add created and updated
     public static Specification<Order> buildListFilterForUser(OrderCriteriaForUserDto orderCriteria) {
         return ((root, query, cb) -> {
             if (orderCriteria == null) {

@@ -5,6 +5,7 @@ import com.max.shop.dto.ProductDto;
 import com.max.shop.dto.ProductInfoDto;
 import com.max.shop.dto.request.ProductCriteriaDto;
 import com.max.shop.service.ProductService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
@@ -15,14 +16,10 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/api/public/products")
+@RequiredArgsConstructor
 public class ProductController {
 
     private final ProductService productService;
-
-    public ProductController(ProductService productService) {
-        this.productService = productService;
-    }
-
 
     @GetMapping
     public Page<ProductInfoDto> listProducts(
