@@ -25,6 +25,7 @@ public class OrderCreateHandler implements Handler {
                 .orElseGet(() -> OrderStat.builder()
                         .quantityOrders(0)
                         .totalCost(0)
+                        .userId(userId)
                         .dateViews(LocalDate.now())
                         .build());
         orderStat.setQuantityOrders(orderStat.getQuantityOrders() + 1);

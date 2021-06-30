@@ -1,18 +1,19 @@
 package com.max.shop.advice;
 
-import com.max.shop.exception.EntityNotFountException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
+import java.time.LocalDateTime;
+
 @ControllerAdvice
 public class DefaultAdvice {
 
-    @ExceptionHandler(EntityNotFountException.class)
-    public ResponseEntity<Response> handleException(EntityNotFountException e){
+    @ExceptionHandler({Exception.class})
+    public ResponseEntity<Response> handleException(Exception e) {
         Response response = new Response();
-        response.setMessage(e.getMessage());
+        response.setMessage(LocalDateTime.now() + " " + e.getMessage());
         return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
     }
 }
