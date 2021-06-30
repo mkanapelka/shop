@@ -10,4 +10,6 @@ import lombok.Setter;
 public class Response {
 
     private String message;
+    private String date;
+    private int statusCode;
 }
