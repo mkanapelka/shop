@@ -13,6 +13,7 @@ import com.max.shop.entity.Product;
 import com.max.shop.entity.ProductInCart;
 import com.max.shop.entity.ProductInOrder;
 import com.max.shop.entity.ProductStatus;
+import com.max.shop.entity.User;
 import com.max.shop.entity.embeddable.OrderDetails;
 import com.max.shop.exception.CartIsEmptyException;
 import com.max.shop.exception.EntityNotFountException;
@@ -20,6 +21,7 @@ import com.max.shop.exception.ProductsNotEnoughException;
 import com.max.shop.exception.UserIsNotRegisteredException;
 import com.max.shop.exception.WrongOrderException;
 import com.max.shop.repository.OrderRepository;
+import com.max.shop.service.email.EmailServiceImpl;
 import com.max.shop.specification.OrderSpecification;
 import com.max.shop.util.SecurityUtil;
 import lombok.RequiredArgsConstructor;
@@ -37,6 +39,7 @@ public class OrderService {
     private final OrderRepository orderRepository;
     private final CartService cartService;
     private final MapperService conversionService;
+    private final EmailServiceImpl mailService;
 
     public List<OrderDto> showOrdersByFilter(OrderCriteriaForUserDto criteriaDto) {
         List<Order> orders = orderRepository
@@ -48,7 +51,7 @@ public class OrderService {
     @UserStatistics(StatisticsType.ORDER_CREATE)
     public OrderDto createOrder(OrderDetails orderDetails) {
 
-        if (SecurityUtil.getUser().getAuthType().equals(AuthType.ANONYMOUS)){
+        if (SecurityUtil.getUser().getAuthType().equals(AuthType.ANONYMOUS)) {
             throw new UserIsNotRegisteredException();
         }
 
@@ -62,7 +65,7 @@ public class OrderService {
             if (productInCart.getProduct().getQuantity() > productInCart.getQuantity()) {
                 Product product = productInCart.getProduct();
                 product.setQuantity(product.getQuantity() - productInCart.getQuantity());
-            }else if(productInCart.getProduct().getQuantity().equals(productInCart.getQuantity())){
+            } else if (productInCart.getProduct().getQuantity().equals(productInCart.getQuantity())) {
                 Product product = productInCart.getProduct();
                 product.setQuantity(0);
                 product.setStatus(ProductStatus.SOLD_OUT);
@@ -75,6 +78,12 @@ public class OrderService {
         order.setOrderDetails(orderDetails);
         orderRepository.save(order);
         cartService.cleanCart();
+
+        User user = SecurityUtil.getUser();
+        String message = "Уважаемый, " + user.getFirstName() + " "
+                + user.getLastName() + ", Ваша заявка принята. Спасибо за заказ";
+
+        mailService.sendSimpleMessage(user, message);
         return conversionService.convert(order, OrderDto.class);
     }
 
@@ -92,7 +101,7 @@ public class OrderService {
         for (ProductInOrder productInOrder : productInOrderList) {
             Product product = productInOrder.getProduct();
             product.setQuantity(product.getQuantity() + productInOrder.getQuantity());
-            if (product.getStatus().equals(ProductStatus.SOLD_OUT)){
+            if (product.getStatus().equals(ProductStatus.SOLD_OUT)) {
                 product.setStatus(ProductStatus.AVAILABLE);
             }
         }
