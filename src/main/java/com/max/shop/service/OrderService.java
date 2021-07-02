@@ -28,6 +28,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.text.MessageFormat;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
@@ -80,8 +81,10 @@ public class OrderService {
         cartService.cleanCart();
 
         User user = SecurityUtil.getUser();
-        String message = "Уважаемый, " + user.getFirstName() + " "
-                + user.getLastName() + ", Ваша заявка принята. Спасибо за заказ";
+        String message = MessageFormat
+                .format("Уважаемый, {0} {1}, Ваша заявка принята. Спасибо за заказ"
+                        ,user.getFirstName()
+                        , user.getLastName());
 
         mailService.sendSimpleMessage(user, message);
         return conversionService.convert(order, OrderDto.class);

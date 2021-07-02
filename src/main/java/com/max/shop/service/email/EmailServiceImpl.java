@@ -13,7 +13,7 @@ public class EmailServiceImpl implements EmailService {
 
     private final JavaMailSender javaMailSender;
 
-    @Async
+
     @Override
     public void sendSimpleMessage(User user, String text) {
         SimpleMailMessage mailMessage = new SimpleMailMessage();
