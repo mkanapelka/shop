@@ -3,6 +3,7 @@ package com.max.shop.service;
 import com.max.shop.aspect.StatisticsType;
 import com.max.shop.aspect.UserStatistics;
 import com.max.shop.converter.MapperService;
+import com.max.shop.dto.MessageDto;
 import com.max.shop.dto.OrderDto;
 import com.max.shop.dto.request.OrderCriteriaForUserDto;
 import com.max.shop.entity.AuthType;
@@ -41,6 +42,7 @@ public class OrderService {
     private final CartService cartService;
     private final MapperService conversionService;
     private final EmailServiceImpl mailService;
+    private final MessageService messageService;
 
     public List<OrderDto> showOrdersByFilter(OrderCriteriaForUserDto criteriaDto) {
         List<Order> orders = orderRepository
@@ -49,7 +51,7 @@ public class OrderService {
     }
 
     @Transactional
-    @UserStatistics(StatisticsType.ORDER_CREATE)
+    @UserStatistics(value = StatisticsType.ORDER_CREATE)
     public OrderDto createOrder(OrderDetails orderDetails) {
 
         if (SecurityUtil.getUser().getAuthType().equals(AuthType.ANONYMOUS)) {
@@ -81,12 +83,7 @@ public class OrderService {
         cartService.cleanCart();
 
         User user = SecurityUtil.getUser();
-        String message = MessageFormat
-                .format("Уважаемый, {0} {1}, Ваша заявка принята. Спасибо за заказ"
-                        ,user.getFirstName()
-                        , user.getLastName());
-
-        mailService.sendSimpleMessage(user, message);
+        mailService.sendSimpleMessage(user, 1L);
         return conversionService.convert(order, OrderDto.class);
     }
 

@@ -43,7 +43,7 @@ public class ProductService {
         return productRepository.findById(id).orElseThrow(() -> new EntityNotFountException("Product"));
     }
 
-    @UserStatistics(StatisticsType.PRODUCT_VIEW)
+    @UserStatistics(value = StatisticsType.PRODUCT_VIEW)
     public ProductDto getProduct(Long id) {
         Product product = productRepository
             .findOne(buildSingleFilter(id).and(fetchCharacteristics())).orElseThrow(() -> new EntityNotFountException("Product"));

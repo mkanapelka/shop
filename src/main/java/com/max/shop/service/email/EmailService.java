@@ -6,5 +6,5 @@ import org.springframework.scheduling.annotation.Async;
 public interface EmailService {
 
     @Async
-    void sendSimpleMessage(User user, String text);
+    void sendSimpleMessage(User user, Long messageId);
 }
