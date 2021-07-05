@@ -22,15 +22,14 @@ public class EmailServiceImpl implements EmailService {
     public void sendSimpleMessage(User user, Long messageId) {
         SimpleMailMessage mailMessage = new SimpleMailMessage();
 
-
         MessageDto messageDto = messageService.findOneById(messageId);
-//        TODO: create other formatters
         String message = MessageFormat
                 .format(messageDto.getText(), user.getFirstName(), user.getLastName());
 
         mailMessage.setFrom(user.getFirstName());
         mailMessage.setTo(user.getEmail());
         mailMessage.setText(message);
+        mailMessage.setFrom(messageDto.getFromAddress());
         mailMessage.setSubject(messageDto.getSubject());
         javaMailSender.send(mailMessage);
     }

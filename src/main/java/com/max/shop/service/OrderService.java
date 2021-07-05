@@ -3,7 +3,6 @@ package com.max.shop.service;
 import com.max.shop.aspect.StatisticsType;
 import com.max.shop.aspect.UserStatistics;
 import com.max.shop.converter.MapperService;
-import com.max.shop.dto.MessageDto;
 import com.max.shop.dto.OrderDto;
 import com.max.shop.dto.request.OrderCriteriaForUserDto;
 import com.max.shop.entity.AuthType;
@@ -29,7 +28,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.text.MessageFormat;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
@@ -42,7 +40,6 @@ public class OrderService {
     private final CartService cartService;
     private final MapperService conversionService;
     private final EmailServiceImpl mailService;
-    private final MessageService messageService;
 
     public List<OrderDto> showOrdersByFilter(OrderCriteriaForUserDto criteriaDto) {
         List<Order> orders = orderRepository

@@ -49,4 +49,5 @@ public class ProductService {
             .findOne(buildSingleFilter(id).and(fetchCharacteristics())).orElseThrow(() -> new EntityNotFountException("Product"));
         return conversionService.convert(product, ProductDto.class);
     }
+
 }
