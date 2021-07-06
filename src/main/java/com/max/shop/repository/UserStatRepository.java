@@ -10,4 +10,6 @@ import java.util.Optional;
 public interface UserStatRepository extends JpaRepository<UserStat, Long>, JpaSpecificationExecutor<UserStat> {
 
     Optional<UserStat> findByUserIdAndProductIdAndDateViews(Long userId, Long productId, LocalDate date);
+
+    UserStat findByProductId(Long productId);
 }

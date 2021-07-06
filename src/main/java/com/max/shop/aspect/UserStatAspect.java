@@ -33,13 +33,11 @@ public class UserStatAspect {
     public void addUserStatisticAfterReturning(JoinPoint joinPoint, UserStatistics userStatistics, Object result) {
         Handler handler = this.statisticsHandlerFactory.getHandler(userStatistics.value());
 
-        if (userStatistics.index() == -1) {
-            handler.writeStatistics(result);
-        } else {
+        if (userStatistics.index() != -1) {
             Object[] args = joinPoint.getArgs();
             result = handler.getResultByArg(args[userStatistics.index()]);
-            handler.writeStatistics(result);
         }
+        handler.writeStatistics(result);
     }
 
 }

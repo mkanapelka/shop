@@ -14,8 +14,8 @@ INSERT INTO cart (id, quantity_product, total_cost, user_id) VALUES
 INSERT INTO product_in_cart(id, quantity, cart_id, product_id) VALUES
 (10001, 5, 10001, 10001);
 
-insert into product_category (id, name, thumbnail)
-values (10001, 'первое','Pervoe');
+insert into product_category (id, name, thumbnail, is_active)
+values (10001, 'первое','Pervoe', true);
 
 insert into sub_product_category(id, name, product_category_id)
 values (10001, 'борщи', 10001),

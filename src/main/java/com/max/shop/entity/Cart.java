@@ -21,7 +21,7 @@ import java.util.List;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-@EqualsAndHashCode(onlyExplicitlyIncluded = true, callSuper = false)
+//@EqualsAndHashCode(onlyExplicitlyIncluded = true, callSuper = false)
 public class Cart extends BaseEntity {
 
     private int totalCost;

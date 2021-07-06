@@ -8,7 +8,9 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.Table;
 import javax.validation.constraints.Email;
 
 @Entity
@@ -18,10 +20,15 @@ import javax.validation.constraints.Email;
 @AllArgsConstructor
 @NoArgsConstructor
 @EqualsAndHashCode(onlyExplicitlyIncluded = true, callSuper = false)
+@Table(name = "message")
 public class Message extends BaseEntity {
 
-    @Email
+    @Column(name = "from_address")
     private String fromAddress;
+
+    @Column(name = "text")
     private String text;
+
+    @Column(name = "subject")
     private String subject;
 }

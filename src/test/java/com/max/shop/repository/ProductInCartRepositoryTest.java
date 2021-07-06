@@ -30,16 +30,16 @@ class ProductInCartRepositoryTest extends BaseRepositoryTest {
 
         Cart cart = cartRepository.findCartByUserId(10001L);
 
-        ProductInCart productExpected = ProductInCart.builder()
-                .quantity(10)
-                .cart(cart)
-                .build();
-        testSubject.save(productExpected);
+//        ProductInCart productExpected = ProductInCart.builder()
+//                .quantity(10)
+//                .cart(cart)
+//                .build();
+//        testSubject.save(productExpected);
 
         assertThat(testSubject.findAllByCartId(cart.getId()))
                 .hasSize(1)
                 .extracting("quantity")
-                .containsExactly(10);
+                .containsExactly(5);
     }
 
 

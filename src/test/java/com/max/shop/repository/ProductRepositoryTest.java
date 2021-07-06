@@ -2,6 +2,7 @@ package com.max.shop.repository;
 
 import com.max.shop.dto.request.ProductCriteriaDto;
 import com.max.shop.entity.Product;
+import com.max.shop.repository.parent.BaseRepositoryTest;
 import com.max.shop.repository.parent.IntegrationTestBase;
 import com.max.shop.specification.ProductSpecification;
 import org.junit.jupiter.api.Test;
@@ -14,7 +15,7 @@ import java.util.stream.Collectors;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-public class ProductRepositoryTest extends IntegrationTestBase {
+public class ProductRepositoryTest extends BaseRepositoryTest {
 
     @Autowired
     ProductRepository productRepository;
@@ -45,7 +46,7 @@ public class ProductRepositoryTest extends IntegrationTestBase {
                 .build();
 
 
-        List<Product> productList = productRepository.findAll(ProductSpecification.buildListFilter(productCriteria));
+        List<Product> productList = productRepository.findAll(ProductSpecification.buildListFilter(new ProductCriteriaDto()));
         assertEquals(productsExpected.size(), productList.size());
         assertEquals(productsExpected.get(0).getName(), productList.get(0).getName());
         assertEquals(productsExpected.get(0).getCost(), productList.get(0).getCost());
