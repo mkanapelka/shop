@@ -1,9 +1,11 @@
 package com.max.shop.aspect.handler;
 
 import com.max.shop.aspect.StatisticsType;
+import com.max.shop.converter.MapperService;
 import com.max.shop.dto.ProductDto;
 import com.max.shop.entity.stat.UserStat;
 import com.max.shop.repository.UserStatRepository;
+import com.max.shop.service.ProductService;
 import com.max.shop.util.SecurityUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
@@ -14,6 +16,8 @@ import java.time.LocalDate;
 public class ProductViewHandler implements Handler {
 
     private final UserStatRepository userStatRepository;
+    private final ProductService productService;
+    private final MapperService conversionService;
 
     @Override
     public void writeStatistics(Object product) {
@@ -36,5 +40,10 @@ public class ProductViewHandler implements Handler {
 
     @Override public boolean supports(StatisticsType type) {
         return type == StatisticsType.PRODUCT_VIEW;
+    }
+
+    @Override
+    public Object getResultByArg(Object object) {
+        return conversionService.convert(productService.findOneById((Long) object), ProductDto.class);
     }
 }

@@ -36,4 +36,9 @@ public class OrderCreateHandler implements Handler {
     @Override public boolean supports(StatisticsType type) {
         return type == StatisticsType.ORDER_CREATE;
     }
+
+    @Override
+    public Object getResultByArg(Object object) {
+        return null;
+    }
 }

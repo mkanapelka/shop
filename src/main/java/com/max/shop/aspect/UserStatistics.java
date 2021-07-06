@@ -9,5 +9,9 @@ import java.lang.annotation.Target;
 @Target(ElementType.METHOD)
 public @interface UserStatistics {
 
+    /**
+     * field index shows the position number of the parameter
+     */
+    int index() default -1;
     StatisticsType value();
 }

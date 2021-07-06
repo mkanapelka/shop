@@ -30,9 +30,16 @@ public class UserStatAspect {
 
     @SneakyThrows
     @AfterReturning(pointcut = "@annotation(userStatistics)", returning = "result")
-    public void addUserStatisticAfterReturning(JoinPoint joinPoint, UserStatistics userStatistics, Object result){
+    public void addUserStatisticAfterReturning(JoinPoint joinPoint, UserStatistics userStatistics, Object result) {
         Handler handler = this.statisticsHandlerFactory.getHandler(userStatistics.value());
-        handler.writeStatistics(result);
+
+        if (userStatistics.index() == -1) {
+            handler.writeStatistics(result);
+        } else {
+            Object[] args = joinPoint.getArgs();
+            result = handler.getResultByArg(args[userStatistics.index()]);
+            handler.writeStatistics(result);
+        }
     }
 
 }
