@@ -43,6 +43,11 @@ public class ProductService {
         return productRepository.findById(id).orElseThrow(() -> new EntityNotFountException("Product"));
     }
 
+    public ProductDto findById(Long id) {
+        Product product = productRepository.findById(id).orElseThrow(() -> new EntityNotFountException("Product"));
+        return conversionService.convert(product, ProductDto.class);
+    }
+
     @UserStatistics(value = StatisticsType.PRODUCT_VIEW)
     public ProductDto getProduct(Long id) {
         Product product = productRepository
