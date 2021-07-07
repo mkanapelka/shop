@@ -55,5 +55,11 @@ public class ProductService {
         return conversionService.convert(product, ProductDto.class);
     }
 
+    @UserStatistics(value = StatisticsType.PRODUCT_VIEW, index = 0)
+    public void getProductVoid(Long id) {
+        Product product = productRepository
+                .findOne(buildSingleFilter(id).and(fetchCharacteristics())).orElseThrow(() -> new EntityNotFountException("Product"));
+    }
+
 
 }

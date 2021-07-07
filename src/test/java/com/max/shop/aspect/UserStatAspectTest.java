@@ -4,7 +4,6 @@ import com.max.shop.dto.ProductDto;
 import com.max.shop.entity.User;
 import com.max.shop.entity.stat.UserStat;
 import com.max.shop.exception.EntityNotFountException;
-import com.max.shop.repository.ProductRepository;
 import com.max.shop.repository.UserRepository;
 import com.max.shop.repository.UserStatRepository;
 import com.max.shop.repository.parent.IntegrationTestBase;
@@ -44,9 +43,16 @@ class UserStatAspectTest extends IntegrationTestBase {
 
     @Test
     public void testAddUserStatisticAfterReturning() {
-
         ProductDto productDto = productService.getProduct(10001L);
         UserStat userStat = userStatRepository.findByProductId(10001L);
-        assertEquals(productDto.getId(), userStat.getProductId());
+
+        assertEquals(userStat.getProductId(), productDto.getId());
+        assertEquals(userStat.getQuantityViews(), 1);
+
+        productService.getProductVoid(10001L);
+        userStat = userStatRepository.findByProductId(10001L);
+        assertEquals(userStat.getQuantityViews(), 2);
     }
+
+
 }
