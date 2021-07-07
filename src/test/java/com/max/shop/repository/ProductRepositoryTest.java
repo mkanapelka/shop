@@ -7,6 +7,8 @@ import com.max.shop.repository.parent.IntegrationTestBase;
 import com.max.shop.specification.ProductSpecification;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.test.context.jdbc.Sql;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -15,6 +17,7 @@ import java.util.stream.Collectors;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+@Sql("/sql/data.sql")
 public class ProductRepositoryTest extends BaseRepositoryTest {
 
     @Autowired

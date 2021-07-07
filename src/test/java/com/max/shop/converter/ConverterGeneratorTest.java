@@ -5,6 +5,8 @@ import com.max.shop.dto.UserProfileDto;
 import com.max.shop.dto.UserProfileInfoDto;
 import com.max.shop.entity.Product;
 import com.max.shop.entity.User;
+import com.max.shop.repository.parent.BaseRepositoryTest;
+import com.max.shop.repository.parent.IntegrationTestBase;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
@@ -16,7 +18,6 @@ import java.util.List;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @SpringBootTest
-@AutoConfigureTestDatabase
 public class ConverterGeneratorTest {
 
     @Autowired

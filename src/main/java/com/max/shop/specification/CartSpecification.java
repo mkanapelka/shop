@@ -1,6 +1,7 @@
 package com.max.shop.specification;
 
 import com.max.shop.entity.Cart;
+import com.max.shop.entity.SubProductCategory;
 import com.max.shop.entity.User;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.data.jpa.domain.Specification;
@@ -20,10 +21,14 @@ public class CartSpecification {
     }
 
 
+//    public static Specification<Cart> fetchProducts() {
+//        return ((root, query, cb) -> {
+//            root.fetch("productInCarts", JoinType.LEFT).fetch("product", JoinType.LEFT);
+//            return null;
+//        });
+//    }
+
     public static Specification<Cart> fetchProducts() {
-        return ((root, query, cb) -> {
-            root.fetch("productInCarts", JoinType.LEFT).fetch("product", JoinType.LEFT);
-            return null;
-        });
+        return BaseSpecification.withFetch("productInCarts","product");
     }
 }

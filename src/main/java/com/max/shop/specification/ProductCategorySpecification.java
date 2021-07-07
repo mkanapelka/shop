@@ -1,6 +1,7 @@
 package com.max.shop.specification;
 
 import com.max.shop.dto.request.CategoryCriteriaDto;
+import com.max.shop.entity.Product;
 import com.max.shop.entity.ProductCategory;
 import com.max.shop.entity.SubProductCategory;
 import org.apache.commons.lang3.StringUtils;
@@ -31,16 +32,19 @@ public class ProductCategorySpecification {
                 predicates.add(cb.equal(root.get("name"), categoryCriteria.getName()));
             }
 
-            predicates.add(cb.equal(root.get("isActive;"),true));
-
+            predicates.add(cb.equal(root.get("isActive"),true));
             return cb.and(predicates.toArray(new Predicate[0]));
         });
     }
 
+//    public static Specification<ProductCategory> fetchSubcategories() {
+//        return ((root, query, cb) -> {
+//            root.fetch("subProductCategories", JoinType.LEFT);
+//            return null;
+//        });
+//    }
+
     public static Specification<ProductCategory> fetchSubcategories() {
-        return ((root, query, cb) -> {
-            root.fetch("subProductCategories", JoinType.LEFT);
-            return null;
-        });
+        return BaseSpecification.withFetch("subProductCategories");
     }
 }

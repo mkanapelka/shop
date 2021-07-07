@@ -2,6 +2,7 @@ package com.max.shop.specification;
 
 import com.max.shop.dto.request.OrderCriteriaForAdminDto;
 import com.max.shop.dto.request.OrderCriteriaForUserDto;
+import com.max.shop.entity.Cart;
 import com.max.shop.entity.Order;
 import com.max.shop.entity.User;
 import com.max.shop.exception.WrongOrderException;
@@ -102,9 +103,6 @@ public class OrderSpecification {
     }
 
     public static Specification<Order> fetchProducts() {
-        return ((root, query, cb) -> {
-            root.fetch("productInOrders", JoinType.LEFT).fetch("product", JoinType.LEFT);
-            return null;
-        });
+        return BaseSpecification.withFetch("productInOrders","product");
     }
 }
