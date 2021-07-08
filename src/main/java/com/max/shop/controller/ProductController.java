@@ -32,8 +32,5 @@ public class ProductController {
     public ProductDto getProduct(@PathVariable Long id) {
         return productService.getProduct(id);
     }
-
-
-
 }
 
