@@ -15,6 +15,8 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+
+import javax.persistence.EntityNotFoundException;
 import java.util.List;
 import java.util.Optional;
 
@@ -52,4 +54,9 @@ public class BoUserService {
             conversionService.convertList(users.getContent(), UserProfileInfoDto.class);
         return new PageImpl<>(profilesList, pageable, users.getTotalElements());
     }
+
+    public User findByUsername(String username){
+        return userRepository.findByUsername(username).orElseThrow(EntityNotFoundException::new);
+    }
 }
+

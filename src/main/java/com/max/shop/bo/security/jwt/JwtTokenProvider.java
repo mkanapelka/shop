@@ -14,10 +14,7 @@ import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
 import javax.servlet.http.HttpServletRequest;
-import java.util.ArrayList;
-import java.util.Base64;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 @Component
 public class JwtTokenProvider {
@@ -33,7 +30,7 @@ public class JwtTokenProvider {
     private UserDetailsServiceImpl userDetailsService;
 
     @Bean
-    public BCryptPasswordEncoder passwordEncoder() {
+    public BCryptPasswordEncoder Encoder() {
         return new BCryptPasswordEncoder();
     }
 
@@ -42,7 +39,7 @@ public class JwtTokenProvider {
         secret = Base64.getEncoder().encodeToString(secret.getBytes());
     }
 
-    public String createToken(String username, List<Role> roles) {
+    public String createToken(String username, Set<Role> roles) {
 
         Claims claims = Jwts.claims().setSubject(username);
         claims.put("roles", getRoleNames(roles));
@@ -50,11 +47,11 @@ public class JwtTokenProvider {
         Date now = new Date();
         Date validity = new Date(now.getTime() + validityInMilliseconds);
 
-        return Jwts.builder()//
-                .setClaims(claims)//
-                .setIssuedAt(now)//
-                .setExpiration(validity)//
-                .signWith(SignatureAlgorithm.HS256, secret)//
+        return Jwts.builder()
+                .setClaims(claims)
+                .setIssuedAt(now)
+                .setExpiration(validity)
+                .signWith(SignatureAlgorithm.HS256, secret)
                 .compact();
     }
 
@@ -69,8 +66,9 @@ public class JwtTokenProvider {
 
     public String resolveToken(HttpServletRequest req) {
         String bearerToken = req.getHeader("Authorization");
-        if (bearerToken != null && bearerToken.startsWith("Bearer_")) {
-            return bearerToken.substring(7, bearerToken.length());
+        String prefix = "Bearer_";
+        if (bearerToken != null && bearerToken.startsWith(prefix)) {
+            return bearerToken.substring(prefix.length());
         }
         return null;
     }
@@ -82,20 +80,16 @@ public class JwtTokenProvider {
             if (claims.getBody().getExpiration().before(new Date())) {
                 return false;
             }
-
             return true;
         } catch (JwtException | IllegalArgumentException e) {
             throw new JwtAuthenticationException("JWT token is expired or invalid");
         }
     }
 
-    private List<String> getRoleNames(List<Role> userRoles) {
+    private List<String> getRoleNames(Set<Role> userRoles) {
+
         List<String> result = new ArrayList<>();
-
-        userRoles.forEach(role -> {
-            result.add(role.name());
-        });
-
+        userRoles.forEach(role -> result.add(role.name()));
         return result;
     }
 }
