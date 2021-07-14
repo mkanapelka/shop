@@ -1,5 +1,6 @@
 package com.max.shop.bo.security.jwt;
 
+import com.max.shop.bo.security.KeyUtils;
 import com.max.shop.entity.Role;
 import com.max.shop.security.UserDetailsServiceImpl;
 import io.jsonwebtoken.*;
@@ -53,7 +54,9 @@ public class JwtTokenProvider {
                 .setExpiration(validity)
                 .signWith(SignatureAlgorithm.HS256, secret)
 //                todo: inject and getPrivate....
-//                .signWith(SignatureAlgorithm.RS256,)
+                .signWith(SignatureAlgorithm.RS256,
+                        KeyUtils.readKeyPair("src/main/resources/sertificat/selfsigned.jks","127312","tomcat")
+                                .getPrivate())
                 .compact();
     }
 

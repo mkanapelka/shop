@@ -59,7 +59,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     //    todo: do it
     @Bean
     public JwtDecoder serverJwtDecoder() {
-        return NimbusJwtDecoder.withPublicKey((RSAPublicKey) KeyUtils.readPublicKey("")).build();
+        return NimbusJwtDecoder
+                .withPublicKey(KeyUtils.readPublicKey("src/main/resources/sertificat/selfsigned.jks"))
+                .build();
     }
 
 }
