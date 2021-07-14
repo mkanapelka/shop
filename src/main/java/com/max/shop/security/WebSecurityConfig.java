@@ -1,6 +1,5 @@
 package com.max.shop.security;
 
-import com.max.shop.repository.UserRepository;
 import com.max.shop.service.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

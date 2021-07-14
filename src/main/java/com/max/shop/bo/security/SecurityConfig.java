@@ -30,7 +30,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         return super.authenticationManagerBean();
     }
 
-    //    TODO: Check it
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http
@@ -41,11 +40,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .requestMatchers()
                 .antMatchers("/api/admin/**")
                 .and()
-                .authorizeRequests()
-                .antMatchers("/").permitAll()
-                .anyRequest().authenticated()
+                .apply(new JwtConfigurer(jwtTokenProvider))
                 .and()
-                .apply(new JwtConfigurer(jwtTokenProvider));
-
+                .authorizeRequests()
+                .anyRequest().permitAll();
     }
+
 }
