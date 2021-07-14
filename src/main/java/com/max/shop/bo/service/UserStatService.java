@@ -5,6 +5,7 @@ import com.max.shop.dto.UserStatDto;
 import com.max.shop.dto.request.UserStatCriteriaDto;
 import com.max.shop.entity.stat.UserStat;
 import com.max.shop.repository.UserStatRepository;
+import com.max.shop.util.SecurityUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;

@@ -52,6 +52,8 @@ public class JwtTokenProvider {
                 .setIssuedAt(now)
                 .setExpiration(validity)
                 .signWith(SignatureAlgorithm.HS256, secret)
+//                todo: inject and getPrivate....
+//                .signWith(SignatureAlgorithm.RS256,)
                 .compact();
     }
 

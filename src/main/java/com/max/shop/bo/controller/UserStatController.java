@@ -4,6 +4,8 @@ import com.max.shop.bo.service.UserStatService;
 import com.max.shop.constans.Constants;
 import com.max.shop.dto.UserStatDto;
 import com.max.shop.dto.request.UserStatCriteriaDto;
+import com.max.shop.entity.User;
+import com.max.shop.util.SecurityUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -25,6 +27,7 @@ public class UserStatController {
     @ResponseStatus(HttpStatus.OK)
     public Page<UserStatDto> listUserStatistic(UserStatCriteriaDto userStatCriteriaDto,
                                                @PageableDefault(size = Constants.DEFAULT_PAGE_SIZE) Pageable pageable){
+//        String name = SecurityUtil.getUser().getUsername();
         return userStatService.listUserStat(userStatCriteriaDto,pageable);
     }
 }

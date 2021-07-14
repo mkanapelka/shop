@@ -13,6 +13,10 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.oauth2.jwt.JwtDecoder;
+import org.springframework.security.oauth2.jwt.NimbusJwtDecoder;
+
+import java.security.interfaces.RSAPublicKey;
 
 @Configuration
 @EnableWebSecurity(debug = true)
@@ -22,7 +26,7 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 @Order(2)
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
-    private final JwtTokenProvider jwtTokenProvider;
+    private final KeyUtils keyUtils;
 
     @Bean
     @Override
@@ -30,20 +34,32 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         return super.authenticationManagerBean();
     }
 
+    //    TODO: Add handlers
     @Override
     protected void configure(HttpSecurity http) throws Exception {
+
         http
                 .httpBasic().disable()
                 .csrf().disable()
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
-                .requestMatchers()
-                .antMatchers("/api/admin/**")
-                .and()
-                .apply(new JwtConfigurer(jwtTokenProvider))
+                .requestMatchers().antMatchers("/api/admin/**")
                 .and()
                 .authorizeRequests()
-                .anyRequest().permitAll();
+                .antMatchers("/").permitAll()
+                .antMatchers("/api/admin/users/login").permitAll()
+                .antMatchers("/api/admin/**").authenticated()
+                .and()
+                .oauth2ResourceServer()
+                .jwt()
+                .decoder(serverJwtDecoder());
 
     }
+
+    //    todo: do it
+    @Bean
+    public JwtDecoder serverJwtDecoder() {
+        return NimbusJwtDecoder.withPublicKey((RSAPublicKey) KeyUtils.readPublicKey("")).build();
+    }
+
 }
