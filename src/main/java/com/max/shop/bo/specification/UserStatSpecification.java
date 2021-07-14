@@ -30,11 +30,11 @@ public class UserStatSpecification {
                 predicates.add(cb.lessThanOrEqualTo(root.get("dateViews"), userStatCriteria.getDateTo()));
             }
 
-            if (userStatCriteria.getQuantityViewsFrom() != 0) {
+            if (userStatCriteria.getQuantityViewsFrom() != null) {
                 predicates.add(cb.greaterThanOrEqualTo(root.get("quantityViews"), userStatCriteria.getQuantityViewsFrom()));
             }
 
-            if (userStatCriteria.getQuantityViewsTo() != 0) {
+            if (userStatCriteria.getQuantityViewsTo() != null) {
                 predicates.add(cb.lessThanOrEqualTo(root.get("quantityViews"), userStatCriteria.getQuantityViewsTo()));
             }
 

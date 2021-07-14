@@ -49,7 +49,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         http.cors()
                 .and()
                 .csrf().disable()
-                .requestMatchers().antMatchers("/api/**")
+                .requestMatchers().antMatchers("/api/public/**")
                 .and()
                 .authorizeRequests()
                 .antMatchers("/").permitAll()
@@ -87,18 +87,15 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         return daoAuthenticationProvider;
     }
 
-
     @Bean
     protected PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder(12);
     }
 
-
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
         auth.authenticationProvider(daoAuthenticationProvider());
     }
-
 
     @Bean
     @Override

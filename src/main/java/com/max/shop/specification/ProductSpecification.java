@@ -70,7 +70,7 @@ public class ProductSpecification {
 
             List<Predicate> predicates = new ArrayList<>();
 //            predicates.add(cb.equal(root.get("status"), ProductStatus.AVAILABLE.name()));
-            predicates.add(cb.equal(root.get("status"), ProductStatus.MODERATION));
+            predicates.add(cb.equal(root.get("status"), ProductStatus.AVAILABLE));
             predicates.add(cb.equal(root.get("id"), id));
             return cb.and(predicates.toArray(new Predicate[0]));
         });
