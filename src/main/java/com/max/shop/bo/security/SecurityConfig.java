@@ -1,7 +1,5 @@
 package com.max.shop.bo.security;
 
-import com.max.shop.bo.security.jwt.JwtConfigurer;
-import com.max.shop.bo.security.jwt.JwtTokenProvider;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Bean;
@@ -54,11 +52,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     }
 
-    //    todo: do it
     @Bean
     public JwtDecoder serverJwtDecoder() {
         return NimbusJwtDecoder
-                .withPublicKey(KeyUtils.readPublicKey("src/main/resources/sertificat/selfsigned.jks"))
+                .withPublicKey((RSAPublicKey) KeyUtils.readKeyPair("src/main/resources/sertificat/selfsigned.jks", "127312", "tomcat")
+                        .getPublic())
                 .build();
     }
 
