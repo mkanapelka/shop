@@ -2,8 +2,11 @@ package com.max.shop.bo.security;
 
 import lombok.CustomLog;
 import lombok.SneakyThrows;
+import lombok.experimental.UtilityClass;
 import lombok.val;
 import org.springframework.core.io.FileSystemResource;
+import org.springframework.stereotype.Component;
+
 import java.security.KeyPair;
 import java.security.KeyStore;
 import java.security.PrivateKey;
@@ -12,6 +15,7 @@ import java.security.cert.CertificateFactory;
 import java.security.interfaces.RSAPublicKey;
 
 //@CustomLog
+@UtilityClass
 public class KeyUtils {
 
     /**

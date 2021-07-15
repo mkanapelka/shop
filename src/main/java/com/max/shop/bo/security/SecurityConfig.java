@@ -26,8 +26,6 @@ import java.security.interfaces.RSAPublicKey;
 @Order(2)
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
-    private final KeyUtils keyUtils;
-
     @Bean
     @Override
     public AuthenticationManager authenticationManagerBean() throws Exception {
