@@ -4,6 +4,7 @@ import com.max.shop.exception.BaseException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.client.RestTemplate;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -20,5 +21,6 @@ public class ExceptionDefaultHandler {
         return ResponseEntity
             .status(e.getStatusCode())
             .body(response);
+
     }
 }

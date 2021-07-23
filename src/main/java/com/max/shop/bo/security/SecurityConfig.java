@@ -23,7 +23,7 @@ import java.security.interfaces.RSAPublicKey;
 @RequiredArgsConstructor
 @Order(2)
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
-
+//
     @Bean
     @Override
     public AuthenticationManager authenticationManagerBean() throws Exception {
@@ -39,12 +39,12 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .csrf().disable()
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
-                .requestMatchers().antMatchers("/api/admin/**")
+                .requestMatchers().antMatchers("/bo/admin/**")
                 .and()
                 .authorizeRequests()
                 .antMatchers("/").permitAll()
-                .antMatchers("/api/admin/users/login").permitAll()
-                .antMatchers("/api/admin/**").authenticated()
+                .antMatchers("/bo/admin/users/login").permitAll()
+                .antMatchers("/bo/admin/**").authenticated()
                 .and()
                 .oauth2ResourceServer()
                 .jwt()
