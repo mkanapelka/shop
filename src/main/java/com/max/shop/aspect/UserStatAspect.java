@@ -7,7 +7,6 @@ import lombok.SneakyThrows;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.annotation.AfterReturning;
 import org.aspectj.lang.annotation.Aspect;
-import org.aspectj.lang.annotation.Pointcut;
 import org.springframework.stereotype.Component;
 
 @Aspect
@@ -17,7 +16,6 @@ public class UserStatAspect {
 
     private final StatisticsHandlerFactory statisticsHandlerFactory;
 
-    
     @SneakyThrows
     @AfterReturning(pointcut = "@annotation(userStatistics)", returning = "result")
     public void addUserStatisticAfterReturning(JoinPoint joinPoint, UserStatistics userStatistics, Object result) {

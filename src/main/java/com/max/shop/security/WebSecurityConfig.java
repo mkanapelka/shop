@@ -49,12 +49,10 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         http.cors()
                 .and()
                 .csrf().disable()
-                .requestMatchers().antMatchers("/api/**")
+                .requestMatchers().antMatchers("/**")
                 .and()
                 .authorizeRequests()
                 .antMatchers("/api/public/**").permitAll()
-                .antMatchers("/api/oauth2/authorization/*").permitAll()
-                .antMatchers("/api/login/oauth2/code/*").permitAll()
                 .antMatchers("/api/login").permitAll()
                 .and()
                 .oauth2Login()
@@ -76,7 +74,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .and()
                 .anonymous()
                 .authenticationFilter(this.anonymousAuthenticationFilter())
-                .authenticationProvider(this.anonymousAuthenticationProvider());
+                .authenticationProvider(this.anonymousAuthenticationProvider())
+        ;
     }
 
     @Bean
