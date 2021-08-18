@@ -1,24 +1,20 @@
 package com.max.shop.converter;
 
+import com.max.shop.IntegrationTestBase;
 import com.max.shop.dto.ProductDto;
 import com.max.shop.dto.UserProfileDto;
 import com.max.shop.dto.UserProfileInfoDto;
 import com.max.shop.entity.Product;
 import com.max.shop.entity.User;
-import com.max.shop.repository.parent.BaseRepositoryTest;
-import com.max.shop.repository.parent.IntegrationTestBase;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
-import org.springframework.boot.test.context.SpringBootTest;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-@SpringBootTest
-public class ConverterGeneratorTest {
+public class ConverterGeneratorTest extends IntegrationTestBase {
 
     @Autowired
     private MapperService conversionService;
@@ -63,9 +59,9 @@ public class ConverterGeneratorTest {
 
         assertThat(dto)
             .extracting(UserProfileDto::getUsername,
-                    UserProfileDto::getEmail,
-                    UserProfileDto::getFirstName,
-                    UserProfileDto::getLastName)
+                UserProfileDto::getEmail,
+                UserProfileDto::getFirstName,
+                UserProfileDto::getLastName)
             .containsExactly("user2", "usr@mail.com", "Homer", "Simpson");
     }
 

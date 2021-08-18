@@ -1,9 +1,9 @@
 package com.max.shop.repository;
 
+import com.max.shop.IntegrationTestBase;
 import com.max.shop.dto.request.UserListCriteriaDto;
 import com.max.shop.entity.User;
 import com.max.shop.exception.EntityNotFountException;
-import com.max.shop.repository.parent.IntegrationTestBase;
 import com.max.shop.specification.UserSpecification;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;

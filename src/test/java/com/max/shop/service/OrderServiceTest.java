@@ -1,5 +1,6 @@
 package com.max.shop.service;
 
+import com.max.shop.IntegrationTestBase;
 import com.max.shop.dto.OrderDto;
 import com.max.shop.dto.request.OrderCriteriaForUserDto;
 import com.max.shop.entity.Cart;
@@ -12,20 +13,16 @@ import com.max.shop.entity.embeddable.PaymentMethod;
 import com.max.shop.exception.EntityNotFountException;
 import com.max.shop.repository.OrderRepository;
 import com.max.shop.repository.UserRepository;
-import com.max.shop.repository.parent.IntegrationTestBase;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.test.context.jdbc.Sql;
-
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-@Sql("/sql/data.sql")
 public class OrderServiceTest extends IntegrationTestBase {
 
     @Autowired

@@ -1,12 +1,12 @@
 package com.max.shop.aspect;
 
+import com.max.shop.IntegrationTestBase;
 import com.max.shop.dto.ProductDto;
 import com.max.shop.entity.User;
 import com.max.shop.entity.stat.UserStat;
 import com.max.shop.exception.EntityNotFountException;
 import com.max.shop.repository.UserRepository;
 import com.max.shop.repository.UserStatRepository;
-import com.max.shop.repository.parent.IntegrationTestBase;
 import com.max.shop.service.ProductService;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -14,11 +14,9 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.test.context.jdbc.Sql;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-@Sql("/sql/data.sql")
 class UserStatAspectTest extends IntegrationTestBase {
 
     @Autowired

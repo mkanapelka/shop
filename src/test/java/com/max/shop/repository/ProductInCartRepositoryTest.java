@@ -1,15 +1,12 @@
 package com.max.shop.repository;
 
 import com.max.shop.entity.Cart;
-import com.max.shop.entity.ProductInCart;
 import com.max.shop.repository.parent.BaseRepositoryTest;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.test.context.jdbc.Sql;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class ProductInCartRepositoryTest extends BaseRepositoryTest {
 
@@ -25,7 +22,6 @@ class ProductInCartRepositoryTest extends BaseRepositoryTest {
     }
 
     @Test
-    @Sql("/sql/data.sql")
     void  testFindAllByCartId(){
 
         Cart cart = cartRepository.findCartByUserId(10001L);
