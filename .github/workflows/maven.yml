@@ -31,11 +31,8 @@ jobs:
       - name: Build and Test with Maven
         run: mvn clean package --file pom.xml
 
-      - name: Echo secrets
-        run: echo DOCKERHUB_USERNAME = ${{ secrets.DOCKERHUB_USERNAME }} and DOCKERHUB_TOKEN = ${{ secrets.DOCKERHUB_TOKEN }}
-
       - name: Login to DockerHub
-        uses: docker/login-action@v1.10.0
+        uses: docker/login-action@v1
         with:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
@@ -45,7 +42,7 @@ jobs:
         with:
           context: .
           push: true
-          tags: max-shop:latest
+          tags: ${{ secrets.DOCKERHUB_USERNAME }}/max-shop:latest
 
 
 
