@@ -57,9 +57,10 @@ jobs:
           username: github_client
           password: github_client
           script: |
-            docker-compose down -v
-            docker pull ${{ secrets.DOCKERHUB_USERNAME }}/max-shop:latest
-            docker-compose up --build -d
+            sudo docker-compose down -v
+            sudo docker rmi $(docker images '${{ secrets.DOCKERHUB_USERNAME }}/max-shop' -a -q)
+            sodo docker pull ${{ secrets.DOCKERHUB_USERNAME }}/max-shop:latest
+            sudo docker-compose up --build -d
 
 
 
