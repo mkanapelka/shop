@@ -50,17 +50,33 @@ jobs:
     runs-on: ubuntu-18.04
 
     steps:
-      - name: multiple command
+      - name: Copy docker-compose.yml
+        uses: garygrossgarten/github-action-scp@release
+        with:
+          local: docker-compose.yml
+          remote: /home/github_client/docker-compose.yml
+          host: 139.162.174.107
+          username: github_client
+          password: github_client
+      - name: Copy init.sql
+        uses: garygrossgarten/github-action-scp@release
+        with:
+          local: init.sql
+          remote: /home/github_client/init.sql
+          host: 139.162.174.107
+          username: github_client
+          password: github_client
+      - name: Restart docker containers
         uses: appleboy/ssh-action@master
         with:
           host: 139.162.174.107
           username: github_client
           password: github_client
           script: |
-            sudo docker-compose down -v
-            sudo docker rmi $(docker images '${{ secrets.DOCKERHUB_USERNAME }}/max-shop' -a -q)
-            sodo docker pull ${{ secrets.DOCKERHUB_USERNAME }}/max-shop:latest
-            sudo docker-compose up --build -d
+            docker-compose down -v
+            docker rmi $(docker images '${{ secrets.DOCKERHUB_USERNAME }}/max-shop' -a -q)
+            docker pull ${{ secrets.DOCKERHUB_USERNAME }}/max-shop:latest
+            docker-compose up --build -d
 
 
 
