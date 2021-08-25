@@ -10,3 +10,9 @@ services:
       - POSTGRES_PASSWORD=db-password
     ports:
       - 6432:5432
+  app:
+    image: dima1114/max-shop:latest
+    ports:
+      - 8080:8080
+    depends_on:
+      - postgres
