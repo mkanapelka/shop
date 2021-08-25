@@ -1,12 +1,10 @@
 package com.max.shop.bo.security;
 
-import lombok.CustomLog;
 import lombok.SneakyThrows;
 import lombok.experimental.UtilityClass;
 import lombok.val;
+import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.FileSystemResource;
-import org.springframework.stereotype.Component;
-
 import java.security.KeyPair;
 import java.security.KeyStore;
 import java.security.PrivateKey;
@@ -42,7 +40,7 @@ public class KeyUtils {
     @SneakyThrows
     public static KeyPair readKeyPair(String certificatePath, String password, String alias) {
         val keyStore = KeyStore.getInstance(KeyStore.getDefaultType());
-        keyStore.load(new FileSystemResource(certificatePath).getInputStream(), password.toCharArray());
+        keyStore.load(new ClassPathResource(certificatePath).getInputStream(), password.toCharArray());
 
         val key = keyStore.getKey(alias, password.toCharArray());
         if (key instanceof PrivateKey) {

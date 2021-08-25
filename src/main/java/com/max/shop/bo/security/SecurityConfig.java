@@ -13,7 +13,6 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.oauth2.jwt.JwtDecoder;
 import org.springframework.security.oauth2.jwt.NimbusJwtDecoder;
-
 import java.security.interfaces.RSAPublicKey;
 
 @Configuration
@@ -55,8 +54,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Bean
     public JwtDecoder serverJwtDecoder() {
         return NimbusJwtDecoder
-                .withPublicKey((RSAPublicKey) KeyUtils.readKeyPair("src/main/resources/sertificat/selfsigned.jks", "127312", "tomcat")
-                        .getPublic())
+            .withPublicKey((RSAPublicKey) KeyUtils.readKeyPair("sertificat/selfsigned.jks", "127312", "tomcat")
+                .getPublic())
                 .build();
     }
 

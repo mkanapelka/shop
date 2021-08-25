@@ -3,7 +3,11 @@ package com.max.shop.bo.security.jwt;
 import com.max.shop.bo.security.KeyUtils;
 import com.max.shop.entity.Role;
 import com.max.shop.security.UserDetailsServiceImpl;
-import io.jsonwebtoken.*;
+import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.Jws;
+import io.jsonwebtoken.JwtException;
+import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.SignatureAlgorithm;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
@@ -12,10 +16,13 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Component;
-
 import javax.annotation.PostConstruct;
 import javax.servlet.http.HttpServletRequest;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Base64;
+import java.util.Date;
+import java.util.List;
+import java.util.Set;
 
 @Component
 public class JwtTokenProvider {
@@ -55,7 +62,7 @@ public class JwtTokenProvider {
                 .signWith(SignatureAlgorithm.HS256, secret)
 //                todo: inject and getPrivate....
                 .signWith(SignatureAlgorithm.RS256,
-                        KeyUtils.readKeyPair("src/main/resources/sertificat/selfsigned.jks","127312","tomcat")
+                    KeyUtils.readKeyPair("sertificat/selfsigned.jks", "127312", "tomcat")
                                 .getPrivate())
                 .compact();
     }
